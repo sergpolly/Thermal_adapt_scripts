@@ -15,9 +15,9 @@ with open(inventory,'r') as fp:
     fnames = [line.strip() for line in fp.readlines()]
 
 # index them depending on the format
-if format == "genbank":
+if seq_format == "genbank":
     res = SeqIO.index_db(db_file,filenames=fnames,format=seq_format)
-elif format == "fasta":
+elif seq_format == "fasta":
     get_index = lambda name: name.split('|')[3]
     res = SeqIO.index_db(db_file,filenames=fnames,format=seq_format,key_function=get_index)
 else:

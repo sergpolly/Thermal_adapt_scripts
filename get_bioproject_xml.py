@@ -10,7 +10,7 @@ import numpy as np
 import itertools
 
 # always tell NCBI who ... are you!?
-ncbi.email = "sergey.venev@umassmed.edu"
+ncbi.email = "yourmail@server.com"
 
 # path = os.path.join(os.path.expanduser('~'),'GENOMES_BACTER/ftp.ncbi.nih.gov/refseq/release/bacteria/genbank')
 path = os.path.join(os.path.expanduser('~'),'GENOMES_BACTER_RELEASE69/genbank')

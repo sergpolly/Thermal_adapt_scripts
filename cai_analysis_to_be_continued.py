@@ -61,7 +61,7 @@ def do_work(seqrecid):
 work = list(dat.GenomicID)
 #
 print "launching process, to do %d pieces of work ..."%len(work)
-results = map(do_work, work[:10])
+results = list(do_work(piece) for piece in work[:10])
 # #
 # print "file outputting ..."
 # with open("proteome_all.dat","w") as fp:

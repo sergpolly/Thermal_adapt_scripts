@@ -66,10 +66,13 @@ def get_putative_cDNA(ref_prot,frames):
     """
     # presumbaly_top_align = pairwise2.align.globalxx(seq1,seq2)[0]
     # s1_aln, s2_aln, score, begin, end = presumbaly_top_align
-    frame_align = ((cDNA,float(pairwise2.align.globalxx(str(ref_prot),translation)[0][2])) for cDNA,translation in frames.iteritems())
+    frame_align = ( (cDNA, pairwise2.align.globalxx(str(ref_prot),translation)[0][2] ) for cDNA,translation in frames.iteritems() if translation)
     # frames' translations aligned to the reference protein: iter of (cDNA, SCORE_aln)-pairs is returned ...
     # returning cDNA with the best alignment score ...
     best_cDNA, prot_score = max(frame_align,key=lambda x: x[1])
+    #
+    print prot_score, len(ref_prot)
+    #
     # prot_score is simply the number of matches, in case we use the "dumb" globalxx aligner
     # see BioPython pairwise2 description for details http://biopython.org/DIST/docs/api/Bio.pairwise2-module.html
     # let's return the fraction of amino acids that we were able to align,
@@ -162,31 +165,45 @@ def extract_genes_features(genbank,nuc_seq):
             data['product'].append(feat_quals['product'][0].replace(',',' '))
             data['table'].append(genetic_table)
             #
-            current_cDNA_translation_status = "accepted"
-            #
+            # trying clean CDS translation first ...
             try:
                 translation = extracted_nucs.translate(table=genetic_table,cds=True)
             # we'll be catching TranslationError exceptions here ...
             except Data.CodonTable.TranslationError:
-                # if extracted_nucs is not true-CDS and it cannot be translated we'll automatically reject it!
-                current_cDNA_translation_status = "rejected"
-            # even if it is a true-CDS, we'll check if it translates back to what is in the feature qualifiers ..
-            if (current_cDNA_translation_status == "accepted")and(str(translation)==feat_quals['translation'][0]):
-                # OK! extracted extracted_nucs translates to the the provided feature qualifier ...
-                data['status'].append(current_cDNA_translation_status)
-                data['cdna'].append('')
-            else:
-                # before rejecting cDNA completely, let's try recovering cDNA manually ...
-                extracted_cDNA_trans = six_frames_translation(extracted_nucs, genetic_table=genetic_table)
-                putative_cDNA, matched_aa = get_putative_cDNA(extracted_protein,extracted_cDNA_trans)
-                # compare matched_aa with MATCHED_RATIO:
-                if (matched_aa >= MATCHED_RATIO):
-                    data['status'].append("recovered")
-                    data['cdna'].append(putative_cDNA)
-                else:
-                    # final rejection ...
-                    data['status'].append('rejected')
+                # if extracted_nucs is not true-CDS, try manual translation thing ...
+                translation = extracted_nucs.translate(table=genetic_table).strip('*')
+                # we are not catching anything here, it's kinda dangerous though ...
+            finally:
+                # best situation, translation matches exactly ...
+                if (str(translation) == extracted_protein):
+                    # OK! extracted extracted_nucs translates to the the provided feature qualifier ...
+                    data['status'].append("accepted")
                     data['cdna'].append('')
+                # translations are matched >= 80% ...
+                # examples: TGA is a stop codon in 11's table, yet it can code for U (Selenocysteine)
+                elif pairwise2.align.globalxx(str(translation),extracted_protein)[0][2] >= 0.8*len(extracted_protein): 
+                    # OK! extracted extracted_nucs translates to the the provided feature qualifier
+                    # ALMOST exactly ...
+                    data['status'].append("accepted")
+                    data['cdna'].append('')
+                # try something else ...
+                else:
+                    #LAST RESORT ...
+                    # before rejecting cDNA completely, let's try recovering cDNA manually ...
+                    print "trying to recover cDNA @ genbank %s feature %d ..."%(genbank.id,int(fid))
+                    extracted_cDNA_trans = six_frames_translation(extracted_nucs, genetic_table=genetic_table)
+                    putative_cDNA, matched_aa = get_putative_cDNA(extracted_protein,extracted_cDNA_trans)
+                    # compare matched_aa with MATCHED_RATIO:
+                    if (matched_aa >= MATCHED_RATIO):
+                        data['status'].append("recovered")
+                        data['cdna'].append(putative_cDNA)
+                    else:
+                        # final rejection ...
+                        data['status'].append('rejected')
+                        data['cdna'].append('')
+            # finally clause over ...
+        # if CDS,translation,product clause over ...
+    # features loop over ...
     return data
 
 

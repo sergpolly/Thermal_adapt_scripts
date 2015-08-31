@@ -7,12 +7,15 @@ from Bio import SeqUtils
 from Bio.SeqUtils import CodonUsage
 import math
 from Bio import Data
+from Bio import pairwise2
 
 
 # number of nucleotide per codon ...
 CODON_LEN = 3
 # Number of extracted CDS coding for ribosomal proteins, that we accept as sufficient... 
 RIBO_LIMIT = 20
+# matched amino acids threshold for cDNA recovery procedure ...
+MATCHED_RATIO = 0.5
 
 # Codon dictionary for accounting, just for convenience -> get a deepcopy of it whenever you need to reset
 CodonsDict = {'TTT': 0, 'TTC': 0, 'TTA': 0, 'TTG': 0, 'CTT': 0, 
@@ -28,6 +31,52 @@ CodonsDict = {'TTT': 0, 'TTC': 0, 'TTA': 0, 'TTG': 0, 'CTT': 0,
               'TGA': 0, 'TGG': 0, 'CGT': 0, 'CGC': 0, 'CGA': 0, 
               'CGG': 0, 'AGT': 0, 'AGC': 0, 'AGA': 0, 'AGG': 0, 
               'GGT': 0, 'GGC': 0, 'GGA': 0, 'GGG': 0}
+
+
+
+
+def six_frames_translation(seq, genetic_table=11):
+    """
+    six_frames_translation(seq, genetic_table=11)
+        seq: presumably coding DNA sequence in Seq or string format.
+        genetic_table: index of the genetic table in use (Bacterial/Archaeal/PlantPlasmid, 11 is the default)
+    Function returns a dictionary with keys being all 6 possible in-frame cDNA sequences, and
+    values being corresponding protein translations until first in-frame STOP. Beware cDNA are not
+    truncated at corresponding STOP codons, so they can be much long than their "to_stop" translations.
+    """
+    anti = seq.reverse_complement()
+    length = len(seq)
+    frames = {}
+    for fid in range(CODON_LEN):
+        fragment_length = CODON_LEN * ( (length-fid)//CODON_LEN )
+        frames[str(seq[fid:fid+fragment_length])] = str(seq[fid:fid+fragment_length].translate(table=genetic_table,to_stop=True))
+        frames[str(anti[fid:fid+fragment_length])] = str(anti[fid:fid+fragment_length].translate(table=genetic_table,to_stop=True))
+    return frames
+
+
+
+def get_putative_cDNA(ref_prot,frames):
+    """
+    get_putative_cDNA(frames)
+        ref_prot: reference protein sequence with unknown cDNA (cDNA fuzzy location, etc.)
+        frames: dictionary of 6*cDNA:translation key:value pairs, returned by six_frames_translation
+    Takes 6-frames dictionary returned by six_frames_translation and looks for the cDNA best matching
+    the reference protein. Returns a pair (best_cDNA, percent_matched), where percent_matched is
+    the number of amino acids that matched to the reference protein sequence.
+    """
+    # presumbaly_top_align = pairwise2.align.globalxx(seq1,seq2)[0]
+    # s1_aln, s2_aln, score, begin, end = presumbaly_top_align
+    frame_align = ((cDNA,float(pairwise2.align.globalxx(str(ref_prot),translation)[0][2])) for cDNA,translation in frames.iteritems())
+    # frames' translations aligned to the reference protein: iter of (cDNA, SCORE_aln)-pairs is returned ...
+    # returning cDNA with the best alignment score ...
+    best_cDNA, prot_score = max(frame_align,key=lambda x: x[1])
+    # prot_score is simply the number of matches, in case we use the "dumb" globalxx aligner
+    # see BioPython pairwise2 description for details http://biopython.org/DIST/docs/api/Bio.pairwise2-module.html
+    # let's return the fraction of amino acids that we were able to align,
+    # so that we could do an advised decision on whether that recovered cDNA is usable or not ...
+    return (best_cDNA, prot_score/len(ref_prot))
+
+
 
 
 ###################################################################################
@@ -79,6 +128,8 @@ def extract_ribo_genes(genbank,nuc_seq):
                     data['status'].append('reject')
     return data
 
+
+
 # this returns a dictionary of with assorted info on the CDS-es from a given genbank ...
 def extract_genes_features(genbank,nuc_seq):
     """
@@ -88,7 +139,7 @@ def extract_genes_features(genbank,nuc_seq):
     It goes through the genbank's list of features and extracts CDS-es with translation and product description.
     their feature id (in a given genbank), nucleotide and protein sequences and finally their acceptance status. 
     """
-    data = {"fid":[],"pid":[],"nucs":[],"protein":[],"product":[],"table":[],"status":[]}
+    data = {"fid":[],"pid":[],"nucs":[],"protein":[],"cdna":[],"product":[],"table":[],"status":[]}
     #
     for fid,feature in enumerate(genbank.features):
         feat_quals = feature.qualifiers 
@@ -111,21 +162,31 @@ def extract_genes_features(genbank,nuc_seq):
             data['product'].append(feat_quals['product'][0].replace(',',' '))
             data['table'].append(genetic_table)
             #
+            current_cDNA_translation_status = "accepted"
+            #
             try:
                 translation = extracted_nucs.translate(table=genetic_table,cds=True)
             # we'll be catching TranslationError exceptions here ...
             except Data.CodonTable.TranslationError:
                 # if extracted_nucs is not true-CDS and it cannot be translated we'll automatically reject it!
-                data['status'].append('reject')
-                # and move on to the next extracted_nucs in the loop ...
-                continue
+                current_cDNA_translation_status = "rejected"
             # even if it is a true-CDS, we'll check if it translates back to what is in the feature qualifiers ..
-            if str(translation)==feat_quals['translation'][0]:
+            if (current_cDNA_translation_status == "accepted")and(str(translation)==feat_quals['translation'][0]):
                 # OK! extracted extracted_nucs translates to the the provided feature qualifier ...
-                data['status'].append('accept')
+                data['status'].append(current_cDNA_translation_status)
+                data['cdna'].append('')
             else:
-                # rejecting the extracted_nucs if it does not match with the feature qualifier translation ...
-                data['status'].append('reject')
+                # before rejecting cDNA completely, let's try recovering cDNA manually ...
+                extracted_cDNA_trans = six_frames_translation(extracted_nucs, genetic_table=genetic_table)
+                putative_cDNA, matched_aa = get_putative_cDNA(extracted_protein,extracted_cDNA_trans)
+                # compare matched_aa with MATCHED_RATIO:
+                if (matched_aa >= MATCHED_RATIO):
+                    data['status'].append("recovered")
+                    data['cdna'].append(putative_cDNA)
+                else:
+                    # final rejection ...
+                    data['status'].append('rejected')
+                    data['cdna'].append('')
     return data
 
 

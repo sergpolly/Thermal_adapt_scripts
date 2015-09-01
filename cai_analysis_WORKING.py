@@ -17,57 +17,28 @@ import cairi
 from multiprocessing import Pool
 
 
-aacids = list('CMFILVWYAGTSNQDEHRKP')
 
-# def get_aausage_proteome(seqrec):
-#     # seqrec = db[seqrec_id]
-#     features = seqrec.features
-#     proteome = []
-#     for feature in features:
-#         qualifiers = feature.qualifiers
-#         if (feature.type == 'CDS')and('translation' in qualifiers):
-#             proteome.append(qualifiers['translation'][0])
-#     #return the results ...
-#     proteome = ''.join(proteome)
-#     prot_len = float(len(proteome))
-#     aa_freq = tuple(proteome.count(aa)/prot_len for aa in aacids)
-#     #
-#     return (int(prot_len),) + aa_freq
-
-# def analyse_genome(db,seqrec_id):
-#     seqrec = db[seqrec_id]
-#     pl_aa_freq = get_aausage_proteome(seqrec)
-#     gc = SeqUtils.GC(seqrec.seq)
-#     id = seqrec.id
-#     return (id,gc) + pl_aa_freq
-
-
-
-
-
-
-
-path = os.path.join(os.path.expanduser('~'),'GENOMES_BACTER_RELEASE69/genbank')
-# dbx = SeqIO.index_db(os.path.join(path,'genbank.idx'))
-dbx = SeqIO.index_db(os.path.join(path,"subset.idx"))
-# subset.idx is a previously indexed db for the single genbank file with complete genomes only (the one ~5GB).
-dat = pd.read_csv(os.path.join(path,"env_catalog_compgenome.dat"))
-#
-#
-def do_work(seqrecid):
-    seqrec = dbx[seqrecid]
-    return cairi.extract_genes_features(seqrec,seqrec.seq)
-#
-work = list(dat.GenomicID)
-#
-print "launching process, to do %d pieces of work ..."%len(work)
-results = list(do_work(piece) for piece in work[:10])
+# path = os.path.join(os.path.expanduser('~'),'GENOMES_BACTER_RELEASE69/genbank')
+# # dbx = SeqIO.index_db(os.path.join(path,'genbank.idx'))
+# dbx = SeqIO.index_db(os.path.join(path,"subset.idx"))
+# # subset.idx is a previously indexed db for the single genbank file with complete genomes only (the one ~5GB).
+# dat = pd.read_csv(os.path.join(path,"env_catalog_compgenome.dat"))
 # #
-# print "file outputting ..."
-# with open("proteome_all.dat","w") as fp:
-#     fp.write("GenomicID,GC,ProtLen,"+",".join(aacids)+"\n")
-#     for result in results:
-#         fp.write(','.join(str(item) for item in result)+'\n')
+# #
+# def do_work(seqrecid):
+#     seqrec = dbx[seqrecid]
+#     return cairi.extract_genes_features(seqrec,seqrec.seq)
+# #
+# work = list(dat.GenomicID)
+# #
+# print "launching process, to do %d pieces of work ..."%len(work)
+# results = list(do_work(piece) for piece in work[:10])
+# # #
+# # print "file outputting ..."
+# # with open("proteome_all.dat","w") as fp:
+# #     fp.write("GenomicID,GC,ProtLen,"+",".join(aacids)+"\n")
+# #     for result in results:
+# #         fp.write(','.join(str(item) for item in result)+'\n')
 
 
 
@@ -76,56 +47,54 @@ results = list(do_work(piece) for piece in work[:10])
 
 
 
-# if __name__ == "__main__":
-#     path = os.path.join(os.path.expanduser('~'),'GENOMES_BACTER_RELEASE69/genbank')
-#     # dbx = SeqIO.index_db(os.path.join(path,'genbank.idx'))
-#     dbx = SeqIO.index_db(os.path.join(path,"subset.idx"))
-#     # subset.idx is a previously indexed db for the single genbank file with complete genomes only (the one ~5GB).
-#     dat = pd.read_csv(os.path.join(path,"env_catalog_compgenome.dat"))
-#     #
-#     #
-#     def do_work(seqrecid):
-#         seqrec = dbx[seqrecid]
-#         return extract_genes_features(seqrec,seqrec.seq)
-#     #
-#     work = list(dat.GenomicID)
-#     #
-#     print "launching processes, to do %d pieces of work ..."%len(work)
-#     pool = Pool(processes=16)
-#     results = pool.map(do_work, work)
-#     #
-#     print "file outputting ..."
-#     with open("proteome_all.dat","w") as fp:
-#         fp.write("GenomicID,GC,ProtLen,"+",".join(aacids)+"\n")
-#         for result in results:
-#             fp.write(','.join(str(item) for item in result)+'\n')
+if __name__ == "__main__":
+    path = os.path.join(os.path.expanduser('~'),'GENOMES_BACTER_RELEASE69/genbank')
+    # dbx = SeqIO.index_db(os.path.join(path,'genbank.idx'))
+    dbx = SeqIO.index_db(os.path.join(path,"subset.idx"))
+    # subset.idx is a previously indexed db for the single genbank file with complete genomes only (the one ~5GB).
+    dat = pd.read_csv(os.path.join(path,"env_catalog_compgenome.dat"))
+    # #
+    # outpath = os.path.join(path,'parout')
+    # out = lambda x: "out_%s.dat"%x
+    # #
+    def do_work(seqrecid):
+        seqrec = dbx[seqrecid]
+        return cairi.extract_genes_features(seqrec,seqrec.seq)
+        # pd.DataFrame(dat).to_csv(os.path.join(outpath,out(seqrecid)),index=False)
+    #
+    work = list(dat.GenomicID)
+    #
+    processes = int(sys.argv[1])
+    pool = Pool(processes=processes)
+    print "launching %d processes, to do %d pieces of work ..."%(processes,len(work))
+    results = pool.map(do_work, work)
+    #
+    print "parallel calculations are OVER!!!"
+    # #
+    i = 0 
+    for res in results:
+    	print work[i], len(res['fid'])
+    	i += 1
+    # print "file outputting ..."
+    # with open("proteome_all.dat","w") as fp:
+    #     fp.write("GenomicID,GC,ProtLen,"+",".join(aacids)+"\n")
+    #     for result in results:
+    #         fp.write(','.join(str(item) for item in result)+'\n')
 
 
 
+# THIS ARE THE GENBANKS THAT GOT STUCK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# ['NC_006526.2', 'NC_010645.1', 'NC_015436.1']
 
 
 
+# sr1 = dbx['NC_006526.2']
+# sr2 = dbx['NC_010645.1']
+# sr3 = dbx['NC_015436.1']
 
+# fid = 11013
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# trying to recover cDNA @ genbank NC_003888.3 feature 12136 ...
 
 # # ALL organisms appear to be unique in the catalog, so that there are NO double-chromosome bacteria in our dataset...
 # # that is strange, because I remember that I did encounter them somehow and that there are abnormally low amount of ribo-genes there ...
@@ -234,17 +203,6 @@ results = list(do_work(piece) for piece in work[:10])
 # org_dat['accepted_CDS_count'] = accepted_CDS_count
 # org_dat['GC'] = genome_GC
 # org_dat.to_csv('catalog_with_accesion.dat',index=False)
-
-
-
-
-
-
-
-
-
-
-
 
 
 

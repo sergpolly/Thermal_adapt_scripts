@@ -8,14 +8,18 @@ from Bio.SeqUtils import CodonUsage
 import math
 from Bio import Data
 from Bio import pairwise2
+import warnings
+from Bio import BiopythonWarning
 
+warnings.filterwarnings('error')
 
 # number of nucleotide per codon ...
 CODON_LEN = 3
 # Number of extracted CDS coding for ribosomal proteins, that we accept as sufficient... 
 RIBO_LIMIT = 20
 # matched amino acids threshold for cDNA recovery procedure ...
-MATCHED_RATIO = 0.5
+MATCHED_RATIO_PARTIAL = 0.5
+MATCHED_RATIO_FULL = 0.8
 
 # Codon dictionary for accounting, just for convenience -> get a deepcopy of it whenever you need to reset
 CodonsDict = {'TTT': 0, 'TTC': 0, 'TTA': 0, 'TTG': 0, 'CTT': 0, 
@@ -142,7 +146,7 @@ def extract_genes_features(genbank,nuc_seq):
     It goes through the genbank's list of features and extracts CDS-es with translation and product description.
     their feature id (in a given genbank), nucleotide and protein sequences and finally their acceptance status. 
     """
-    data = {"fid":[],"pid":[],"nucs":[],"protein":[],"cdna":[],"product":[],"table":[],"status":[]}
+    data = {"fid":[],"pid":[],"nucs":[],"protein":[],"product":[],"table":[],"status":[]}
     #
     for fid,feature in enumerate(genbank.features):
         feat_quals = feature.qualifiers 
@@ -160,50 +164,75 @@ def extract_genes_features(genbank,nuc_seq):
             # fill in the dict, no matter what:
             data['fid'].append(fid)
             data['pid'].append(feat_quals['protein_id'][0])
-            data['nucs'].append(extracted_nucs)
+            # data['nucs'].append(str(extracted_nucs))
             data['protein'].append(extracted_protein)
             data['product'].append(feat_quals['product'][0].replace(',',' '))
             data['table'].append(genetic_table)
             #
             # trying clean CDS translation first ...
             try:
+                # print "try CDS"
                 translation = extracted_nucs.translate(table=genetic_table,cds=True)
             # we'll be catching TranslationError exceptions here ...
             except Data.CodonTable.TranslationError:
+                # print "try to translate ..."
                 # if extracted_nucs is not true-CDS, try manual translation thing ...
-                translation = extracted_nucs.translate(table=genetic_table).strip('*')
+                try:
+                    translation = extracted_nucs.translate(table=genetic_table).strip('*')
+                except BiopythonWarning:
+                    print "Partial codon detected @ genbank %s feature %d, trimming nucleotide sequence ..."%(genbank.id,int(fid))
+                    nucs_len = len(extracted_nucs)
+                    extracted_nucs = extracted_nucs[:-(nucs_len%CODON_LEN)]
+                    translation = extracted_nucs.translate(table=genetic_table).strip('*')
                 # we are not catching anything here, it's kinda dangerous though ...
             finally:
                 # best situation, translation matches exactly ...
                 if (str(translation) == extracted_protein):
+                    # print "MATCH!"
                     # OK! extracted extracted_nucs translates to the the provided feature qualifier ...
+                    data['nucs'].append(str(extracted_nucs))
                     data['status'].append("accepted")
-                    data['cdna'].append('')
-                # translations are matched >= 80% ...
-                # examples: TGA is a stop codon in 11's table, yet it can code for U (Selenocysteine)
-                elif pairwise2.align.globalxx(str(translation),extracted_protein)[0][2] >= 0.8*len(extracted_protein): 
+                # try comparing 2 sequences as if they were aligned ...
+                elif sum((a==b) for a,b in zip(str(translation),extracted_protein)) >= MATCHED_RATIO_FULL*len(extracted_protein):
+                    # print "ALMOST MATCH ..."
                     # OK! extracted extracted_nucs translates to the the provided feature qualifier
                     # ALMOST exactly ...
+                    data['nucs'].append(str(extracted_nucs))
                     data['status'].append("accepted")
-                    data['cdna'].append('')
+                # translations are matched >= 80% ...
+                # examples: TGA is a stop codon in 11's table, yet it can code for U (Selenocysteine)
+                elif pairwise2.align.globalxx(str(translation),extracted_protein,score_only=True) >= MATCHED_RATIO_FULL*len(extracted_protein): 
+                    # print "ALMOST ALIGNED ..."
+                    # OK! extracted extracted_nucs translates to the the provided feature qualifier
+                    # ALMOST exactly ...
+                    data['status '].append("accepted")
+                    data['nucs'].append(str(extracted_nucs))
                 # try something else ...
                 else:
+                    # print "recovery ..."
                     #LAST RESORT ...
                     # before rejecting cDNA completely, let's try recovering cDNA manually ...
                     print "trying to recover cDNA @ genbank %s feature %d ..."%(genbank.id,int(fid))
                     extracted_cDNA_trans = six_frames_translation(extracted_nucs, genetic_table=genetic_table)
                     putative_cDNA, matched_aa = get_putative_cDNA(extracted_protein,extracted_cDNA_trans)
-                    # compare matched_aa with MATCHED_RATIO:
-                    if (matched_aa >= MATCHED_RATIO):
+                    # compare matched_aa with MATCHED_RATIO_PATRIAL:
+                    # it was needed just once so far, when the start location was fuzzy for the strand=1 DNA ...
+                    # so the extracted_nucleotides were not in frame! ...
+                    if (matched_aa >= MATCHED_RATIO_PARTIAL):
+                        # print "recovered!!!!!!!!!!!"
+                        data['nucs'].append(str(extracted_nucs))
                         data['status'].append("recovered")
-                        data['cdna'].append(putative_cDNA)
                     else:
+                        # print "total reject ..."
                         # final rejection ...
+                        data['nucs'].append(str(extracted_nucs))
                         data['status'].append('rejected')
-                        data['cdna'].append('')
             # finally clause over ...
         # if CDS,translation,product clause over ...
     # features loop over ...
+    #
+    # let's try lower memory attempt first :
+    # return len(data['status'])
     return data
 
 

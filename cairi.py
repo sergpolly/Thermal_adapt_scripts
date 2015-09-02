@@ -146,7 +146,7 @@ def extract_genes_features(genbank,nuc_seq):
     It goes through the genbank's list of features and extracts CDS-es with translation and product description.
     their feature id (in a given genbank), nucleotide and protein sequences and finally their acceptance status. 
     """
-    data = {"fid":[],"pid":[],"nucs":[],"protein":[],"product":[],"table":[],"status":[]}
+    data = {"GenomicID":[],"fid":[],"pid":[],"cDNA":[],"protein":[],"product":[],"table":[],"status":[]}
     #
     for fid,feature in enumerate(genbank.features):
         feat_quals = feature.qualifiers 
@@ -162,9 +162,9 @@ def extract_genes_features(genbank,nuc_seq):
             # genetic_table = 11 is the Bacterial, Archaeal and Plant Plastid Code, so it'll be our default, just in case ...
             #
             # fill in the dict, no matter what:
+            data['GenomicID'].append(genbank.id)
             data['fid'].append(fid)
             data['pid'].append(feat_quals['protein_id'][0])
-            # data['nucs'].append(str(extracted_nucs))
             data['protein'].append(extracted_protein)
             data['product'].append(feat_quals['product'][0].replace(',',' '))
             data['table'].append(genetic_table)
@@ -190,14 +190,14 @@ def extract_genes_features(genbank,nuc_seq):
                 if (str(translation) == extracted_protein):
                     # print "MATCH!"
                     # OK! extracted extracted_nucs translates to the the provided feature qualifier ...
-                    data['nucs'].append(str(extracted_nucs))
+                    data['cDNA'].append(str(extracted_nucs))
                     data['status'].append("accepted")
                 # try comparing 2 sequences as if they were aligned ...
                 elif sum((a==b) for a,b in zip(str(translation),extracted_protein)) >= MATCHED_RATIO_FULL*len(extracted_protein):
                     # print "ALMOST MATCH ..."
                     # OK! extracted extracted_nucs translates to the the provided feature qualifier
                     # ALMOST exactly ...
-                    data['nucs'].append(str(extracted_nucs))
+                    data['cDNA'].append(str(extracted_nucs))
                     data['status'].append("accepted")
                 # translations are matched >= 80% ...
                 # examples: TGA is a stop codon in 11's table, yet it can code for U (Selenocysteine)
@@ -206,7 +206,7 @@ def extract_genes_features(genbank,nuc_seq):
                     # OK! extracted extracted_nucs translates to the the provided feature qualifier
                     # ALMOST exactly ...
                     data['status '].append("accepted")
-                    data['nucs'].append(str(extracted_nucs))
+                    data['cDNA'].append(str(extracted_nucs))
                 # try something else ...
                 else:
                     # print "recovery ..."
@@ -220,19 +220,16 @@ def extract_genes_features(genbank,nuc_seq):
                     # so the extracted_nucleotides were not in frame! ...
                     if (matched_aa >= MATCHED_RATIO_PARTIAL):
                         # print "recovered!!!!!!!!!!!"
-                        data['nucs'].append(str(extracted_nucs))
+                        data['cDNA'].append(str(extracted_nucs))
                         data['status'].append("recovered")
                     else:
                         # print "total reject ..."
                         # final rejection ...
-                        data['nucs'].append(str(extracted_nucs))
+                        data['cDNA'].append(str(extracted_nucs))
                         data['status'].append('rejected')
             # finally clause over ...
         # if CDS,translation,product clause over ...
     # features loop over ...
-    #
-    # let's try lower memory attempt first :
-    # return len(data['status'])
     return data
 
 

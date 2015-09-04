@@ -234,34 +234,6 @@ def extract_genes_features(genbank,nuc_seq):
 
 
 #
-def count_codons_old(dna_seq_list,cod_dict):
-    """
-    count_codons_old(dna_seq_list,cod_dict)
-        dna_seq_list: list(or other iterable) of DNA sequences(Seq object or strings)
-        cod_dict: dictionary with the valid codons as the keys.
-    It goes over all sequences and count appearances of all codons.
-    Sequences whose length is not proportional to 3(nucleotides per codon) are skipped!
-    Codons containing anything but 'ATGC' are skipped as well.
-    All sequences must be in frame, so that first 3 letters must constitute an actual codon (user responsibility).
-    """
-    # cod_dict must be zeroed out beforehand, that's a potential issue ...
-    # codons = [dna_seq[i:i+CODON_LEN] for i in range(0,len(dna_seq),CODON_LEN)]
-    for gene_sequence in dna_seq_list:
-        gene_sequence = str(gene_sequence)
-        len_gene_sequence = len(gene_sequence)
-        if len_gene_sequence%CODON_LEN:
-            print >> sys.stderr,"(Counting codons in count_codons) gene lengths is not ~3! Skipping it!!!"
-        else:
-            for codon in [gene_sequence[i:i+CODON_LEN] for i in range(0,len_gene_sequence,CODON_LEN)]:
-                if codon in cod_dict.keys(): 
-                    cod_dict[codon] += 1 
-                else: 
-                    # raise TypeError("Illegal codon %s in genes" % codon)
-                    print >> sys.stderr, "(Counting codons in count_codons) Illegal codon %s in genes! Skipping it!" % codon
-
-
-
-#
 def count_codons(dna_seq_list):
     """
     count_codons_old(dna_seq_list)
@@ -398,6 +370,33 @@ def cai_for_gene(dna_seq,index):
 
 
 
+
+
+# #
+# def count_codons_old(dna_seq_list,cod_dict):
+#     """
+#     count_codons_old(dna_seq_list,cod_dict)
+#         dna_seq_list: list(or other iterable) of DNA sequences(Seq object or strings)
+#         cod_dict: dictionary with the valid codons as the keys.
+#     It goes over all sequences and count appearances of all codons.
+#     Sequences whose length is not proportional to 3(nucleotides per codon) are skipped!
+#     Codons containing anything but 'ATGC' are skipped as well.
+#     All sequences must be in frame, so that first 3 letters must constitute an actual codon (user responsibility).
+#     """
+#     # cod_dict must be zeroed out beforehand, that's a potential issue ...
+#     # codons = [dna_seq[i:i+CODON_LEN] for i in range(0,len(dna_seq),CODON_LEN)]
+#     for gene_sequence in dna_seq_list:
+#         gene_sequence = str(gene_sequence)
+#         len_gene_sequence = len(gene_sequence)
+#         if len_gene_sequence%CODON_LEN:
+#             print >> sys.stderr,"(Counting codons in count_codons) gene lengths is not ~3! Skipping it!!!"
+#         else:
+#             for codon in [gene_sequence[i:i+CODON_LEN] for i in range(0,len_gene_sequence,CODON_LEN)]:
+#                 if codon in cod_dict.keys(): 
+#                     cod_dict[codon] += 1 
+#                 else: 
+#                     # raise TypeError("Illegal codon %s in genes" % codon)
+#                     print >> sys.stderr, "(Counting codons in count_codons) Illegal codon %s in genes! Skipping it!" % codon
 
 
 

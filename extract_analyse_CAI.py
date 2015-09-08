@@ -52,10 +52,12 @@ percentile = []
 median = []
 mean = []
 sigma = []
+idx_for_ribo = []
+ribo_count_for_df = [] 
 #
 pid_cai_list = []
 for idx,ribo_count in ribo_cai_info.itertuples(index=False):
-    if ribo_count >= 24:
+    if ribo_count >= RIBO_LIMIT:
         cds_dat = orgs.get_group(idx)
         ribo_cds = cds_dat[cds_dat['ribosomal']]['cDNA'] # cDNA of ribosomal proteins ...
         codon_usage = cairi.count_codons(ribo_cds)
@@ -70,6 +72,8 @@ for idx,ribo_count in ribo_cai_info.itertuples(index=False):
         mean.append(local_mean)
         median.append(local_median)
         sigma.append(local_sigma)
+        idx_for_ribo.append(idx)
+        ribo_count_for_df.append(ribo_count)
         #
         local_ribo_indexes = cds_dat['ribosomal'].nonzero()[0]
         local_ribo = pid_cai.iloc[local_ribo_indexes].reset_index(drop=True) 
@@ -87,30 +91,43 @@ for idx,ribo_count in ribo_cai_info.itertuples(index=False):
         # # plt.savefig(os.path.join(plot_path,idx+".pdf"))
         #
         pid_cai_list.append( pid_cai )
+# ttt = ["30S ribosomal subunit protein S9", "ribosomal-protein-alanine acetyltransferase", "Ribosomal protein L33", "ribosomal subunit interface protein", "Ribosomal protein S10", "ribosomal 5S rRNA E-loop binding protein Ctc/L25/TL5", "ribosomal-protein-alanine acetyltransferase", "16S ribosomal RNA methyltransferase KsgA/Dim1 family protein", "30S ribosomal proteinS16", "Acetyltransferases including N-acetylases of ribosomal proteins"]
 
-
-# this is just stupid thing, because there organisms that do not satisfy (ribo_count >= 24) ...
-# also we'are lazy ...
-idx_for_ribo = []
-ribo_count_for_df = [] 
-for idx,ribo_count in ribo_cai_info.itertuples(index=False):
-    if ribo_count >= 24:
-        idx_for_ribo.append(idx)
-        ribo_count_for_df.append(ribo_count)
 
 org_cai_descr = {"GenomicID":idx_for_ribo,"ribo_count":ribo_count_for_df,"TrOp":percentile,"median_cai":median,"mean_cai":mean,"sigma_cai":sigma}
-
 org_cai_df = pd.DataFrame(org_cai_descr)
+
 pid_cai_df = pd.concat(pid_cai_list)
 #
-# before any mergins ...
-###########################################
-# MERGE BY THE INDEX  .... TO BE CONTINUED ...
-###########################################
+# # before any mergings  ...
+# ###########################################
+# # MERGE BY THE INDEX  .... TO BE CONTINUED ...
+# ###########################################
+# # 1) merging 
+# yyy = dat.join(pid_cai_df,lsuffix='',rsuffix='_wnans')#
+# # 2) merging orther way ...
+# xxx = pd.concat([dat,pid_cai_df],axis=1)
+# #
+# indexes = (xxx.CAI != yyy.CAI).nonzero()[0]
+# # beware  (np.nan==np.nan) is False  ...
+# # so there are ~1200 indexes ...
+# # TO BE CONTINUED ...
+# # merging is done, outputtting and that's it ...
+dat_with_cai = dat.join(pid_cai_df,lsuffix='',rsuffix='_wnans')
+# then simple check ...
+# all instances, where (pid != pid_wnans) must be NULL ...
+if dat_with_cai.pid_wnans[dat_with_cai.pid!=dat_with_cai.pid_wnans].isnull().all():
+    pass
+else:
+    print "ACHTUNG!!! All pid_wnans items whose (pid_wnans!=pid), must be NULL. Check"
+
+# output CDS info with the calculated CAI ...
+dat_with_cai[['GenomicID', 'cDNA', 'fid', 'pid', 'product', 'protein', 'status', 'table', 'ribosomal', 'CAI']].to_csv(os.path.join(path,"complete_CDS_CAI_DNA.dat"),index=False)
+# ['GenomicID', 'cDNA', 'fid', 'pid', 'product', 'protein', 'status', 'table', 'ribosomal', 'pid_wnans', 'CAI']
+# ['GenomicID', 'cDNA', 'fid', 'pid', 'product', 'protein', 'status', 'table', 'ribosomal', 'CAI']
+
 #
-#
-#
-# som echaracterizational plotting ...
+# some characterization plotting ...
 plt.clf()
 org_cai_trop = org_cai_df[org_cai_df["TrOp"]]
 org_cai_notrop = org_cai_df[~org_cai_df["TrOp"]]
@@ -121,26 +138,18 @@ ax.set_title("Organism level CAI: t.o. criteria comparison (Margalit vs ours)")
 ax.set_xlabel("median CAI")
 ax.set_ylabel("CAI coefficient of variation") # using plain sigma works worse ...
 ax.legend(loc='best')
-# plt.legend([trop_dots, notrop_dots], ['translational optimization', 'No translational optimization'])
+plt.savefig(os.path.join(path,"org_cai_to.pdf"))
 #
 # 
-# ttt = ["30S ribosomal subunit protein S9", "ribosomal-protein-alanine acetyltransferase", "Ribosomal protein L33", "ribosomal subunit interface protein", "Ribosomal protein S10", "ribosomal 5S rRNA E-loop binding protein Ctc/L25/TL5", "ribosomal-protein-alanine acetyltransferase", "16S ribosomal RNA methyltransferase KsgA/Dim1 family protein", "30S ribosomal proteinS16", "Acetyltransferases including N-acetylases of ribosomal proteins"]
 plt.clf()
-# org_cai_trop = org_cai_df[org_cai_df["TrOp"]]
-# org_cai_notrop = org_cai_df[~org_cai_df["TrOp"]]
 size_dot = lambda x: 10 if 50<x<60 else 120
 plt.scatter(x=org_cai_df.median_cai,y=np.true_divide(org_cai_df.sigma_cai,org_cai_df.mean_cai),s=org_cai_df.ribo_count.apply(size_dot),c="blue",edgecolor=None)
-# trop_dots = plt.plot(org_cai_trop.median_cai,np.true_divide(org_cai_trop.sigma_cai,org_cai_trop.mean_cai),'ro',label='translational optimization')
-# notrop_dots = plt.plot(org_cai_notrop.median_cai,np.true_divide(org_cai_notrop.sigma_cai,org_cai_notrop.mean_cai),'bo',alpha=0.8,label='No translational optimization')
 ax = plt.gca()
 ax.set_title("Organism level CAI: effect of # ribosomal proteins (no effect)")
 ax.set_xlabel("median CAI")
 ax.set_ylabel("CAI coefficient of variation") # using plain sigma works worse ...
-# ax.legend(loc='best')
+plt.savefig(os.path.join(path,"org_cai_ribonum.pdf"))
 
-
-
-# TO BE CONTINUED ...
 
 
 

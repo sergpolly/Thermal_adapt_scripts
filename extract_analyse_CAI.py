@@ -121,8 +121,14 @@ if dat_with_cai.pid_wnans[dat_with_cai.pid!=dat_with_cai.pid_wnans].isnull().all
 else:
     print "ACHTUNG!!! All pid_wnans items whose (pid_wnans!=pid), must be NULL. Check"
 
+########### let's try joining the 'org_cai_df' to the dat_with_cai as well, so that we'd be able to easily grab Trans.Optimized
+########### organisms ...
+dat_with_cai_trop = pd.merge(dat_with_cai, org_cai_df, how='left', on='GenomicID')
+# apparently 'join' is a legacy procedure, so using 'merge' is encouraged instead!
+# http://stackoverflow.com/questions/10114399/pandas-simple-join-not-working
+
 # output CDS info with the calculated CAI ...
-dat_with_cai[['GenomicID', 'cDNA', 'fid', 'pid', 'product', 'protein', 'status', 'table', 'ribosomal', 'CAI']].to_csv(os.path.join(path,"complete_CDS_CAI_DNA.dat"),index=False)
+dat_with_cai_trop[['GenomicID','cDNA','fid','pid','product','protein','status','table','ribosomal','CAI','TrOp']].to_csv(os.path.join(path,"complete_CDS_CAI_DNA.dat"),index=False)
 # ['GenomicID', 'cDNA', 'fid', 'pid', 'product', 'protein', 'status', 'table', 'ribosomal', 'pid_wnans', 'CAI']
 # ['GenomicID', 'cDNA', 'fid', 'pid', 'product', 'protein', 'status', 'table', 'ribosomal', 'CAI']
 

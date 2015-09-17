@@ -236,7 +236,7 @@ def extract_genes_features(genbank,nuc_seq):
 #
 def count_codons(dna_seq_list):
     """
-    count_codons_old(dna_seq_list)
+    count_codons(dna_seq_list)
         dna_seq_list: list(or other iterable) of DNA sequences(Seq object or strings)
     It goes over all sequences and count appearances of all codons.
     Sequences whose length is not proportional to 3(nucleotides per codon) are skipped!

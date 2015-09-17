@@ -4,9 +4,9 @@ import subprocess as sub
 import re
 import sys
 from Bio import SeqUtils
-
-
-
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import stats
 
 path = os.path.join(os.path.expanduser('~'),'GENOMES_BACTER_RELEASE69/genbank')
 
@@ -36,11 +36,15 @@ argentina = os.path.join(cost_vec_path,'argentina-cost.d')
 
 akashi_cost = pd.read_csv(akashi,header=None,sep=' ')
 argentina_cost = pd.read_csv(argentina,header=None,sep=' ')
+thermo_freq = pd.read_csv(os.path.join(path,'thermo.dat'),header=None,sep=' ')
 
 akashi_cost.set_index(0,inplace=True)
 argentina_cost.set_index(0,inplace=True)
+thermo_freq.set_index(0,inplace=True)
 
-
+akashi_cost.sort_index(inplace=True)
+argentina_cost.sort_index(inplace=True)
+thermo_freq.sort_index(inplace=True)
 
 
 #################################################
@@ -104,6 +108,8 @@ stat_dat = {'GenomicID':[],
             'TrOp':[]}
 for i in range(num_of_quantiles):
     stat_dat['q%d'%i] = []
+    stat_dat['R20_q%d'%i] = []
+    stat_dat['Akashi_q%d'%i] = []
 #
 #
 for idx,topt in env_dat[['GenomicID','OptimumTemperature']].itertuples(index=False):
@@ -111,9 +117,9 @@ for idx,topt in env_dat[['GenomicID','OptimumTemperature']].itertuples(index=Fal
     # is it a translationally optimized organism ?
     all,any = cds_cai_dat['TrOp'].all(),cds_cai_dat['TrOp'].any()
     if all == any:
-        trans_opt = all
-    else: #any != all
-        print "%s@T=%f: Something wrong is happening: TrOp flag is not same for all ..."%(idx,topt)
+	    trans_opt = all
+    else:  #any != all
+	    print "%s@T=%f: Something wrong is happening: TrOp flag is not same for all ..."%(idx,topt)
     # THIS IS just a stupid precaution measure, in case we messed something upstream ...
     # not that stupid after all, because NaN is behaving badly here ...
     if cds_cai_dat['TrOp'].notnull().all():
@@ -132,20 +138,117 @@ for idx,topt in env_dat[['GenomicID','OptimumTemperature']].itertuples(index=Fal
             IVYWREL = sum(cds_cai_category['protein'].str.count(aa).sum() for aa in list('IVYWREL'))
             # IVYWREL = cds_cai_category['protein'].str.count('|'.join("IVYWREL")).sum() # tiny bit slower ...
             f_IVYWREL = float(IVYWREL)/float(total_length)
+            # 20-vector for of amino acid composition ...
+            aa_freq_20 = np.true_divide([cds_cai_category['protein'].str.count(aa).sum() for aa in aacids],float(total_length))
+            # slope, intercept, r_value, p_value, std_err = stats.linregress(x,y)
+            _1,_2,R20,_4,_5 = stats.linregress(aa_freq_20, thermo_freq[1])
+            # Akashi ...
+            cost = np.dot(aa_freq_20,akashi_cost[1])
             # appending ...
+            #
+            #
             stat_dat['q%d'%cat].append(f_IVYWREL)
+            stat_dat['R20_q%d'%cat].append(R20)
+            stat_dat['Akashi_q%d'%cat].append(cost)
 #
 #
 #
 cai_stats_quant = pd.DataFrame(stat_dat)
 #
 cai_stats_quant_TrOp = cai_stats_quant[cai_stats_quant.TrOp]
+cai_stats_quant_noTrOp = cai_stats_quant[~cai_stats_quant.TrOp]
+
+
+plt.clf()
+bins = np.linspace(-0.05,0.05,50)
+plt.hist(list(cai_stats_quant_TrOp.q4 - cai_stats_quant_TrOp.q1),bins=bins,color='blue')
+plt.hist(list(cai_stats_quant_noTrOp.q4 - cai_stats_quant_noTrOp.q1),bins=bins,color='red',alpha=0.8)
+plt.show()
+
+
+plt.clf()
+bins = np.linspace(-0.15,0.15,50)
+# bins=50
+plt.hist(list(cai_stats_quant[cai_stats_quant.OptimumTemperature<=50].R20_q4 - cai_stats_quant[cai_stats_quant.OptimumTemperature<=50].R20_q1),bins=bins,color='black',cumulative=False)
+plt.hist(list(cai_stats_quant_noTrOp[cai_stats_quant_noTrOp.OptimumTemperature<=50].R20_q4 - cai_stats_quant_noTrOp[cai_stats_quant_noTrOp.OptimumTemperature<=50].R20_q1),bins=bins,color='blue',cumulative=False)
+plt.hist(list(cai_stats_quant_TrOp[cai_stats_quant_TrOp.OptimumTemperature<=50].R20_q4 - cai_stats_quant_TrOp[cai_stats_quant_TrOp.OptimumTemperature<=50].R20_q1),bins=bins,color='red',alpha=0.8,cumulative=False)
+plt.xlabel('$R^{4}_{T} - R^{1}_{T}$')
+# plt.hist(list(cai_stats_quant_TrOp.R20_q4 - cai_stats_quant_TrOp.R20_q1),bins=bins,color='blue')
+# plt.hist(list(cai_stats_quant_noTrOp.R20_q4 - cai_stats_quant_noTrOp.R20_q1),bins=bins,color='red',alpha=0.8)
+plt.show()
+
+
 
 plt.clf()
 plt.plot(cai_stats_quant.OptimumTemperature,cai_stats_quant.q1,'bo',alpha=0.8)
 plt.plot(cai_stats_quant.OptimumTemperature,cai_stats_quant.q4,'ro',alpha=0.8)
 plt.show()
 # #
+
+plt.clf()
+plt.plot(cai_stats_quant.OptimumTemperature,cai_stats_quant.R20_q1,'bo',alpha=0.8)
+plt.plot(cai_stats_quant.OptimumTemperature,cai_stats_quant.R20_q4,'ro',alpha=0.8)
+plt.show()
+
+plt.clf()
+plt.plot(cai_stats_quant.GC,cai_stats_quant.R20_q1,'bo',alpha=0.8)
+plt.plot(cai_stats_quant.GC,cai_stats_quant.R20_q4,'ro',alpha=0.8)
+plt.show()
+
+
+plt.clf()
+for i in range(num_of_quantiles):
+    k1 = 'q%d'%i
+    k2 = 'R20_q%d'%i
+    k3 = 'Akashi_q%d'%i
+    #
+    plt.plot([i+1,]*cai_stats_quant.shape[0],cai_stats_quant[k1],alpha=0.7)
+
+plt.xlim(0,6)
+
+
+plt.clf()
+for i in range(num_of_quantiles):
+    k1 = 'q%d'%i
+    k2 = 'R20_q%d'%i
+    k3 = 'Akashi_q%d'%i
+    #
+    plt.errorbar([i+1,],cai_stats_quant_noTrOp[cai_stats_quant_noTrOp.OptimumTemperature>0][k2].mean(),yerr=cai_stats_quant_noTrOp[cai_stats_quant_noTrOp.OptimumTemperature>0][k2].std(),fmt='o')
+
+plt.xlim(0,6)
+plt.show()
+
+
+# R20 grows on average, 
+#       | meso thermo
+# ------+-------------
+# TrOp  |  ++  ~+
+# noTrOp|  +   ~
+
+
+# Akashi is declining on average 
+#       | meso thermo
+# ------+-------------
+# TrOp  |  --   --
+# noTrOp|  ~-   ~-
+
+
+# IVYWREL is declining on average 
+#       | meso thermo
+# ------+-------------
+# TrOp  |  --   ~-
+# noTrOp|  ~-    -
+
+
+
+
+# After reshuffling given CAI, everything becomes flat and 0-centered with much narrower distributions 
+
+
+
+
+
+
 # #
 # #     # move on ...
 # #     # quantiles calculation ...

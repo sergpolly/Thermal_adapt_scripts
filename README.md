@@ -15,3 +15,12 @@ Negative features:
 
 Just remarks:
 1) It is very likely that the order of entries in genbank and in nucleotide fasta is exactly the same. However I’d rather use dictionary to cross-access these entries!
+
+
+THE MOST IMMEDIATE TODO:
+The next big thing to finish up is the Archaeal part of the code.
+Goto ~/Dropbox (UMASS MED - BIB)/protein_design/NEW_DATASETS_genbank and work out all the neccesary scripts to get Archaea to the same stage as Bacteria in terms of research.
+most likely, we'd need to download Archaeal genbanks again (folders) ftp.ncbi.nih.gov/genomes/all ...
+Next important file is `phylog_temps.txt`, we should try matching orgnisms from that file with the ones available at NCBI GenBank - that would be our to go point. Check how it was done before ?
+
+

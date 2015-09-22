@@ -1,0 +1,270 @@
+taxonid	topt	hidden	name
+414004	10	0	Cenarchaeum symbiosum A
+420950	18	0	Methanolobus psychrophilus
+1007084	22	0	Candidatus Nitrosoarchaeum limnia
+368407	22	0	Methanoculleus marisnigri JR1
+259564	23.4	0	Methanococcoides burtonii DSM 6242
+1510466	25	0	Candidatus Nitrosopumilus koreensis
+1229909	25	0	Candidatus Nitrosopumilus sp. AR2
+2221	25	0	Methanolobus tindarius
+367189	27	0	Haladaptatus paucihalophilus
+436308	27	0	Nitrosopumilus maritimus SCM1
+889948	28	0	Candidatus Nanosalina sp. J07AB43
+889962	28	0	Candidatus Nanosalinarum sp. J07AB56
+408577	28	0	Methanobacterium veterum
+1036677	28	0	Methanosarcina soligelidi
+411361	30	0	Halosarcina pallida
+877455	30	0	Methanobacterium lacus
+521011	30	0	Methanosphaerula palustris E1-9c
+1353246	30	0	Thaumarchaeota archaeon MY2
+882104	32	0	Methanoregula formicica
+416348	34	0	Halorubrum lacusprofundi ATCC 49239
+255616	35	0	Haloferax sulfurifontis
+868132	35	0	Methanobacterium sp. AL-21
+868131	35	0	Methanobacterium sp. SWAN-1
+101192	35	0	Methanomethylovorans hollandica
+456442	35	0	Methanoregula boonei 6A8
+269797	35	0	Methanosarcina barkeri str. Fusaro
+192952	35	0	Methanosarcina mazei Go1
+323259	35	0	Methanospirillum hungatei JF-1
+64602	35	0	Natrialba asiatica
+304371	36	0	Methanocella paludicola SANAE
+1406512	37	0	Candidatus Methanomassiliicoccus intestinalis
+1291540	37	0	Candidatus Methanomethylophilus alvus
+453847	37	0	Haladaptatus cibarius
+1457250	37	0	Halapricum salinum
+489138	37	0	Halarchaeum acidiphilum
+244363	37	0	Haloarcula californiae
+634497	37	0	Haloarcula hispanica ATCC 33960
+35742	37	0	Haloarcula sinaiiensis
+28442	37	0	Haloarcula vallismortis
+1448860	37	0	Halobellus rufus
+332168	37	0	Halococcus hamelinensis
+2250	37	0	Halococcus morrhuae
+62319	37	0	Halococcus saccharolyticus
+1264579	37	0	Halococcus sediminicola
+335952	37	0	Halococcus thailandensis
+114529	37	0	Haloferax alexandrinus
+35745	37	0	Haloferax denitrificans
+35746	37	0	Haloferax gibbonsii
+2254	37	0	Haloferax lucentense
+1227462	37	0	Haloferax sp. ATCC BAA-644
+693851	37	0	Halogranum salarium
+1380430	37	0	Halolamina rubra
+387343	37	0	Halopiger xanaduensis
+797210	37	0	Halopiger xanaduensis SH-6
+362976	37	0	Haloquadratum walsbyi DSM 16790
+416585	37	0	Halorubrum californiense
+64713	37	0	Halorubrum coriense
+413816	37	0	Halorubrum halophilum
+1227480	37	0	Halorubrum hochstenium
+478441	37	0	Halorubrum kocurii
+353800	37	0	Halostagnicola larsenii
+504937	37	0	Haloterrigena salina
+332953	37	0	Halovivax asiaticus
+387341	37	0	Halovivax ruber
+386456	37	0	Methanobacterium arcticum
+2162	37	0	Methanobacterium formicicum
+39441	37	0	Methanobrevibacter arboriphilus
+66851	37	0	Methanobrevibacter oralis
+420247	37	0	Methanobrevibacter smithii ATCC 35061
+190977	37	0	Methanobrevibacter wolinii
+71518	37	0	Methanocorpusculum bavaricum
+410358	37	0	Methanocorpusculum labreanum Z
+1201294	37	0	Methanoculleus bourgensis MS2
+547558	37	0	Methanohalophilus mahii DSM 5219
+1080712	37	0	Methanomassiliicoccus luminyensis
+679926	37	0	Methanoplanus petrolearius DSM 11571
+990316	37	0	Methanosaeta concilii GP6
+1110509	37	0	Methanosaeta harundinacea 6Ac
+160846	37	0	Natrialba taiwanensis
+222984	37	0	Natrinema altunense
+69525	37	0	Natrinema pellirubrum
+406552	37	0	Natrinema sp. J7-2
+44930	37	0	Natronobacterium gregoryi
+1333523	37	0	Salinarchaeum sp. Harcht-Bsk1
+662759	38	0	Candidatus Parvarchaeum acidiphilum
+662761	38	0	Candidatus Parvarchaeum acidophilus
+523841	38	0	Haloferax mediterranei ATCC 33500
+437163	38	0	Halomicrobium katesii
+337243	38	0	Halorubrum ezzemoulense
+171164	38	0	Halosimplex carlsbadense
+1348249	38	0	Methanobrevibacter boviskoreani
+224719	38	0	Methanobrevibacter sp. AbM4
+426368	38	0	Methanococcus maripaludis C7
+406327	38	0	Methanococcus vannielii SB
+456320	38	0	Methanococcus voltae A3
+339860	38	0	Methanosphaera stadtmanae DSM 3091
+547559	38	0	Natrialba magadii ATCC 43099
+419186	38	0	Natrinema gari
+69527	38	0	Natrinema pallidum
+416273	38	0	Natronomonas moolapensis
+97393	39	0	Ferroplasma acidarmanus
+1071085	39	0	haloarchaeon 3A1 DGR
+634498	39	0	Methanobrevibacter ruminantium M1
+1054217	39	0	Thermoplasmatales archaeon BRNA1
+43776	40	0	Haloarcula argentinensis
+36738	40	0	Halococcus salifodinae
+469382	40	0	Halogeometricum borinquense DSM 11551
+485914	40	0	Halomicrobium mukohataei DSM 12286
+376171	40	0	Haloplanus natans
+409316	40	0	Halorubrum litoreum
+119434	40	0	Halorubrum tebenquichense
+2201	40	0	Methanofollis liminatans
+2205	40	0	Methanomicrobium mobile
+2315	40	0	Methanoplanus limicola
+188937	40	0	Methanosarcina acetivorans C2A
+129789	40	0	Natrialba aegyptia
+29288	40	0	Natronococcus occultus
+795797	41	0	Halalkalicoccus jeotgali B3
+396317	41	0	Haloarcula amylolytica
+478009	41	0	Halobacterium salinarum R1
+64091	41	0	Halobacterium sp. NRC-1
+368623	41	0	Halorubrum aidingense
+267368	41	0	Halorubrum terrestre
+413811	41	0	Haloterrigena jeotgali
+413812	41	0	Natronococcus jeotgali
+253107	41	0	Natronolimnobius innermongolicus
+130048	42	0	Halobiforma nitratireducens
+368454	42	0	Halorubrum arcis
+402880	42	0	Methanococcus maripaludis C5
+44470	42	0	Natronococcus amylolyticus
+1034015	42	0	Nitrososphaera viennensis
+229731	43	0	Halobiforma lacisalsi
+302484	43	0	Haloferax larsenii
+381852	43	0	Haloferax prahovense
+88724	43	0	Natrinema versiforme
+29282	44	0	Haloarcula japonica
+348780	44	0	Natronomonas pharaonis DSM 2160
+272569	45	0	Haloarcula marismortui ATCC 43049
+309800	45	0	Haloferax volcanii DS2
+768065	45	0	Haloquadratum walsbyi C23
+430914	45	0	Halorhabdus tiamatea
+1416969	45	0	Haloterrigena sp. H13
+351160	45	0	Methanocella arvoryzae MRE50
+679901	45	0	Methanosalsum zhilinae DSM 4017
+68911	45	0	Natrialba chahannaoensis
+61858	45	0	Natronorubrum bangense
+388259	45	0	Natronorubrum sulfidifaciens
+63128	45	0	Natronorubrum tibetense
+1407055	45	0	Thaumarchaeota archaeon N4
+497727	46	0	Candidatus Nitrososphaera gargensis
+368624	46	0	Halorubrum lipolyticum
+419665	46	0	Methanococcus aeolicus Nankai-3
+403191	47	0	Haloferax elongans
+370323	47	0	Haloterrigena limicola
+403181	48	0	Haloferax mucosum
+519442	50	0	Halorhabdus utahensis DSM 12940
+2248	50	0	Halorubrum saccharovorum
+121872	50	0	Haloterrigena thermotolerans
+644295	50	0	Methanohalobium evestigatum Z-7303
+263906	50	0	Methanolinea tarda
+123783	50	0	Natrialba hulunbeirensis
+543526	51	0	Haloterrigena turkmenica DSM 5511
+1041930	55	0	Methanocella conradii HZ254
+349307	57	0	Methanosaeta thermophila PT
+419942	59	0	Sulfolobus islandicus Y.N.15.51
+273075	59	0	Thermoplasma acidophilum DSM 1728
+263820	60	0	Picrophilus torridus DSM 9790
+155863	62	0	Methanothermococcus okinawensis
+647113	62	0	Methanothermococcus okinawensis IH1
+1006006	65	0	Metallosphaera cuprina Ar-4
+1111107	65	0	Metallosphaera yellowstonensis
+79929	65	0	Methanothermobacter marburgensis str. Marburg
+187420	65	0	Methanothermobacter thermautotrophicus str. Delta H
+2186	65	0	Methanothermococcus thermolithotrophicus
+660064	65	0	Methermicoccus shengliensis
+1326980	65	0	Sulfolobales archaeon AZ1
+1163730	67	0	Fervidicoccus fontis Kam940
+273116	67	0	Thermoplasma volcanium GSS1
+439481	70	0	Aciduliprofundum boonei T469
+673860	70	0	Aciduliprofundum sp. MAR08-339
+311458	70	0	Candidatus Caldiarchaeum subterraneum
+200415	72	0	Caldisphaera lagunensis
+439386	72	0	Sulfolobus islandicus Y.G.57.14
+1316941	75	0	Archaeoglobus sulfaticallidus
+1160895	75	0	Candidatus Acidianus copahuensis
+399549	75	0	Metallosphaera sedula DSM 5348
+213185	75	0	Methanotorris formicicus
+555311	75	0	Sulfolobus solfataricus 98/2
+427318	76	0	Sulfolobus islandicus M.16.27
+426118	76	0	Sulfolobus islandicus M.16.4
+930945	77	0	Sulfolobus islandicus REY15A
+54076	77	0	Thermococcus zilligii
+425944	78	0	Sulfolobus islandicus L.D.8.5
+429572	78	0	Sulfolobus islandicus L.S.2.15
+604354	78	0	Thermococcus sibiricus MM 739
+693661	80	0	Archaeoglobus veneficus SNP6
+667126	80	0	Methanocaldococcus villosus
+579137	80	0	Methanocaldococcus vulcanius M7
+971279	80	0	Palaeococcus pacificus
+330779	80	0	Sulfolobus acidocaldarius DSM 639
+273057	80	0	Sulfolobus solfataricus P2
+273063	80	0	Sulfolobus tokodaii str. 7
+523850	80	0	Thermococcus onnurineus NA1
+1042877	80	0	Thermococcus sp. 4557
+246969	80	0	Thermococcus sp. AM4
+1378080	81	0	Thaumarchaeota archaeon JGI OTU-1
+1395101	81	0	Thaumarchaeota archaeon JGI OTU-2
+1379386	81	0	Thaumarchaeota archaeon JGI OTU-3
+1379389	81	0	Thaumarchaeota archaeon JGI OTU-4
+666510	82	0	Acidilobus saccharovorans 345-15
+572546	82	0	Archaeoglobus profundus DSM 5631
+768672	82	0	Desulfurococcus fermentans DSM 16532
+1294122	82	0	nanoarchaeote Nst1
+1294123	82	0	Sulfolobales archaeon Acd1
+224325	83	0	Archaeoglobus fulgidus DSM 4304
+523846	83	0	Methanothermus fervidus DSM 2088
+1104324	84	0	Pyrobaculum sp. 1860
+1184251	84	0	Thermogladius cellulolyticus 1633
+933801	85	0	Acidianus hospitalis W1
+229980	85	0	Aeropyrum camini
+76887	85	0	Caldivirga maquilingensis
+397948	85	0	Caldivirga maquilingensis IC-167
+374847	85	0	Candidatus Korarchaeum cryptofilum OPF8
+490899	85	0	Desulfurococcus kamchatkensis 1221n
+765177	85	0	Desulfurococcus mucosus DSM 2162
+589924	85	0	Ferroglobus placidus DSM 10642
+573064	85	0	Methanocaldococcus fervens AG86
+573063	85	0	methanocaldococcus infernus ME
+243232	85	0	Methanocaldococcus jannaschii DSM 2661
+70771	85	0	Pyrobaculum neutrophilum
+591019	85	0	Staphylothermus hellenicus DSM 12710
+55802	85	0	Thermococcus barophilus
+391623	85	0	Thermococcus barophilus MP
+69014	85	0	Thermococcus kodakarensis KOD1
+444157	85	0	Thermoproteus neutrophilus V24Sta
+633148	85	0	Thermosphaera aggregans DSM 11486
+572478	87	0	Vulcanisaeta distributa DSM 14429
+195522	87.5	0	Thermococcus nautili
+880724	88	0	Methanotorris igneus Kol 5
+593117	88	0	Thermococcus gammatolerans EJ3
+2265	88	0	Thermococcus litoralis
+163003	88	0	Thermococcus sp. CL1
+368408	88	0	Thermofilum pendens Hrk 5
+453591	90	0	Ignicoccus hospitalis KIN4/I
+644281	90	0	Methanocaldococcus sp. FS406-22
+228908	90	0	Nanoarchaeum equitans Kin4-M
+1365176	90	0	Thermofilum sp. 1910b
+768679	90	0	Thermoproteus tenax Kra 1
+999630	90	0	Thermoproteus uzoniensis 768-20
+94694	91	0	Desulfurococcus amylolyticus
+427317	91	0	Sulfolobus islandicus M.14.25
+272557	92	0	Aeropyrum pernix K1
+340102	92	0	Pyrobaculum arsenaticum DSM 13514
+410359	92	0	Pyrobaculum calidifontis JCM 11548
+698757	92	0	Pyrobaculum oguniense TE7
+399550	92	0	Staphylothermus marinus F1
+583356	93	0	Ignisphaera aggregans DSM 17230
+342949	93	0	Pyrococcus sp. NA2
+1183377	95	0	Pyrococcus sp. ST04
+272844	96	0	Pyrococcus abyssi GE5
+190192	98	0	Methanopyrus kandleri AV19
+1185654	98	0	Pyrococcus furiosus COM1
+70601	98	0	Pyrococcus horikoshii OT3
+529709	98	0	Pyrococcus yayanosii CH1
+415426	100	0	Hyperthermus butylicus DSM 5456
+178306	100	0	Pyrobaculum aerophilum str. IM2
+384616	100	0	Pyrobaculum islandicum DSM 4184
+186497	100	0	Pyrococcus furiosus DSM 3638
+694429	106	0	Pyrolobus fumarii 1A

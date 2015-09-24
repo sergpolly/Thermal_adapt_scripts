@@ -113,8 +113,7 @@ with open('ftp_request.dat','w') as fp:
 
 # original assembly file is somewhere in ftp.ncbi.nih.gov/genomes/genbank/archaea/
 #
-
- # wget -b -r --user=anonymous --password=sergey.venev@umassmed.edu -i ftp_request.dat # log outputted to wget-log
+# wget -b -r --user=anonymous --password=xxx@server.edu -i ftp_request.dat # log outputted to wget-log
 
 
 

@@ -103,14 +103,23 @@ for asm_group in matched_asm:
 # after all the ugly manipulations we finally get what we wanted ...
 dat_topt = pd.concat(filtered_matched_asm)
 dat_topt['OptimumTemperature'] = topt_aligned
+
+# now as everything is established, drop_duplicates, as there are some clashes ...
+dat_topt = dat_topt.drop_duplicates()
+# one example being: Pyrobaculum neutrophilum which is reffering to the sa Thermoproteus neutrophilus V24Sta
+
 dat_topt.to_csv("assembly_topt.dat",index=False)
+
+
+
+
 
 # write file with ftp requests ...
 with open('ftp_request.dat','w') as fp:
-    for ppp in ggg.ftp_path:
-        fp.write(ppp+'\n')
+    for _line in dat_topt.ftp_path:
+        fp.write(_line+'\n')
 
-
+# notes about fetching data from NCBI ... (more details at the github wiki)
 # original assembly file is somewhere in ftp.ncbi.nih.gov/genomes/genbank/archaea/
 #
 # wget -b -r --user=anonymous --password=xxx@server.edu -i ftp_request.dat # log outputted to wget-log

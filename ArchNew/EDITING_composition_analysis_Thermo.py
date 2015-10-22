@@ -163,7 +163,9 @@ plt.clf()
 bins = np.linspace(-0.05,0.05,50)
 plt.hist(list(cai_stats_quant_TrOp.q4 - cai_stats_quant_TrOp.q1),bins=bins,color='blue')
 plt.hist(list(cai_stats_quant_noTrOp.q4 - cai_stats_quant_noTrOp.q1),bins=bins,color='red',alpha=0.8)
-plt.show()
+plt.xlabel("IVYWREL(TrOp:blue,noTrOp:red)")
+# plt.show()
+plt.savefig("IVYWREL_arch_hist_TrueCodon.png")
 
 
 plt.clf()
@@ -173,32 +175,49 @@ plt.hist(list(cai_stats_quant[cai_stats_quant.OptimumTemperature<=50].R20_q4 - c
 plt.hist(list(cai_stats_quant_noTrOp[cai_stats_quant_noTrOp.OptimumTemperature<=50].R20_q4 - cai_stats_quant_noTrOp[cai_stats_quant_noTrOp.OptimumTemperature<=50].R20_q1),bins=bins,color='blue',cumulative=False)
 plt.hist(list(cai_stats_quant_TrOp[cai_stats_quant_TrOp.OptimumTemperature<=50].R20_q4 - cai_stats_quant_TrOp[cai_stats_quant_TrOp.OptimumTemperature<=50].R20_q1),bins=bins,color='red',alpha=0.8,cumulative=False)
 plt.xlabel('$R^{4}_{T} - R^{1}_{T}$')
+plt.ylabel("hist AllMeso:black; noTrOpMeso:blue; TrOpMeso:red")
 # plt.hist(list(cai_stats_quant_TrOp.R20_q4 - cai_stats_quant_TrOp.R20_q1),bins=bins,color='blue')
 # plt.hist(list(cai_stats_quant_noTrOp.R20_q4 - cai_stats_quant_noTrOp.R20_q1),bins=bins,color='red',alpha=0.8)
-plt.show()
+plt.savefig("R20_arch_hist_TrueCodon.png")
 
 
 
 plt.clf()
 plt.plot(cai_stats_quant.OptimumTemperature,cai_stats_quant.q1,'bo',alpha=0.8)
 plt.plot(cai_stats_quant.OptimumTemperature,cai_stats_quant.q4,'ro',alpha=0.8)
-plt.show()
+plt.xlabel("Temperature")
+plt.ylabel("IVYWREL(HE:red;LE:blue)")
+# plt.show()
+plt.savefig("IVYWREL_T_dots_TrueCodon.png")
 # #
 
 plt.clf()
 plt.plot(cai_stats_quant.OptimumTemperature,cai_stats_quant.R20_q1,'bo',alpha=0.8)
 plt.plot(cai_stats_quant.OptimumTemperature,cai_stats_quant.R20_q4,'ro',alpha=0.8)
-plt.show()
+plt.xlabel("Temperature")
+plt.ylabel("R20(HE:red;LE:blue)")
+plt.savefig("R20_T_dots_TrueCodon.png")
 
 ############################
 # GC is lacking from the file env_dat is reffering to  ...
-# FIT IT ...
+# FIX IT ...
 ###########################
+# plt.clf()
+# plt.plot(cai_stats_quant.GC,cai_stats_quant.R20_q1,'bo',alpha=0.8)
+# plt.plot(cai_stats_quant.GC,cai_stats_quant.R20_q4,'ro',alpha=0.8)
+# plt.show()
 
-plt.clf()
-plt.plot(cai_stats_quant.GC,cai_stats_quant.R20_q1,'bo',alpha=0.8)
-plt.plot(cai_stats_quant.GC,cai_stats_quant.R20_q4,'ro',alpha=0.8)
-plt.show()
+
+# plt.clf()
+# for i in range(num_of_quantiles):
+#     k1 = 'q%d'%i
+#     k2 = 'R20_q%d'%i
+#     k3 = 'Akashi_q%d'%i
+#     #
+#     plt.plot([i+1,]*cai_stats_quant.shape[0],cai_stats_quant[k1],alpha=0.7)
+
+# plt.xlim(0,6)
+# plt.show()
 
 
 plt.clf()
@@ -207,9 +226,13 @@ for i in range(num_of_quantiles):
     k2 = 'R20_q%d'%i
     k3 = 'Akashi_q%d'%i
     #
-    plt.plot([i+1,]*cai_stats_quant.shape[0],cai_stats_quant[k1],alpha=0.7)
+    plt.errorbar([i+1,],cai_stats_quant_noTrOp[cai_stats_quant_noTrOp.OptimumTemperature>0][k1].mean(),yerr=cai_stats_quant_noTrOp[cai_stats_quant_noTrOp.OptimumTemperature>0][k1].std(),fmt='o')
 
 plt.xlim(0,6)
+plt.ylabel(k1)
+plt.xlabel('CAI quantile')
+plt.savefig("IVYWREL_arch_qunatile_trend_TrueCodon.png")
+# plt.show()
 
 
 plt.clf()
@@ -221,7 +244,25 @@ for i in range(num_of_quantiles):
     plt.errorbar([i+1,],cai_stats_quant_noTrOp[cai_stats_quant_noTrOp.OptimumTemperature>0][k2].mean(),yerr=cai_stats_quant_noTrOp[cai_stats_quant_noTrOp.OptimumTemperature>0][k2].std(),fmt='o')
 
 plt.xlim(0,6)
-plt.show()
+plt.ylabel(k2)
+plt.xlabel('CAI quantile')
+plt.savefig("R20_arch_qunatile_trend_TrueCodon.png")
+# plt.show()
+
+
+plt.clf()
+for i in range(num_of_quantiles):
+    k1 = 'q%d'%i
+    k2 = 'R20_q%d'%i
+    k3 = 'Akashi_q%d'%i
+    #
+    plt.errorbar([i+1,],cai_stats_quant_noTrOp[cai_stats_quant_noTrOp.OptimumTemperature>0][k3].mean(),yerr=cai_stats_quant_noTrOp[cai_stats_quant_noTrOp.OptimumTemperature>0][k3].std(),fmt='o')
+
+plt.xlim(0,6)
+plt.ylabel(k3)
+plt.xlabel('CAI quantile')
+plt.savefig("Akashi_arch_qunatile_trend_TrueCodon.png")
+# plt.show()
 
 
 # R20 grows on average, 

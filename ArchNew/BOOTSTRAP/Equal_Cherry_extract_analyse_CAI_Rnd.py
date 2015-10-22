@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import cairi
 from multiprocessing import Pool
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 #MAYBE WE DONT NEED THAT ANYMORE ...
 # # STUPID FIX TO AVOID OLDER PANDAS HERE ...
@@ -23,7 +23,7 @@ RIBO_LIMIT = 24
 
 # path = os.path.join(os.path.expanduser('~'),'GENOMES_BACTER_RELEASE69/genbank')
 path = "."
-dat = pd.read_csv(os.path.join(path,"complete_arch_CDS_Rnd.dat"))
+dat = pd.read_csv(os.path.join(path,"complete_arch_CDS_Rnd_Equal.dat"))
 # plot_path = os.path.join(os.path.expanduser('~'),'GENOMES_BACTER_RELEASE69/plots')
 plot_path = path
 

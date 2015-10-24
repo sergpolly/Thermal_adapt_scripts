@@ -18,6 +18,12 @@ path = "."
 # 'crit_features','crit_comp_genome','crit_plasmid']
 env_dat = pd.read_csv(os.path.join(path,"summary_organisms_interest.dat"))
 
+
+taxon_dat = pd.read_csv(os.path.join(path,"arch_taxonomy_interest.dat"))
+check_halo = lambda tax_class: any(_ in tax_class for _ in ('Halobacteria','Nanohaloarchaea'))
+taxon_dat['halo'] = taxon_dat['tax_lineages'].apply(lambda lins: any( check_halo(lin.split(';')) for lin in lins.split(':') ) )
+
+
 #['assembly_accession','cDNA','fid','pid','product','protein','status','table','ribosomal','CAI','TrOp']
 gen_dat = pd.read_csv(os.path.join(path,"complete_arch_CDS_CAI_DNA_Rnd.dat"))
 
@@ -65,45 +71,48 @@ for i in range(num_of_quantiles):
     stat_dat['R20_q%d'%i] = []
     stat_dat['Akashi_q%d'%i] = []
 #
+env_dat_tax = pd.merge(env_dat,taxon_dat,on='assembly_accession')
 #
-for idx,topt in env_dat[['assembly_accession','OptimumTemperature']].itertuples(index=False):
-    cds_cai_dat = gen_dat_org.get_group(idx) 
-    # is it a translationally optimized organism ?
-    all,any = cds_cai_dat['TrOp'].all(),cds_cai_dat['TrOp'].any()
-    if all == any:
-        trans_opt = all
-    else:  #any != all
-        print "%s@T=%f: Something wrong is happening: TrOp flag is not same for all ..."%(idx,topt)
-    # THIS IS just a stupid precaution measure, in case we messed something upstream ...
-    # not that stupid after all, because NaN is behaving badly here ...
-    if cds_cai_dat['TrOp'].notnull().all():
-        #
-        # we can use this 'qcut' function from pandas to divide our proteins by the quantiles ...
-        category,bins = pd.qcut(cds_cai_dat['CAI'],q=num_of_quantiles,retbins=True,labels=False)
-        #
-        stat_dat['assembly_accession'].append(idx)
-        stat_dat['OptimumTemperature'].append(topt)
-        stat_dat['TrOp'].append(trans_opt)
-        #
-        # then we could iterate over proteins/cDNAs in these categories ...
-        for cat in range(num_of_quantiles):
-            cds_cai_category = cds_cai_dat[category==cat]
-            total_length = cds_cai_category['protein'].str.len().sum()
-            IVYWREL = sum(cds_cai_category['protein'].str.count(aa).sum() for aa in list('IVYWREL'))
-            # IVYWREL = cds_cai_category['protein'].str.count('|'.join("IVYWREL")).sum() # tiny bit slower ...
-            f_IVYWREL = float(IVYWREL)/float(total_length)
-            # 20-vector for of amino acid composition ...
-            aa_freq_20 = np.true_divide([cds_cai_category['protein'].str.count(aa).sum() for aa in aacids],float(total_length))
-            # slope, intercept, r_value, p_value, std_err = stats.linregress(x,y)
-            _1,_2,R20,_4,_5 = stats.linregress(aa_freq_20, thermo_freq[1])
-            # Akashi ...
-            cost = np.dot(aa_freq_20,akashi_cost[1])
-            # appending ...
+for idx,topt,halo in env_dat_tax[['assembly_accession','OptimumTemperature','halo']].itertuples(index=False):
+    # excluding halophiles ...
+    if not halo:
+        cds_cai_dat = gen_dat_org.get_group(idx) 
+        # is it a translationally optimized organism ?
+        all,any = cds_cai_dat['TrOp'].all(),cds_cai_dat['TrOp'].any()
+        if all == any:
+            trans_opt = all
+        else:  #any != all
+            print "%s@T=%f: Something wrong is happening: TrOp flag is not same for all ..."%(idx,topt)
+        # THIS IS just a stupid precaution measure, in case we messed something upstream ...
+        # not that stupid after all, because NaN is behaving badly here ...
+        if cds_cai_dat['TrOp'].notnull().all():
             #
+            # we can use this 'qcut' function from pandas to divide our proteins by the quantiles ...
+            category,bins = pd.qcut(cds_cai_dat['CAI'],q=num_of_quantiles,retbins=True,labels=False)
             #
-            stat_dat['q%d'%cat].append(f_IVYWREL)
-            stat_dat['R20_q%d'%cat].append(R20)
-            stat_dat['Akashi_q%d'%cat].append(cost)
+            stat_dat['assembly_accession'].append(idx)
+            stat_dat['OptimumTemperature'].append(topt)
+            stat_dat['TrOp'].append(trans_opt)
+            #
+            # then we could iterate over proteins/cDNAs in these categories ...
+            for cat in range(num_of_quantiles):
+                cds_cai_category = cds_cai_dat[category==cat]
+                total_length = cds_cai_category['protein'].str.len().sum()
+                IVYWREL = sum(cds_cai_category['protein'].str.count(aa).sum() for aa in list('IVYWREL'))
+                # IVYWREL = cds_cai_category['protein'].str.count('|'.join("IVYWREL")).sum() # tiny bit slower ...
+                f_IVYWREL = float(IVYWREL)/float(total_length)
+                # 20-vector for of amino acid composition ...
+                aa_freq_20 = np.true_divide([cds_cai_category['protein'].str.count(aa).sum() for aa in aacids],float(total_length))
+                # slope, intercept, r_value, p_value, std_err = stats.linregress(x,y)
+                _1,_2,R20,_4,_5 = stats.linregress(aa_freq_20, thermo_freq[1])
+                # Akashi ...
+                cost = np.dot(aa_freq_20,akashi_cost[1])
+                # appending ...
+                #
+                #
+                stat_dat['q%d'%cat].append(f_IVYWREL)
+                stat_dat['R20_q%d'%cat].append(R20)
+                stat_dat['Akashi_q%d'%cat].append(cost)
 #
 #
 #
@@ -143,7 +152,7 @@ for i in range(num_of_quantiles):
 plt.xlim(0,6)
 plt.ylabel(k1)
 plt.xlabel('CAI quantile')
-plt.savefig("IVYWREL_arch_qunatile_trend_Shuff.png")
+plt.savefig("IVYWREL_arch_qunatile_trend_Shuff.noTrop.png")
 
 plt.clf()
 for i in range(num_of_quantiles):
@@ -156,7 +165,7 @@ for i in range(num_of_quantiles):
 plt.xlim(0,6)
 plt.ylabel(k2)
 plt.xlabel('CAI quantile')
-plt.savefig("R20_arch_qunatile_trend_Shuff.png")
+plt.savefig("R20_arch_qunatile_trend_Shuff.noTrop.png")
 
 plt.clf()
 for i in range(num_of_quantiles):
@@ -169,7 +178,101 @@ for i in range(num_of_quantiles):
 plt.xlim(0,6)
 plt.ylabel(k3)
 plt.xlabel('CAI quantile')
-plt.savefig("Akashi_arch_qunatile_trend_Shuff.png")
+plt.savefig("Akashi_arch_qunatile_trend_Shuff.noTrop.png")
+
+
+
+#####################################################################################################
+
+
+
+plt.clf()
+for i in range(num_of_quantiles):
+    k1 = 'q%d'%i
+    k2 = 'R20_q%d'%i
+    k3 = 'Akashi_q%d'%i
+    #
+    plt.errorbar([i+1,],cai_stats_quant[cai_stats_quant.OptimumTemperature>0][k1].mean(),yerr=cai_stats_quant[cai_stats_quant.OptimumTemperature>0][k1].std(),fmt='o')
+
+plt.xlim(0,6)
+plt.ylabel(k1)
+plt.xlabel('CAI quantile')
+plt.savefig("IVYWREL_arch_qunatile_trend_Shuff.ALL.png")
+
+plt.clf()
+for i in range(num_of_quantiles):
+    k1 = 'q%d'%i
+    k2 = 'R20_q%d'%i
+    k3 = 'Akashi_q%d'%i
+    #
+    plt.errorbar([i+1,],cai_stats_quant[cai_stats_quant.OptimumTemperature>0][k2].mean(),yerr=cai_stats_quant[cai_stats_quant.OptimumTemperature>0][k2].std(),fmt='o')
+
+plt.xlim(0,6)
+plt.ylabel(k2)
+plt.xlabel('CAI quantile')
+plt.savefig("R20_arch_qunatile_trend_Shuff.ALL.png")
+
+plt.clf()
+for i in range(num_of_quantiles):
+    k1 = 'q%d'%i
+    k2 = 'R20_q%d'%i
+    k3 = 'Akashi_q%d'%i
+    #
+    plt.errorbar([i+1,],cai_stats_quant[cai_stats_quant.OptimumTemperature>0][k3].mean(),yerr=cai_stats_quant[cai_stats_quant.OptimumTemperature>0][k3].std(),fmt='o')
+
+plt.xlim(0,6)
+plt.ylabel(k3)
+plt.xlabel('CAI quantile')
+plt.savefig("Akashi_arch_qunatile_trend_Shuff.ALL.png")
+
+
+
+#####################################################################################################
+
+
+
+
+plt.clf()
+for i in range(num_of_quantiles):
+    k1 = 'q%d'%i
+    k2 = 'R20_q%d'%i
+    k3 = 'Akashi_q%d'%i
+    #
+    plt.errorbar([i+1,],cai_stats_quant_TrOp[cai_stats_quant_TrOp.OptimumTemperature>0][k1].mean(),yerr=cai_stats_quant_TrOp[cai_stats_quant_TrOp.OptimumTemperature>0][k1].std(),fmt='o')
+
+plt.xlim(0,6)
+plt.ylabel(k1)
+plt.xlabel('CAI quantile')
+plt.savefig("IVYWREL_arch_qunatile_trend_Shuff.TrOp.png")
+
+plt.clf()
+for i in range(num_of_quantiles):
+    k1 = 'q%d'%i
+    k2 = 'R20_q%d'%i
+    k3 = 'Akashi_q%d'%i
+    #
+    plt.errorbar([i+1,],cai_stats_quant_TrOp[cai_stats_quant_TrOp.OptimumTemperature>0][k2].mean(),yerr=cai_stats_quant_TrOp[cai_stats_quant_TrOp.OptimumTemperature>0][k2].std(),fmt='o')
+
+plt.xlim(0,6)
+plt.ylabel(k2)
+plt.xlabel('CAI quantile')
+plt.savefig("R20_arch_qunatile_trend_Shuff.TrOp.png")
+
+plt.clf()
+for i in range(num_of_quantiles):
+    k1 = 'q%d'%i
+    k2 = 'R20_q%d'%i
+    k3 = 'Akashi_q%d'%i
+    #
+    plt.errorbar([i+1,],cai_stats_quant_TrOp[cai_stats_quant_TrOp.OptimumTemperature>0][k3].mean(),yerr=cai_stats_quant_TrOp[cai_stats_quant_TrOp.OptimumTemperature>0][k3].std(),fmt='o')
+
+plt.xlim(0,6)
+plt.ylabel(k3)
+plt.xlabel('CAI quantile')
+plt.savefig("Akashi_arch_qunatile_trend_Shuff.TrOp.png")
+
+
+
 
 # R20 is flat on average (strange bi-modality?!) 
 #       | meso thermo

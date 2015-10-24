@@ -61,6 +61,13 @@ data = {# there might be several GenBank per assembly, so ...
 #         'SourcePlasmid':[] # Check if it is a plasmid, from features[0]
 #         }
 
+# # This is the simple way to iterate over GenBank files ...
+# # iteration over gb files ...
+# asm_root = lambda name,idx:  idx+'_'+name.replace(' ','_')
+# am_roots = [ asm_root(name,idx) for name,idx in asm[['asm_name','assembly_accession']].itertuples(index=False) ]
+# xxx = [ os.path.join(path,am,am+'_genomic.gbff') for am in am_roots ]
+# # xxx = [ os.path.join(path,asm_root(name,idx),'_'.join([asm_root(name,idx),'genomic.gbff'])) for name,idx in asm[['asm_name','assembly_accession']].itertuples(index=False) ]
+
 # iterate over all folders with assemblages and extract genomic information from their contents ...
 for asm_suffix,asm_access in asm[['asm_name','assembly_accession']].itertuples(index=False):
     #

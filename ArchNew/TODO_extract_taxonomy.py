@@ -60,6 +60,21 @@ if __name__ == "__main__":
         fp.write("assembly_accession,tax_lineages\n")
         for result in results:
             fp.write(','.join(str(item) for item in result)+'\n')
+    #
+    #
+    # after the work is done and taxonomy data have been extracted, we can just simply update the 
+    # # list of interesting organisms, to avoid dealing with Halophiles whatsoever ...
+    # summary_organisms_interest.dat
+    taxon_dat = pd.read_csv(os.path.join(root_path,"arch_taxonomy_interest.dat"))
+    check_if_halop = lambda tax_class: any(_ in tax_class for _ in ('Halobacteria','Nanohaloarchaea'))
+    taxon_dat['halo'] = taxon_dat['tax_lineages'].apply(lambda lins: any( check_if_halop(lin.split(';')) for lin in lins.split(':') ) )
+    # now merge dat and taxon to filter dat further on ...
+    env_dat_tax = pd.merge(dat,taxon_dat,on='assembly_accession')
+    #
+    # env_dat excluding halophiles ...
+    env_dat_tax[~env_2dat_tax['halo']].to_csv(os.path.join(root_path,"summary_organisms_interest_no_halop.dat"),index=False)
+
+
 
 
 

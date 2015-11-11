@@ -68,21 +68,35 @@ bact_cai_org = bact_cai.groupby('GenomicID')
 arch_cai_org = arch_cai.groupby('assembly_accession')
 
 
-# TODO ......................................................
-for idx,topt in env_dat[['GenomicID','OptimumTemperature']].itertuples(index=False):
-    cds_cai_dat = gen_dat_org.get_group(idx) 
-    # is it a translationally optimized organism ?
-    all,any = cds_cai_dat['TrOp'].all(),cds_cai_dat['TrOp'].any()
-    if all == any:
-	    trans_opt = all
-    else:  #any != all
-	    print "%s@T=%f: Something wrong is happening: TrOp flag is not same for all ..."%(idx,topt)
-    # THIS IS just a stupid precaution measure, in case we messed something upstream ...
-    # not that stupid after all, because NaN is behaving badly here ...
-    if cds_cai_dat['TrOp'].notnull().all():
+# # This is a bug potentially ...
+# pd.Series([np.nan, np.nan, np.nan]).all() = True
+# pd.Series([np.nan, np.nan, np.nan]).any() = False
+def get_one_trop(idx, all_cai):
+    org_cds = all_cai.get_group(idx)
+    # check if TrOp ...
+    # for a given organism(id) all TrOp values must be same
+    trop_vals = org_cds['TrOp'].unique()
+    assert trop_vals.size == 1
+    # then just figure out TrOp value after unpacking ...
+    trop, = trop_vals
+    if (not trop)or(pd.isnull(trop)):
+        # False or Nan, return False 
+        return False
+    elif trop == True:
+        # if it's True just return ...
+        return trop
+    else:
+        raise ValueError
 
 
+num_TrOp_arch_nohalo    = sum( get_one_trop(idx,arch_cai_org) for idx in arch_nohalo['assembly_accession'] )
+num_TrOp_arch           = sum( get_one_trop(idx,arch_cai_org) for idx in arch['assembly_accession'])
+num_TrOp_bact           = sum( get_one_trop(idx,bact_cai_org) for idx in bact['GenomicID'])
 
+
+print "# of Archaeal species with Translational Optimization, ",num_TrOp_arch
+print "# of Archaeal species with Translational Optimization (excluding Halophiles), ",num_TrOp_arch_nohalo
+print "# of Bacterial species with Translational Optimization, ",num_TrOp_bact
 
 
 

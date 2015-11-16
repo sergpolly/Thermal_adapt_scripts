@@ -138,74 +138,13 @@ def get_dataset(all_cds,dat,uid_key,cds_criteria='all',org_criteria='all',calcul
 
 
 
-def plot_comparison(ax,x,y,xlab='x',ylab='y'):
-    #
-    ax.plot(x,y,'bo',visible=False)
-    for i,aa in enumerate(aacids):
-        ax.text(x[i], y[i], aa, transform=ax.transData)
-    ###################################################
-    a,b,r,pval,_ = st.linregress(x,y)
-    #
-    middle = 0.5*(x.min()+x.max())
-    delta = 1.1*(x.max()-x.min())
-    x_range = [middle-0.5*delta,middle+0.5*delta]
-    #############################################
-    fff = np.vectorize(lambda x: a*x + b)
-    lin_fit, = ax.plot(x_range,fff(x_range),color='gray',linewidth=1.5,linestyle='-',zorder=100,label='linear fit, R=%.3f'%r)
-    ###################################################
-    ###################################################
-    ax.yaxis.set_ticks_position('left')
-    ax.xaxis.set_ticks_position('bottom')
-    ###################################################
-    ###################################################
-    ax.set_xlabel(xlab)
-    ax.set_ylabel(ylab)
-    ax.legend((lin_fit,),('linear fit, R=%.3f'%r,),loc='best',frameon=False)
-    plt.tight_layout(pad=0.4, h_pad=None, w_pad=None)
-    ###################################################
-    ###################################################
-    # axis limits ...
-    middle = 0.5*(x.min()+x.max())
-    delta = 1.3*(x.max()-x.min())
-    x_lims = [middle-0.5*delta,middle+0.5*delta]
-    middle = 0.5*(y.min()+y.max())
-    delta = 1.3*(y.max()-y.min())
-    y_lims = [middle-0.5*delta,middle+0.5*delta]
-    # ###################################################
-    ax.set_xlim(x_lims)
-    ax.set_ylim(y_lims)
-    ###################################################
-    # ax.locator_params(axis='both',tight=True)#nbins=10)
-    # ax.locator_params(axis='x',nbins=5)
-    ###################################################
 
 
-
-
-
-def get_axis(xbins = 2, ybins = 3):
-    plt.clf()
-    # create grid of subplots on a large figure canvas
-    # share x&y axes among all plots
-    fig, ax = plt.subplots(ybins, xbins, figsize=(7.5,ybins*7.5/xbins))#, sharex=True, sharey=True)
-    # # no space between subplots
-    # fig.subplots_adjust(hspace=0.0, wspace=0.08)
-    # # make some room for the axes' labels
-    # l,b,r,t = 0.05,0.12,0.98,0.92
-    # w, h = r-l, t-b
-    # fig.subplots_adjust(bottom=b, left=l, right=r, top=t)
-    # #
-    # # returning axis ...
-    return (fig,ax)
-
-
-
-# aafreqs_topt = get_dataset(arch_cai_by_org,arch_nohalo,'assembly_accession',cds_criteria='all',org_criteria='all',calculate_trop=True,topt='OptimumTemperature')
 
 
 cds_crits = ['cai','ribo','cai_noribo','all']
 org_crits = ['trop','all']
-
+#
 combinations = [(cc,oo) for cc in cds_crits for oo in org_crits]
 combinations = [[{'cds_criteria':cc,'org_criteria':oo} for cc in cds_crits] for oo in org_crits]
 # # with trop
@@ -213,87 +152,78 @@ combinations = [[{'cds_criteria':cc,'org_criteria':oo} for cc in cds_crits] for 
 # # no trop ...
 # combinations[1][0,1,3]
 
-# ######################################
-# for i,(for_trop,for_notrop) in enumerate(zip([0,2,3],[0,1,3])):
-#     #
-#     print i,combinations[0][for_trop]
-#     #
-#     kwargs = combinations[0][for_trop]
-#     kwargs['calculate_trop'] = True
-#     # {'cds_criteria':combinations[0][cc],'org_criteria':combinations[0][oo],'calculate_trop':True}
-#     arch_slopes_x = get_slopes(get_dataset(arch_cai_by_org,arch_nohalo,'assembly_accession',**kwargs))
-#     bact_slopes_y = get_slopes(get_dataset(bact_cai_by_org,bact,'GenomicID',**kwargs))
-#     print arch_slopes_x,bact_slopes_y
-#     # #
-#     print i,combinations[1][for_notrop]
-#     #
-#     kwargs = combinations[1][for_notrop]
-#     kwargs['calculate_trop'] = True
-#     # kwargs = {'cds_criteria':combinations[1][cc],'org_criteria':combinations[1][oo],'calculate_trop':True}
-#     arch_slopes_x = get_slopes(get_dataset(arch_cai_by_org,arch_nohalo,'assembly_accession',**kwargs))
-#     bact_slopes_y = get_slopes(get_dataset(bact_cai_by_org,bact,'GenomicID',**kwargs))
-#     print arch_slopes_x,bact_slopes_y
-# #######################################
+
+# for each dataset get some summary info ...
+def get_data_summary(dat,topt='OptimumTemperature'):
+    exp_T = dat[dat[topt]>=50][aacids].mean()
+    exp_M = dat[(dat[topt]>=20)&(dat[topt]<=40)][aacids].mean()
+    exp_A = dat[aacids].mean()
+    exp_D = dat[aacids].apply(lambda x: x.cov(dat[topt])/dat[topt].var())
+    # check exp_D, just in case ...
+    exp_D_check = dat[aacids].apply(lambda x: st.linregress(dat[topt],x)[0])
+    if ( np.abs(exp_D - exp_D_check) > 1e-7 ).any():
+        raise ValueError('exp_D caluclation failed!')
+    # assign some names to form a DataFrame later ...
+    exp_M.name = 'exp_M'
+    exp_T.name = 'exp_T'
+    exp_A.name = 'exp_A'
+    exp_D.name = 'exp_D'
+    # stack these as columns together and return ...
+    return pd.concat([exp_M,exp_T,exp_A,exp_D],axis=1)
 
 
-# # #TESTING ....
-# #
-# # kkk = {'cds_criteria': 'cai', 'org_criteria': 'trop', 'calculate_trop': True}
-# kkk = {'cds_criteria': 'cai', 'org_criteria': 'all', 'calculate_trop': True}
-# # xxx = get_dataset(arch_cai_by_org,arch_nohalo,'assembly_accession',**kkk)
-# xxx = get_dataset(bact_cai_by_org,bact,'GenomicID',**kkk)
-# #
-# xxx[xxx['A'].isnull()] # there is 1 that evaluate to np.nan?!!!!!!!!!!!!!!!
 
-
-# {'cds_criteria': 'ribo', 'org_criteria': 'all'}
-
-# get slopes ...
-def get_slopes(dat,topt='OptimumTemperature'):
-    return np.asarray([st.linregress(dat[topt],dat[aa])[0] for aa in aacids])
-
-# # draw the thing ...
-fig,ax = get_axis()
 
 for i,(for_trop,for_notrop) in enumerate(zip([0,2,3],[0,1,3])):
     #
+    ###################################################################
     print i,combinations[0][for_trop]
     #
     kwargs = combinations[0][for_trop]
     kwargs['calculate_trop'] = True
-    # {'cds_criteria':combinations[0][cc],'org_criteria':combinations[0][oo],'calculate_trop':True}
-    arch_slopes_x = get_slopes(get_dataset(arch_cai_by_org,arch_nohalo,'assembly_accession',**kwargs))
-    bact_slopes_y = get_slopes(get_dataset(bact_cai_by_org,bact,'GenomicID',**kwargs))
-    with open("slopes_%s_%s.info"%(kwargs['cds_criteria'],kwargs['org_criteria']),'w') as fp:
-        fp.write("aa,arch_a,bact_a\n")
-        for aa,arch_a,bact_a in zip(aacids,arch_slopes_x,bact_slopes_y):
-            fp.write("%s,%.4f,%.4f\n"%(aa,arch_a,bact_a))
-    plot_comparison(ax[i,0],arch_slopes_x,bact_slopes_y,ylab='_'.join([str(_) for _ in kwargs.values()]),xlab='x')
-    # #
+    #
+    arch_dataset = get_dataset(arch_cai_by_org,arch_nohalo,'assembly_accession',**kwargs)
+    bact_dataset = get_dataset(bact_cai_by_org,bact,'GenomicID',**kwargs)
+    #
+    arch_dat = get_data_summary(arch_dataset)
+    bact_dat = get_data_summary(bact_dataset)
+    #
+    arch_fname = "exp_MTAD_%s_%s.arch.summary"%(kwargs['cds_criteria'],kwargs['org_criteria'])
+    bact_fname = "exp_MTAD_%s_%s.bact.summary"%(kwargs['cds_criteria'],kwargs['org_criteria'])
+    #
+    arch_dat.to_csv(arch_fname,index=True)
+    bact_dat.to_csv(bact_fname,index=True)
+    #
+    ###################################################################
     print i,combinations[1][for_notrop]
     #
     kwargs = combinations[1][for_notrop]
     kwargs['calculate_trop'] = True
-    # kwargs = {'cds_criteria':combinations[1][cc],'org_criteria':combinations[1][oo],'calculate_trop':True}
-    arch_slopes_x = get_slopes(get_dataset(arch_cai_by_org,arch_nohalo,'assembly_accession',**kwargs))
-    bact_slopes_y = get_slopes(get_dataset(bact_cai_by_org,bact,'GenomicID',**kwargs))
-    with open("slopes_%s_%s.info"%(kwargs['cds_criteria'],kwargs['org_criteria']),'w') as fp:
-        fp.write("aa,arch_a,bact_a\n")
-        for aa,arch_a,bact_a in zip(aacids,arch_slopes_x,bact_slopes_y):
-            fp.write("%s,%.4f,%.4f\n"%(aa,arch_a,bact_a))
-    plot_comparison(ax[i,1],arch_slopes_x,bact_slopes_y,ylab='_'.join([str(_) for _ in kwargs.values()]),xlab='x')
+    #
+    arch_dataset = get_dataset(arch_cai_by_org,arch_nohalo,'assembly_accession',**kwargs)
+    bact_dataset = get_dataset(bact_cai_by_org,bact,'GenomicID',**kwargs)
+    #
+    arch_dat = get_data_summary(arch_dataset)
+    bact_dat = get_data_summary(bact_dataset)
+    #
+    arch_fname = "exp_MTAD_%s_%s.arch.summary"%(kwargs['cds_criteria'],kwargs['org_criteria'])
+    bact_fname = "exp_MTAD_%s_%s.bact.summary"%(kwargs['cds_criteria'],kwargs['org_criteria'])
+    #
+    arch_dat.to_csv(arch_fname,index=True)
+    bact_dat.to_csv(bact_fname,index=True)
 
 
 
-plt.show()
 
 
-# # # # simple thing to extract 20 slopes per dataset ...
-# # # with open('cai10_archaea.slopes_info','w') as fp:
-# # #     fp.write("aa,a,b,r,pval\n")
-# # #     for aa in aacids:
-# # #         a,b,r,pval,_ = st.linregress(dat['topt'],dat[aa])
-# # #         fp.write("%s,%.4f,%.4f,%.4f,%.e\n"%(aa,a,b,r,pval))
+
+
+
+
+
+
+
+
 
 
 

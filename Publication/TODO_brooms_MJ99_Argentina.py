@@ -81,28 +81,79 @@ def get_axis(xbins = 2, ybins = 3, yext=1.0):
     return (fig,ax)
 
 
+# getting file name based on criteria combination ...
+def get_exp_fname(cds_criteria,org_criteria,kingdom):
+    if kingdom in ['arch','archaea']:
+        return "exp_MTAD_%s_%s.arch.summary"%(cds_criteria,org_criteria)
+    elif kingdom in ['bact','bacteria']:
+        return "exp_MTAD_%s_%s.bact.summary"%(cds_criteria,org_criteria)
+    else:
+        raise TypeError('only archaeal and bacterial kingdoms are supported!')
 
 
-# # RAW EXPERIMENTAL DATA HERE ...
-# path = os.path.join(os.path.expanduser('~'),'GENOMES_BACTER_RELEASE69/genbank')
-# root_path = os.path.expanduser('~')
-# bact_path = os.path.join(root_path,'GENOMES_BACTER_RELEASE69/genbank')
-# arch_path = os.path.join(root_path,'GENOMES_ARCH_SEP2015')
-# # SOME ARCHAEAL DATA ...
-# arch        = pd.read_csv(os.path.join(arch_path,'summary_organisms_interest.dat'))
-# arch_nohalo = pd.read_csv(os.path.join(arch_path,'summary_organisms_interest_no_halop.dat'))
-# # SOME BACTERIAL DATA ...
-# # complete genomes only ...
-# bact        = pd.read_csv(os.path.join(bact_path,'env_catalog_compgenome.dat'))
-# # RAW EXPERIMENTAL DATA HERE ...
+def get_slopes_comparison_labels(combination,kingdom):
+    # unpack criteria ...
+    cds_crit,org_crit = combination['cds_criteria'], combination['org_criteria']
+    label = "observed slopes "
+    ######################
+    def translate_kingdom(kingdom):
+        if kingdom in ['arch','archaea']:
+            return 'archaea'
+        elif kingdom in ['bact','bacteria']:
+            return 'bacteria'
+        else:
+            raise ValueError("Only archaeal and bacterial kingdoms are supported!")
+    ######################
+    the_kingdom = translate_kingdom(kingdom)
+    ######################
+    if org_crit == 'all':
+        if cds_crit == 'cai':
+            label += "(top 10%% CAI %s), 1/C"%the_kingdom
+        elif cds_crit == 'ribo':
+            label += "(ribosomal proteins %s), 1/C"%the_kingdom
+        elif cds_crit == 'cai_noribo':
+            label += "(top 10%% CAI excl. ribosomal %s), 1/C"%the_kingdom
+        elif cds_crit == 'all':
+            label += "(proteome %s), 1/C"%the_kingdom
+        else:
+            raise ValueError("cds criteria not supported!")
+    elif org_crit == 'trop':
+        if cds_crit == 'cai':
+            label += "(top 10%% CAI t.o. %s), 1/C"%the_kingdom
+        elif cds_crit == 'ribo':
+            label += "(ribosomal proteins t.o. %s), 1/C"%the_kingdom
+        elif cds_crit == 'cai_noribo':
+            label += "(top 10%% CAI excl. ribosomal t.o. %s), 1/C"%the_kingdom
+        elif cds_crit == 'all':
+            label += "(proteome t.o. %s), 1/C"%the_kingdom
+        else:
+            raise ValueError("cds criteria not supported!")
+    #######################################
+    return label
+
+
+# cds_crits = ['cai','ribo','cai_noribo','all']
+# org_crits = ['trop','all']
+# combinations = [(cc,oo) for cc in cds_crits for oo in org_crits]
+# combinations = [[{'cds_criteria':cc,'org_criteria':oo} for cc in cds_crits] for oo in org_crits]
+
 
 
 #######################################################################################################
 # TODO  GENERATE APPROPROATE FILES HERE ...
-if len(sys.argv)<=1:
-    raise TypeError("Use command line argument to enter experimental data file name!")
+if len(sys.argv)<=3:
+    raise TypeError("Use command line argument to enter CDS and organismal criteria!")
 else:
-    exp_fname = sys.argv[1]
+    the_combination = {'cds_criteria':sys.argv[1],'org_criteria':sys.argv[2]}
+    the_kingdom = sys.argv[3]
+#
+exp_fname = get_exp_fname(the_combination['cds_criteria'],the_combination['org_criteria'],the_kingdom)
+#
+# "observed slopes (proteome bacteria), $1/^{o}C$"
+slopes_label = get_slopes_comparison_labels(the_combination,the_kingdom)
+#
+#
+#
 #
 data_exp = pd.read_csv(exp_fname,index_col=0)
 # loaded ...
@@ -527,7 +578,7 @@ ax_down.yaxis.set_major_locator( MaxNLocator(nbins = 7) )
 ax_up.axvspan(Top_M, Top_T, facecolor='yellow', alpha=0.5)
 ax_down.axvspan(Top_M, Top_T, facecolor='yellow', alpha=0.5)
 #
-plt.savefig(os.path.join(results_path,'%s_TMAD.png'%exp_fname),dpi=300)
+plt.savefig(os.path.join(results_path,'%s_Figure_4.pdf'%exp_fname))
 
 
 
@@ -598,7 +649,7 @@ ax.text(wopMT-0.002,RMT_max.RM_max.max()+0.02,'$w_{op}$',fontsize=11,verticalali
 # ax_bottom.text(T_M,ax_bottom.get_ylim()[0],'$T_M$',fontsize=11,verticalalignment='bottom',horizontalalignment='right',color="#046ABE")
 # ax_bottom.text(T_T,ax_bottom.get_ylim()[0],'$T_T$',fontsize=11,verticalalignment='bottom',horizontalalignment='right',color="#F71231")
 
-plt.savefig(os.path.join(results_path,'%s_Rw_op.png'%exp_fname),dpi=300)
+plt.savefig(os.path.join(results_path,'%s_SuppFigure4.pdf'%exp_fname))
 
 
 
@@ -755,7 +806,7 @@ leg = inset_right.legend(loc='upper left',numpoints=1, bbox_to_anchor=(0.99, 1.0
 # # ax2.text(-0.15, 1.15, 'B', transform=ax2.transAxes, fontsize=10, weight='bold', va='top', color='black')
 ###########################################
 ###########################################
-fig.savefig(os.path.join(results_path,"brooms.png"),dpi=300)
+fig.savefig(os.path.join(results_path,"Figure_3.pdf"))
 ###########################################
 ###########################################
 
@@ -816,7 +867,7 @@ ax.plot(exp_D_range,a*exp_D_range+b,'b-',label='linear fit: $R$=%.2f, $P$=%.3f'%
 # ax.set_title("sim_D = a*exp_D+b, a=%.4f, b=%.4f, r=%.2f"%(a,b,r))
 ax.legend(loc='upper left',bbox_to_anchor=(0.01,0.9),frameon=False)
 # ax.legend(loc='best',frameon=False)
-ax.set_xlabel("observed slopes (proteome bacteria), $1/^{o}C$",labelpad=1.5)
+ax.set_xlabel(slopes_label,labelpad=1.5)
 ax.set_ylabel("simulated slopes, $1/T$",labelpad=0.5)
 #
 # '$f_{a}$, %'

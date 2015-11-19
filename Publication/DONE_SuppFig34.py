@@ -163,7 +163,7 @@ CAI_hist(ax[1],arch_cai_by_org,arch3,legend=True,xlims=None,ylims=None,title=goa
 # CAI_hist(ax[0],arch_cai_by_org,arch1,legend=False,xlims=None,ylims=None,title='non Translationally Optimized')
 # CAI_hist(ax[1],arch_cai_by_org,arch3,legend=True,xlims=None,ylims=None,title='Translationally Optimized')
 # plt.title("%s, CAI median: %.2f, CoV %.3f, t.o. %s"%(idx,local_median,local_sigma/local_mean,str(qL_rib >= qH_all)))
-plt.show()
+plt.savefig("SuppFig3.pdf")
 
 
 
@@ -180,7 +180,7 @@ bact_ids = bact['GenomicID']
 TrOp_hist(ax[0],arch_cai_by_org,arch_ids,title="Archaea",legend=True,xlims=None,ylims=None)
 TrOp_hist(ax[1],bact_cai_by_org,bact_ids,title="Bacteria",legend=False,xlims=None,ylims=None)
 #
-plt.show()
+plt.savefig("SuppFig4.pdf")
 
 
 

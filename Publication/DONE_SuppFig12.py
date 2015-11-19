@@ -376,42 +376,55 @@ def dq_plot_data(x,y,color,label,xlims,ylims,fig,axScatter,axHistx,axHisty,num_p
 ############################################
 
 
-# #
-# # Supplementary Figure 1.
-# # constructing and drawing the Dataset Quality plot ...
-# axes = dq_get_axes()
-# update_lims = dq_stack_data()
-# lims = dq_update_lims(arch_halo_dat['GC'],arch_halo_dat['OptimumTemperature'])
-# lims = dq_update_lims(arch_nohalo_dat['GC'],arch_nohalo_dat['OptimumTemperature'])
-# lims = dq_update_lims(bact_dat['GC'],bact_dat['OptimumTemperature'])
-# #
-# dq_plot_data(arch_halo_dat['GC'],arch_halo_dat['OptimumTemperature'],'red','Halophiles',*(lims+axes))
-# dq_plot_data(arch_nohalo_dat['GC'],arch_nohalo_dat['OptimumTemperature'],'blue','Archaea',*(lims+axes))
-# dq_plot_data(bact_dat['GC'],bact_dat['OptimumTemperature'],'green','Bacteria',*(lims+axes))
-# axes[0].savefig("SuppFig1.pdf")
+###############################################################
+# Supplementary Figure 1.
+# constructing and drawing the Dataset Quality plot ...
+axes = dq_get_axes()
+update_lims = dq_stack_data()
+lims = update_lims(arch_halo_dat['GC'],arch_halo_dat['OptimumTemperature'])
+lims = update_lims(arch_nohalo_dat['GC'],arch_nohalo_dat['OptimumTemperature'])
+lims = update_lims(bact_dat['GC'],bact_dat['OptimumTemperature'])
+#
+dq_plot_data(arch_halo_dat['GC'],arch_halo_dat['OptimumTemperature'],'red','Halophiles',*(lims+axes))
+dq_plot_data(arch_nohalo_dat['GC'],arch_nohalo_dat['OptimumTemperature'],'blue','Archaea',*(lims+axes))
+dq_plot_data(bact_dat['GC'],bact_dat['OptimumTemperature'],'green','Bacteria',*(lims+axes))
+plt.savefig("SuppFig1.pdf")
 
 
 
+###############################################################
+# Supplementary Figure 2.
 ranges = update_ranges(bact_dat)
 # ranges = update_ranges(arch_nohalo_dat,*ranges)
 ranges = update_ranges(arch_halo_dat,*ranges)
-
 axis = aap_get_axes(ranges)
-
 # only GC lims are needed for "fill_palette" ...
 scatter1 = fill_palette(bact_dat,axis,coloring_type='solid',color_vlims=ranges[2],temp='OptimumTemperature',gc='GC',color='green',alpha=0.7)
 scatter2 = fill_palette(arch_halo_dat,axis,coloring_type='solid',color_vlims=ranges[2],color='red',alpha=0.7,fit=False,label=False)
-
 # ...
 scnames = ['Bacteria','Halophilic Archaea']
 figure_level_caps(axis,scatters=[scatter1,scatter2],coloring_type='solid',color_vlims=ranges[2],scnames=scnames)
+plt.savefig('SuppFig2.pdf')
 
 
-plt.savefig(os.path.join(root_path,'Dropbox (UMASS MED - BIB)','plt.pdf'))
+###############################################################
+# Supplementary Figure 2. BACTERIA
+ranges = update_ranges(bact_dat)
+axis = aap_get_axes(ranges)
+# only GC lims are needed for "fill_palette" ...
+scatter = fill_palette(bact_dat,axis,coloring_type='map',color_vlims=ranges[2],temp='OptimumTemperature',gc='GC',color='green',alpha=1.0)
+figure_level_caps(axis,scatters=[scatter,],coloring_type='map',color_vlims=ranges[2])
+plt.savefig('SuppFig2.bact.pdf')
 
 
-
-
+###############################################################
+# Supplementary Figure 2. ARCHAEA
+ranges = update_ranges(arch_nohalo_dat)
+axis = aap_get_axes(ranges)
+# only GC lims are needed for "fill_palette" ...
+scatter = fill_palette(arch_nohalo_dat,axis,coloring_type='map',color_vlims=ranges[2],temp='OptimumTemperature',gc='GC',color='green',alpha=1.0)
+figure_level_caps(axis,scatters=[scatter,],coloring_type='map',color_vlims=ranges[2])
+plt.savefig('SuppFig2.arch.pdf')
 
 
 

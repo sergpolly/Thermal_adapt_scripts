@@ -904,15 +904,15 @@ fig.savefig(os.path.join(results_path,"%s_Slopes_sim_vs_exp_protbact.png"%exp_fn
 ####################################################
 # plot the simulated proteome's cost (both Akashi and Argentina)
 plt.clf()
-x_fig_size = 7.3
+x_fig_size = 7.5
 v_coeff = 0.45
 fig = plt.figure(figsize=(x_fig_size,v_coeff*x_fig_size))
 # between axes ...
-hor_space = 0.08
+hor_space = 0.1
 # axes info ...
-left = 0.06
-bottom = 0.12
-width = 0.5*(0.9 - left - hor_space)
+left = 0.09
+bottom = 0.15
+width = 0.5*(0.87 - left - hor_space)
 height = 0.975 - bottom
 # bottom axes 
 ax_left = plt.axes([left, bottom, width, height])
@@ -920,23 +920,24 @@ left += (width + hor_space)
 # top axes 
 ax_right = plt.axes([left, bottom, width, height])
 #
-#
 # up to now, we agreed to use Model=64 and FFT=MJ99 only, but anyways ...
 mod = 64
 fft = data_sorted[data_sorted.Model==mod].FFTemp.unique()[0]
 ####################################################
 data_mod = data_sorted[(data_sorted.Model==mod)&(data_sorted.FFTemp==fft)]
-wcf_desired = [0.,0.02,0.04,]+[wopMT]+[0.06,0.07,0.09,0.12,0.15]
+wcf_desired = [0.,0.02,0.04,0.05,0.06,0.07,0.09,0.12,0.15]+[wopMT]
+# get reid of the repeats if neccessary ...
+wcf_desired = sorted(list(set(wcf_desired)))
 grouped = data_mod.groupby('W_coeff')
 for i,(wcf,dat) in enumerate(grouped):
     if wcf in wcf_desired:
         datt = dat.transpose()
         ddt = datt[:20] #amino acids only ...
         proteome_argentina_cost = argentina_cost.T.dot(ddt)
-        if wcf == 0.06:
-            ax_left.plot(datt.loc['Temp'],proteome_argentina_cost.T,color=cols[i],marker='o',ms=8,mew=0,lw=2,label="$w$=%.2f"%wcf)
+        if wcf == wopMT:
+            ax_right.plot(datt.loc['Temp'],proteome_argentina_cost.T,color=cols[i],marker='o',ms=8,mew=0,lw=2,label="$w$=%.2f"%wcf)
         else:
-            ax_left.plot(datt.loc['Temp'],proteome_argentina_cost.T,color=cols[i],marker='o',ms=6,mew=0,lw=2,label="$w$=%.2f"%wcf)
+            ax_right.plot(datt.loc['Temp'],proteome_argentina_cost.T,color=cols[i],marker='o',ms=6,mew=0,lw=2,label="$w$=%.2f"%wcf)
 ##################################
 ax_left.yaxis.set_ticks_position('left')
 ax_left.xaxis.set_ticks_position('bottom')
@@ -957,10 +958,10 @@ for i,(wcf,dat) in enumerate(grouped):
         datt = dat.transpose()
         ddt = datt[:20] #amino acids only ...
         proteome_akashi_cost = akashi_cost.T.dot(ddt)
-        if wcf == 0.06:
-            ax_right.plot(datt.loc['Temp'],proteome_akashi_cost.T,color=cols[i],marker='o',ms=8,mew=0,lw=2,label="$w$=%.2f"%wcf)
+        if wcf == wopMT:
+            ax_left.plot(datt.loc['Temp'],proteome_akashi_cost.T,color=cols[i],marker='o',ms=8,mew=0,lw=2,label="$w$=%.2f"%wcf)
         else:
-            ax_right.plot(datt.loc['Temp'],proteome_akashi_cost.T,color=cols[i],marker='o',ms=6,mew=0,lw=2,label="$w$=%.2f"%wcf)
+            ax_left.plot(datt.loc['Temp'],proteome_akashi_cost.T,color=cols[i],marker='o',ms=6,mew=0,lw=2,label="$w$=%.2f"%wcf)
 ##################################
 ax_right.yaxis.set_ticks_position('left')
 ax_right.xaxis.set_ticks_position('bottom')
@@ -972,8 +973,8 @@ ax_left.set_xlabel('$T$, a.u.',labelpad=1)
 ax_right.set_xlabel('$T$, a.u.',labelpad=1)
 #
 #
-ax_left.set_ylabel('Weighted methabolic synthesis cost, ATP/time',labelpad=1)
-ax_right.set_ylabel('Methabolic synthesis cost, ATP',labelpad=1)
+ax_right.set_ylabel('Weighted methabolic synthesis cost, ATP/time',labelpad=1)
+ax_left.set_ylabel('Methabolic synthesis cost, ATP',labelpad=1)
 #
 #
 ax_left.axvspan(Top_M, Top_T, facecolor='yellow', alpha=0.5)
@@ -983,7 +984,7 @@ ax_right.axvspan(Top_M, Top_T, facecolor='yellow', alpha=0.5)
 # ax_right.set_xlim((0.0,6.1))
 # plt.tight_layout()
 # ax_right.set_title("Akashi_proteome_cost_mod%d_fft%s.ghpcc.png"%(mod,fft))
-fig.savefig(os.path.join(results_path,"proteome_costs.png"),dpi=300)
+fig.savefig(os.path.join(results_path,"%s_Fig7_costs.pdf"%exp_fname))
 
 
 

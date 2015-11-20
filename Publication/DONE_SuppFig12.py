@@ -7,9 +7,28 @@ import matplotlib as mpl
 import scipy.stats as st
 import random as rnd
 import numpy as np
-#
-#
-#
+#################################
+# before we proceed to plotting, add the TrOp status calculator for organisms ...
+def get_one_trop(all_cds_grouped,idx):
+    org_cds = all_cds_grouped.get_group(idx)
+    # check if TrOp ...
+    # for a given organism(id) all TrOp values must be same
+    trop_vals = org_cds['TrOp'].unique()
+    assert trop_vals.size == 1
+    # then just figure out TrOp value after unpacking ...
+    trop, = trop_vals
+    if pd.isnull(trop):
+        # special return - not enough ribosomal proteins ...
+        return 'none'
+    if not trop:
+        # False, return False 
+        return 'false'
+    elif trop == True:
+        # if it's True just return ...
+        return 'true'
+    else:
+        raise ValueError
+#################################
 from matplotlib.ticker import MaxNLocator
 from matplotlib.patches import ConnectionPatch
 from matplotlib.patches import Rectangle
@@ -18,40 +37,56 @@ import scipy.interpolate as interpol
 font = {'family' : 'sans-serif',
         #'weight' : 'bold',
         'size'   :9}
-#
 mpl.rc('font', **font)
-#
-#
+###########################################
 aacids = list('CMFILVWYAGTSNQDEHRKP')
 aa_combinations = ['IVYWREL', 'DEKR', 'AGNQSTHY', 'MPCLVWIF', 'ILVM']
-#
-#
+##########################################
 root_path = os.path.expanduser('~')
 bact_path = os.path.join(root_path,'GENOMES_BACTER_RELEASE69/genbank')
 arch_path = os.path.join(root_path,'GENOMES_ARCH_SEP2015')
 # SOME ARCHAEAL DATA ...
 arch        = pd.read_csv(os.path.join(arch_path,'summary_organisms_interest.dat'))
 arch_nohalo = pd.read_csv(os.path.join(arch_path,'summary_organisms_interest_no_halop.dat'))
-
-
+###########################################
 # SOME BACTERIAL DATA ...
 # complete genomes only ...
 bact        = pd.read_csv(os.path.join(bact_path,'env_catalog_compgenome.dat'))
-
-#
 # bacter proteomic summary ...
 bact_prot = pd.read_csv(os.path.join(bact_path,'proteome_all.dat'))
-#
 # arch proteomic summary ...
 arch_prot = pd.read_csv(os.path.join(arch_path,'proteome_arch.dat'))
 arch_prot[aacids] = arch_prot[aacids]*100.0
-
+#
 arch_dat = pd.merge(arch,arch_prot,on='assembly_accession')
 arch_nohalo_dat = pd.merge(arch_nohalo,arch_prot,on='assembly_accession')
 arch_halo_dat = arch_dat[~arch_dat['assembly_accession'].isin(arch_nohalo['assembly_accession'])]
-
+#
 bact_dat = pd.merge(bact,bact_prot,on='GenomicID')
 bact_dat[aacids] = bact_dat[aacids]*100.0
+
+
+calculate_TrOp = True
+if calculate_TrOp:
+    # we need the following to calculate TrOp status on the fly ...
+    ###############################################
+    # complete_CDS_CAI_DNA.dat same thing ...
+    arch_cai_fname = os.path.join(arch_path,"complete_arch_CDS_CAI_DNA.dat")
+    bact_cai_fname = os.path.join(bact_path,"complete_CDS_CAI_DNA.dat")
+    #
+    arch_cai = pd.read_csv(arch_cai_fname)
+    bact_cai = pd.read_csv(bact_cai_fname)
+    #
+    bact_cai_by_org = bact_cai.groupby('GenomicID')
+    arch_cai_by_org = arch_cai.groupby('assembly_accession')
+    #
+    # calculate TrOp
+    bact_dat['TrOp'] = [get_one_trop(bact_cai_by_org,idx) for idx in bact_dat['GenomicID']]
+    arch_nohalo_dat['TrOp'] = [get_one_trop(arch_cai_by_org,idx) for idx in arch_nohalo_dat['assembly_accession']]
+
+
+
+
 
 ############################################################
 #  PLOTTING FUNCTIONS ...
@@ -390,6 +425,83 @@ dq_plot_data(arch_nohalo_dat['GC'],arch_nohalo_dat['OptimumTemperature'],'blue',
 dq_plot_data(bact_dat['GC'],bact_dat['OptimumTemperature'],'green','Bacteria',*(lims+axes))
 plt.savefig("SuppFig1.pdf")
 
+
+
+###############################################################
+# Supplementary Figure 1. (TrOp vs All for bacter)
+# constructing and drawing the Dataset Quality plot ...
+axes = dq_get_axes()
+update_lims = dq_stack_data()
+# lims = update_lims(arch_halo_dat['GC'],arch_halo_dat['OptimumTemperature'])
+# lims = update_lims(arch_nohalo_dat['GC'],arch_nohalo_dat['OptimumTemperature'])
+dat_one = bact_dat[bact_dat['TrOp']=='true']
+dat_two = bact_dat[bact_dat['TrOp']!='true']
+lims = update_lims(dat_one['GC'],dat_one['OptimumTemperature'])
+lims = update_lims(dat_two['GC'],dat_two['OptimumTemperature'])
+#
+dq_plot_data(dat_one['GC'],dat_one['OptimumTemperature'],'red','Tr.Op. Bacteria',*(lims+axes))
+dq_plot_data(dat_two['GC'],dat_two['OptimumTemperature'],'blue','Non-Tr.Op. Bacteria',*(lims+axes))
+plt.savefig("SuppFig1_bact_trop.pdf")
+
+
+
+###############################################################
+# Supplementary Figure 1. (TrOp vs All for arch)
+# constructing and drawing the Dataset Quality plot ...
+axes = dq_get_axes()
+update_lims = dq_stack_data()
+# lims = update_lims(arch_halo_dat['GC'],arch_halo_dat['OptimumTemperature'])
+# lims = update_lims(arch_nohalo_dat['GC'],arch_nohalo_dat['OptimumTemperature'])
+dat_one = arch_nohalo_dat[arch_nohalo_dat['TrOp']=='true']
+dat_two = arch_nohalo_dat[arch_nohalo_dat['TrOp']!='true']
+lims = update_lims(dat_one['GC'],dat_one['OptimumTemperature'])
+lims = update_lims(dat_two['GC'],dat_two['OptimumTemperature'])
+#
+dq_plot_data(dat_one['GC'],dat_one['OptimumTemperature'],'red','Tr.Op. Archaea',*(lims+axes))
+dq_plot_data(dat_two['GC'],dat_two['OptimumTemperature'],'blue','Non-Tr.Op. Archaea',*(lims+axes))
+plt.savefig("SuppFig1_arch_trop.pdf")
+
+
+
+
+
+
+###############################################################
+# Supplementary Figure 2.(TrOp vs All for bacter)
+dat_one = bact_dat[bact_dat['TrOp']!='true']
+dat_two = bact_dat[bact_dat['TrOp']=='true']
+#
+ranges = update_ranges(dat_one)
+# ranges = update_ranges(arch_nohalo_dat,*ranges)
+ranges = update_ranges(dat_two,*ranges)
+axis = aap_get_axes(ranges)
+# only GC lims are needed for "fill_palette" ...
+scatter1 = fill_palette(dat_one,axis,coloring_type='solid',color_vlims=ranges[2],temp='OptimumTemperature',gc='GC',color='green',alpha=0.7)
+scatter2 = fill_palette(dat_two,axis,coloring_type='solid',color_vlims=ranges[2],color='red',alpha=0.7,fit=False,label=False)
+# ...
+scnames = list(reversed(['Tr.Op.Bacteria','Non-Tr.Op.Bacteria']))
+figure_level_caps(axis,scatters=[scatter1,scatter2],coloring_type='solid',color_vlims=ranges[2],scnames=scnames)
+plt.savefig('SuppFig2_bact_trop.pdf')
+
+
+
+
+###############################################################
+# Supplementary Figure 2.(TrOp vs All for bacter)
+dat_one = arch_nohalo_dat[arch_nohalo_dat['TrOp']=='true']
+dat_two = arch_nohalo_dat[arch_nohalo_dat['TrOp']!='true']
+#
+ranges = update_ranges(dat_one)
+# ranges = update_ranges(arch_nohalo_dat,*ranges)
+ranges = update_ranges(dat_two,*ranges)
+axis = aap_get_axes(ranges)
+# only GC lims are needed for "fill_palette" ...
+scatter1 = fill_palette(dat_one,axis,coloring_type='solid',color_vlims=ranges[2],temp='OptimumTemperature',gc='GC',color='green',alpha=0.7)
+scatter2 = fill_palette(dat_two,axis,coloring_type='solid',color_vlims=ranges[2],color='red',alpha=0.7,fit=False,label=False)
+# ...
+scnames = list(reversed(['Tr.Op.Archaea','Non-Tr.Op.Archaea']))
+figure_level_caps(axis,scatters=[scatter1,scatter2],coloring_type='solid',color_vlims=ranges[2],scnames=scnames)
+plt.savefig('SuppFig2_arch_trop.pdf')
 
 
 ###############################################################

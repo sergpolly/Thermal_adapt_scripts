@@ -1,3 +1,11 @@
+# some latex stuff
+*.aux
+*.log
+*.blg
+*.bbl
+*.out
+*.pages
+
 # pictures ...
 *.png
 *.pdf

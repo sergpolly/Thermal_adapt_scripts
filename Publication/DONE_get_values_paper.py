@@ -10,6 +10,7 @@ import time
 
 from multiprocessing import Pool
 
+topt = 'OptimumTemperature'
 
 
 # SPECIAL CASE: archaeal assemblies from GenBank@NCBI before any filtering 
@@ -53,6 +54,16 @@ print "Total # of genomes analysed: archaea without Halophiles, bacteria complet
 											(number_arch_topt_genome_nohalo + number_bact_topt_compgenome)
 
 
+print
+print "Thermophiles ..."
+############################
+# how many Thermophiles (OGT>50) ...
+number_arch_topt_genome_nohalo_THERM = arch_nohalo[arch_nohalo[topt] > 50].shape[0]
+print "# of archaeal Thermophiles with sufficient annotation and OGT, ",number_arch_topt_genome_nohalo_THERM
+####################
+number_bact_topt_compgenome_THERM = bact[bact[topt] > 50].shape[0]
+print "# of bacterial Thermophiles with full annotations and OGT, ",number_bact_topt_compgenome_THERM
+############################
 
 
 ###############################################

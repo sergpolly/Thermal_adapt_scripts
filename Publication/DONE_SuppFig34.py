@@ -117,9 +117,9 @@ def TrOp_hist(ax,cds_grouped,unique_ids,title="",legend=True,xlims=None,ylims=No
     # let's also plot histograms ...
     bins = np.linspace(0,1,num=50)
     # TrOp CAI
-    trop_hist   = ax.hist(cai_means_TrOp,bins=bins,color='red',alpha=0.95,label='Trans. Optimized',histtype='stepfilled',lw=0)
+    trop_hist   = ax.hist(cai_means_TrOp,bins=bins,color='red',alpha=0.95,label='CUS',histtype='stepfilled',lw=0)
     # no TrOp CAI
-    notrop_hist = ax.hist(cai_means_noTrOp,bins=bins,color='blue',alpha=0.8,label='non Trans. Optimized',histtype='stepfilled',lw=0)
+    notrop_hist = ax.hist(cai_means_noTrOp,bins=bins,color='blue',alpha=0.8,label='non-CUS',histtype='stepfilled',lw=0)
     #
     ax.set_title(title)
     ax.set_xlabel('mean organismal CAI')

@@ -1,0 +1,65 @@
+\documentclass{report}
+
+\usepackage{graphicx}
+\usepackage[lofdepth,lotdepth]{subfig}
+% \usepackage[top=0.5in, bottom=0.5in, left=0.5in, right=0.8in]{geometry}
+\usepackage[top=0.8in, bottom=0.8in, left=0.5in, right=0.8in]{geometry}
+
+% textcomp package and marvosym package for additional characters
+\usepackage{textcomp,marvosym}
+
+
+\usepackage{color,soul}
+\sethlcolor{yellow}
+
+\begin{document}
+
+{\bf Text S1. Organismal and protein bootstraps to test the convergence of archaeal and bacterial thermal adaptation }
+
+
+Considering thermal adaptation only in ribosomal proteins, yields similar results for archaea and bacteria (R=0.7), see Fig. X in the main text. However, we must perform the tests to check the plausibility of the null hypothesis that the particular type of proteins does not matter, i.e., any random subsample of $\approx$50 proteins can yield comparable correlations. We performed the required bootstrap test: 100 random subsamples of 50 proteins (instead of $\approx$50 ribosomal proteins) were taken from each organism and then used for the comparison of temperature--trends of amino acid composition between archaea and bacteria. Pearson correlation coefficient is used to asses the similarity between archaeal and bacterial trends of thermal adaptation. The distribution of the correlation coefficient between all 100*100 possible combinations of the amino acid composition trends bootstraped for archaea and abcteria is shown on Fig.~\ref{fig1} with blue bars, while the original correlation coefficient calculated for ribosomal proteins R=0.73 is depicted with the red bar. Original correlation coefficient is much higher then the bootstraped values \hl{pvalue\textless0.001} thus allowing us to reject the null hypothesis that the particular type of proteins does not matter. 
+\begin{figure}[h!]
+	\centering
+	\includegraphics{../BOOTSTRAPS/ribo_bootstrap.pdf}
+	\caption{
+	{\bf Bootstraping proteins for all analyzed organisms.} Distribution of correlation coefficient that reflects similarity between archaeal and bacterial temperature trends of amino acid compositions in the random protein subsampling bootstrap. Original correlation coefficient R$\approx$0.73 for ribosomal proteins (red) is much larger then the bottstraped correlations \hl{pvalue\textless0.001}, thus rejecting the null hypothesis that particular type of the protein does not matter. 
+	}
+	\label{fig1}
+\end{figure}
+
+Proteome--wide thermal adaptation in the organisms with Codon Usage Selection (CUS) yields significant correlation between archaeal and bacterial counterparts R$\approx$0.54, see Fig. X in the main text. However, we must perform the tests to check the plausibility of the null hypothesis that the particular type of organim does not matter. As there are $\sim$40\% of orgnisms with CUS both in archaeal and bacterial datasets, we performed the required bootstrap test using 40\% random organisms from each dataset for 100 subsamples. Proteome--wide composition of amino acids was calculated for every organism in each subsample, and temperature--trends of amino acid compositions was calculated for each subsample (both archaeal and bacterial). Pearson correlation coefficient was used to compare all 100*100 combinations of the bootstraped trends and corresponding distribution is shown on Fig.~\ref{fig2} with blue bars, while the original correlation coefficient calculated for CUS organisms \hl{R=0.54} is depicted with the red bar. The oginial correlation lies well within the bootstraped distribution, and thus the null hypothesis that the particular type of organisms does not matter cannot be rejected, at least for the case of proteome--wide temerpature trends of amino acid compositions.
+\begin{figure}[h!]
+	\centering
+	\includegraphics{../BOOTSTRAPS/xxx.pdf}
+	\caption{
+	{\bf Bootstraping organisms to test the proteome--wide trends of organisms with CUS.}
+	Distribution of correlation coefficient that reflects similarity between archaeal and bacterial temperature trends of amino acid compositions in the random organism subsampling bootstrap. Original correlation coefficient R$\approx$0.53 for orgnisms with CUS (red) lies well within the bootstraped distribution \hl{pvalue$\approx$0.3}, thus the null hypothesis that particular type of organism does not matter cannot be rejected.
+	}
+	\label{fig2}
+\end{figure}
+
+We also performed similar bootstrap test with random organisms subsampling using, however, proteins with the top 10\% CAI instead of the whole proteome for caluclations of the temperature trends of amino acid compositions. Using Pearson correlation coefficient we compared all 100*100 combinations of the bootstraped trends and corresponding distribution is shown on Fig.~\ref{fig3s2} with blue bars, while corresponding original correlation R$\approx$0.87 is depicted with the red bar. The null hypothesis that particular choice of organisms for the analysis does not matter can be safely rejected as the \hl{pvalue=0.008}.
+We also tested a second possible null hypothesis that while consider organisms with CUS only, the particular type of proteins being used to calculate amino acid compositions, does not matter. We performed a protein bootstrap test using organisms with CUS and selecting 10\% random proteins for each organism instead of proteins with 10\% highest CAI. Using Pearson correlation coefficient we compared all 100*100 combinations of the bootstraped trends and corresponding distribution is shown on Fig.~\ref{fig3s1} with blue bars, while corresponding original correlation R$\approx$0.87 is depicted with the red bar. The null hypothesis that particular choice of proteins does not matter, while considering organisms with CUS, can be safely rejected, as the \hl{pvalue\textless0.001}.
+So, in contrast with the proteome--wide trends for organisms with CUS, the fact that highly expressed proteins in organisms with CUS adapts to high temperatures similarly between archaea and bacteria, is indeed statistically significant.
+\begin{figure}[h!]
+	\centering
+	\subfloat[Subfigure 1 list of figures text][CAI ranking bootstrap]{\includegraphics[text=0.35\textwidth]{../BOOTSTRAPS/cus_cai_proteins_test.pdf}\label{fig3s1}}
+		% \\
+	\subfloat[Subfigure 2 list of figures text][CUS organisms bottstrap]{\includegraphics[text=0.35\textwidth]{../BOOTSTRAPS/SuppFig5.pdf}\label{fig3s2}}
+	\caption{
+	{\bf Bootstraping organisms and proteins to test the trends in predicted highly expressed proteins from organisms with CUS.}
+	(a) Distribution of correlation coefficient that reflects similarity between archaeal and bacterial temperature trends of amino acid compositions in the random 
+
+%%%%%%%%%%%%%%%%%%%%%%
+	organism subsampling bootstrap using proteins with top 10\% CAI. Original correlation coefficient R$\approx$0.87 for organisms with CUS (red) is greater then the majority of the bootstrapped correlations, \hl{pvalue=0.008}, thus null hypothesis that particular choice of organisms does not matter can be rejected.
+	(b) Distribution of correlation coefficient that reflects similarity between archaeal and bacterial temperature trends of amino acid compositions in the random organism subsampling bootstrap using proteins with top 10\% CAI. Original correlation coefficient R$\approx$0.87 for organisms with CUS (red) is greater then the majority of the bootstrapped correlations, \hl{pvalue=0.008}, thus null hypothesis that particular choice of organisms does not matter can be rejected.
+}
+\end{figure}
+
+
+\end{document}
+
+
+
+
+

@@ -41,22 +41,27 @@ bact        = pd.read_csv(os.path.join(bact_path,'env_catalog_compgenome.dat'))
 # complete_CDS_CAI_DNA.dat same thing ...
 arch_cai_fname = os.path.join(arch_path,"complete_arch_CDS_CAI_DNA.dat")
 bact_cai_fname = os.path.join(bact_path,"complete_CDS_CAI_DNA.dat")
-
+##############################
 arch_cai = pd.read_csv(arch_cai_fname)
 bact_cai = pd.read_csv(bact_cai_fname)
-
+##############################
 bact_cai_by_org = bact_cai.groupby('GenomicID')
 arch_cai_by_org = arch_cai.groupby('assembly_accession')
-
-
+##############################
 aacids = sorted('ACDEFGHIKLMNPQRSTVWY')
-
-
+##############################
+print "Arch and Bact data is loaded ..."
+##############################
+argv_org = sys.argv[1]
+argv_cds = sys.argv[2]
+argv_iters = int(sys.argv[3])
+##############################
 
 
 FRACTION = 0.4
-ITERATIONS = 25
+ITERATIONS = argv_iters
 PERCENTILE = 0.1
+PROT_SAMPLE_SIZE = 50 # foremost for the ribosomal proteins modeling ...
 # #########################################################
 # #########################################################
 # #########################################################
@@ -84,7 +89,33 @@ PERCENTILE = 0.1
 # select CDS translations (protein sequences) for a given criteria ...
 # criteria includes CAI top 10%, all proteins, TrOp, noTrOp, ribosomal ...
 # 2 types of criteria: organismal  and  CDS-level ...
-def get_random_slopeset(all_cds,dat,uid_key,cds_criteria='all',org_criteria='random',random_trop_fraction=0.5,topt='OptimumTemperature'):
+def get_random_slopeset(all_cds,dat,uid_key,cds_criteria='all',
+                                            org_criteria='random',
+                                            calculate_trop=False,
+                                            random_trop_fraction=0.5,
+                                            topt='OptimumTemperature',
+                                            prot_random_regime='PERCENTILE'):
+    #
+    def get_one_trop(idx):
+        org_cds = all_cds.get_group(idx)
+        # check if TrOp ...
+        # for a given organism(id) all TrOp values must be same
+        trop_vals = org_cds['TrOp'].unique()
+        assert trop_vals.size == 1
+        # then just figure out TrOp value after unpacking ...
+        trop, = trop_vals
+        if pd.isnull(trop):
+            # special return - not enough ribosomal proteins ...
+            return 'none'
+        if not trop:
+            # False, return False 
+            return 'false'
+        elif trop == True:
+            # if it's True just return ...
+            return 'true'
+        else:
+            raise ValueError
+    #######################
     #
     # ACHTUNG !!!
     # the way we treated organisms with too little ribosomal proteins (~<24), makes it hard
@@ -106,8 +137,20 @@ def get_random_slopeset(all_cds,dat,uid_key,cds_criteria='all',org_criteria='ran
             selected_aa = local_cds[(local_cds['CAI'] >= cai10)&(~local_cds['ribosomal'])][cds_trans_key]
         elif criteria == 'all':
             selected_aa = local_cds[cds_trans_key]
+        # the 'random' criteria for BOOTSTRAPIGN and shuffling ...
+        elif criteria == 'random':
+            # grab PERCENTILE fraction of CDSes from the proteome and pretend those are top10 CAI
+            # for bootstrapping purposes ...
+            if prot_random_regime == 'PERCENTILE':
+                cds_subsample_size = int(local_cds.shape[0]*PERCENTILE)
+            elif PROT_SAMPLE_SIZE < local_cds.shape[0]:
+                cds_subsample_size = PROT_SAMPLE_SIZE
+            else:
+                raise ValueError('Not enough CDS to draw random sample from: %s.'%uid)
+            cds_subsample_idx = np.random.choice( local_cds.index, cds_subsample_size )
+            selected_aa = local_cds.loc[cds_subsample_idx][cds_trans_key]
         else:
-            raise ValueError('CDS criteria must be either cai,ribo,cai_noribo or all!')
+            raise ValueError('CDS criteria must be either cai,ribo,cai_noribo,all or random!')
         #
         selected_aa = ''.join(selected_aa)
         total_aacount = float(len(selected_aa))
@@ -128,32 +171,38 @@ def get_random_slopeset(all_cds,dat,uid_key,cds_criteria='all',org_criteria='ran
         # returning ...
         return exp_D
     #######################
-    # we are still required to if CAI can be determined for the organism ...
-    # are there enuogh ribo proteins, or in other words - TrOp status mut be not null ...
-    def is_not_null(idx):
-        org_cds = all_cds.get_group(idx)
-        return org_cds['TrOp'].notnull().all()
-
-    ############################################################################
-    # instead of calculating TrOp we shoud do random subsampling of organisms ...
-    subsample_idx = np.random.choice(dat.index,int(dat.shape[0]*random_trop_fraction))
-    # get the subsample here ...
-    dat_subsample = copy.deepcopy(dat.loc[subsample_idx])
-    # filter the nulls ...
-    dat_subsample['notnull'] = [is_not_null(uid) for uid in dat_subsample[uid_key]]
-    dat_subsample_filtered = dat_subsample[dat_subsample['notnull']]
-    ##############
-    # the only criteria that makes sense ...
-    if org_criteria in ['trop','random']:
-        the_aausage = [ extract_aausage(uid,criteria=cds_criteria) for uid in dat_subsample_filtered[uid_key] ]
-        # it's a resources wasting, but the code is cleaner this way ...
-        return_topt = dat_subsample_filtered[topt]
+    # Calculate or check if we have the TrOp info for each organism ...
+    if calculate_trop:
+        dat['TrOp'] = [get_one_trop(idx) for idx in dat[uid_key]]
     else:
-        raise ValueError("Organism criteria must be 'trop' or 'random'!")
+        assert 'TrOp' in dat.columns
+    # the only criteria that makes sense ...
+    if org_criteria == 'all':
+        the_aausage = [ extract_aausage(uid,criteria=cds_criteria) for uid in dat[dat['TrOp']!='none'][uid_key]]
+        the_topt = dat[dat['TrOp']!='none'][topt]
+    elif org_criteria == 'trop':
+        the_aausage = [ extract_aausage(uid,criteria=cds_criteria) for uid in dat[dat['TrOp']=='true'][uid_key] ]
+        the_topt = dat[dat['TrOp']=='true'][topt]
+    elif org_criteria == 'random':
+        ####################################
+        ####################################
+        ###  # CAI-able data is here ... ###
+        ###  dat[dat['TrOp']!='none']    ###
+        ####################################
+        ####################################
+        # instead of calculating TrOp we shoud do random subsampling of organisms ...
+        subsample_size = int(dat[dat['TrOp']!='none'].shape[0]*random_trop_fraction)
+        subsample_idx = np.random.choice( dat[dat['TrOp']!='none'].index, subsample_size )
+        # use subsample indexes to get the subsample ...
+        the_aausage = [ extract_aausage(uid,criteria=cds_criteria) for uid in dat.loc[subsample_idx][uid_key] ]
+        # it's a resources wasting, but the code is cleaner this way ...
+        the_topt = dat.loc[subsample_idx][topt]
+    else:
+        raise ValueError("Organism criteria must be 'all','trop' or 'random'!")
     # transform the aausage 
     the_aausage = np.asarray(the_aausage)
     the_aausage = pd.DataFrame(the_aausage,columns=aacids)
-    the_aausage[topt] = return_topt.reset_index(drop=True)
+    the_aausage[topt] = the_topt.reset_index(drop=True)
     #
     return get_slopes(the_aausage,topt=topt)
 ###################################################
@@ -161,14 +210,16 @@ def get_random_slopeset(all_cds,dat,uid_key,cds_criteria='all',org_criteria='ran
 # org_crits = ['random']
 ###################################################
 # cds_criteria = 'cai'
-cds_criteria = 'all'
-org_criteria = 'random'
+# cds_criteria = 'cai'
+# org_criteria = 'random'
+cds_criteria = argv_cds
+org_criteria = argv_org
 # for iteration in range(ITERATIONS):
 arch_iter_slopes = []
 bact_iter_slopes = []
 for iteration in range(ITERATIONS):
-    one_arch_iter_slope = get_random_slopeset(arch_cai_by_org,arch_nohalo,'assembly_accession',cds_criteria,org_criteria,FRACTION)
-    one_bact_iter_slope = get_random_slopeset(bact_cai_by_org,bact,'GenomicID',cds_criteria,org_criteria,FRACTION)
+    one_arch_iter_slope = get_random_slopeset(arch_cai_by_org,arch_nohalo,'assembly_accession',cds_criteria,org_criteria,FRACTION,prot_random_regime='NOT_PERCENTILE')
+    one_bact_iter_slope = get_random_slopeset(bact_cai_by_org,bact,'GenomicID',cds_criteria,org_criteria,FRACTION,prot_random_regime='NOT_PERCENTILE')
     one_arch_iter_slope.name = 'iter%d'%iteration
     one_bact_iter_slope.name = 'iter%d'%iteration
     arch_iter_slopes.append(one_arch_iter_slope)

@@ -1,0 +1,57 @@
+\documentclass{report}
+
+\usepackage{graphicx}
+\usepackage[lofdepth,lotdepth]{subfig}
+\usepackage[top=0.7in, bottom=0.2in, left=0.3in, right=0.3in]{geometry}
+
+\begin{document}
+
+
+
+% {\bf Figure S8. Synthesis costs negatively correlated with CAI} Proteins of each organism are divided into 5 quantiles according to their CAI rank and amino acid composition is averaged within each group, so that statistically averaged trend with expression level (CAI) can be conveniently analyzed. (A) archaeal and (B) bacterial trends are presented along with a random realization of the codon reshuffling procedure to emphasize statistical significance of the original trend. P-value is calculated using XXX number of random reshufflings. 
+
+% % {\bf $R_T$ subtle correlation with CAI} Proteins of each organism are divided into 5 quantiles according to their CAI rank and amino acid composition is averaged within each group, so that statistically averaged trend with expression level (CAI) can be conveniently analyzed. $R_T$ is a Pearson correlation coefficient between the average amino acid composition in each quantile and the thermophilic composition of amino acids, calculated used OGT>50C criteria. (A) archaeal and (B) bacterial trends are presented along with a random realization of the codon reshuffling procedure to emphasize statistical significance of the original trend (or lack of thereof). P-value is calculated using XXX number of random reshufflings. [CHECK ...]
+
+{\bf Figure S9. \texttt{IVYWREL} trends with CAI} Proteins of each organism are divided into 5 quantiles according to their CAI rank and amino acid composition is averaged within each group, so that statistically averaged trend with expression level (CAI) can be conveniently analyzed. Analysis if performed separately for archaea (A) and bacteria (B) using organisms with Codon Usage Selection (CUS) only. \texttt{IVYWREL} metric is averaged for each quantile, then (A) archaeal and (B) bacterial trends are presented along with a random realization of the codon reshuffling procedure. Resulted trends are not statistically significant, as we cannot rule out null hypothesis that the particular CAI distribution does not matter. There might be an intrinsic link between \texttt{IVYWREL} and the genetic code.
+
+\begin{figure}[h!]
+	\centering
+	\subfloat[Subfigure 1 list of figures text][Archaeal data]{
+		\includegraphics[width=0.5\textwidth]{../ArchNew/BOOTSTRAP/IVYWREL_arch_qunatile_trend_original_trop.png}
+		\label{fig:subfig1}
+	}
+	\subfloat[Subfigure 2 list of figures text][Bacterial data]{
+		\includegraphics[width=0.5\textwidth]{../BOOTSTRAPS/IVYWREL_bact_qunatile_trend_original_trop.png}
+		\label{fig:subfig2}
+	}
+\end{figure}
+
+
+
+
+
+% \begin{figure}[b!]
+% 	\centering
+% 	\includegraphics[width=\textwidth]{../ArchNew/BOOTSTRAP/arch_IVYWREL.png}
+% \end{figure}
+
+
+% \begin{figure}[b!]
+% 	\centering
+% 	\includegraphics[width=\textwidth]{../BOOTSTRAPS/bact_IVYWREL.png}
+% \end{figure}
+
+
+\end{document}
+
+
+% ../BOOTSTRAPS/bact_Akashi.png
+% ../ArchNew/BOOTSTRAP/arch_Akashi.png
+
+
+
+
+
+
+
+

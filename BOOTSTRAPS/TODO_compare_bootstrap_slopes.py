@@ -51,8 +51,10 @@ def get_pval(dat,ref_point):
 #
 in1 = sys.argv[1]
 in2 = sys.argv[2]
-# we also need a some reference value to compare with ...
-ref_r = 0.554
+ref_r = float(sys.argv[3])
+out = sys.argv[4]
+# # we also need a some reference value to compare with ...
+# ref_r = 0.554
 #################
 dat1 = pd.read_csv(in1,index_col=0)
 dat2 = pd.read_csv(in2,index_col=0)
@@ -69,7 +71,7 @@ for i in range(iters1):
 #################
 pval = get_pval(correlations,ref_r)
 # plotting ...
-plot_the_hist(correlations,ref_r,pval,"SuppFig5_proteome.pdf")
+plot_the_hist(correlations,ref_r,pval,out)
 #################
 #
 #

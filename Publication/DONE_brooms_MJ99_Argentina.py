@@ -17,13 +17,38 @@ import scipy.interpolate as interpol
 
 import matplotlib.patches as patches
 import matplotlib.transforms as transforms
-
-font = {'family' : 'sans-serif',
-        # 'sans-serif':['Helvetica'],
+#
+#
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+## for Palatino and other serif fonts use:
+# rc('font',**{'family':'serif','serif':['Palatino']})
+rc('text', usetex=True)
+# #
+#
+mpl.rcParams['text.latex.preamble'] = [
+       r'\usepackage{textcomp}',   # i need upright \micro symbols, but you need...
+       # r'\sisetup{detect-all}',   # ...this to force siunitx to actually use your fonts
+       r'\usepackage{helvet}',    # set the normal font here
+       r'\usepackage{sansmath}',  # load up the sansmath so that math -> helvet
+       r'\sansmath'               # <- tricky! -- gotta actually tell tex to use!
+]
+#
+#
+font = {#'family' : 'sans-serif',
         #'weight' : 'bold',
-        'size'   : 7.5}
+        'size'   :9}
+rc('font', **font)
+# # data loading ...
 
-mpl.rc('font', **font)
+
+
+# font = {'family' : 'sans-serif',
+#         # 'sans-serif':['Helvetica'],
+#         #'weight' : 'bold',
+#         'size'   : 7.5}
+
+# mpl.rc('font', **font)
 
 # constants ...
 # ALPHABET=20
@@ -94,7 +119,7 @@ def get_exp_fname(cds_criteria,org_criteria,kingdom):
 def get_slopes_comparison_labels(combination,kingdom):
     # unpack criteria ...
     cds_crit,org_crit = combination['cds_criteria'], combination['org_criteria']
-    label = "observed slopes "
+    label = r"observed slopes "
     ######################
     def translate_kingdom(kingdom):
         if kingdom in ['arch','archaea']:
@@ -108,24 +133,24 @@ def get_slopes_comparison_labels(combination,kingdom):
     ######################
     if org_crit == 'all':
         if cds_crit == 'cai':
-            label += "(top 10%% CAI %s), 1/C"%the_kingdom
+            label += r"(top 10\% CAI %s), 1/\textdegree C"%the_kingdom
         elif cds_crit == 'ribo':
-            label += "(ribosomal proteins %s), 1/C"%the_kingdom
+            label += r"(ribosomal proteins %s), 1/\textdegree C"%the_kingdom
         elif cds_crit == 'cai_noribo':
-            label += "(top 10%% CAI excl. ribosomal %s), 1/C"%the_kingdom
+            label += r"(top 10\% CAI excl. ribosomal %s), 1/\textdegree C"%the_kingdom
         elif cds_crit == 'all':
-            label += "(proteome %s), 1/C"%the_kingdom
+            label += r"(proteome %s), 1/\textdegree C"%the_kingdom
         else:
             raise ValueError("cds criteria not supported!")
     elif org_crit == 'trop':
         if cds_crit == 'cai':
-            label += "(top 10%% CAI t.o. %s), 1/C"%the_kingdom
+            label += r"(top 10\%" + r" CAI, CUS %s), 1/\textdegree C"%the_kingdom
         elif cds_crit == 'ribo':
-            label += "(ribosomal proteins t.o. %s), 1/C"%the_kingdom
+            label += r"(ribosomal proteins, CUS %s), 1/\textdegree C"%the_kingdom
         elif cds_crit == 'cai_noribo':
-            label += "(top 10%% CAI excl. ribosomal t.o. %s), 1/C"%the_kingdom
+            label += r"(top 10\%" + r" CAI excl. ribosomal, CUS %s), 1/\textdegree C"%the_kingdom
         elif cds_crit == 'all':
-            label += "(proteome t.o. %s), 1/C"%the_kingdom
+            label += r"(proteome, CUS %s), 1/\textdegree C"%the_kingdom
         else:
             raise ValueError("cds criteria not supported!")
     #######################################
@@ -458,8 +483,8 @@ ax_top.xaxis.set_ticks_position('bottom')
 ax_bottom.yaxis.set_ticks_position('left')
 ax_bottom.xaxis.set_ticks_position('bottom')
 #
-leg_top=ax_top.legend(loc='upper center',bbox_to_anchor=(0.9,1.0),numpoints=1,frameon=False,handlelength=0.8,handletextpad=0.25,labelspacing=0.75,borderaxespad=0.25)
-leg_bottom=ax_bottom.legend(loc='upper center',bbox_to_anchor=(0.9,1.0),numpoints=1,frameon=False,handlelength=0.8,handletextpad=0.25,labelspacing=0.75,borderaxespad=0.25)
+leg_top=ax_top.legend(loc='upper center',bbox_to_anchor=(0.9,1.0),numpoints=1,frameon=False,handlelength=0.8,handletextpad=0.25,labelspacing=0.75,borderaxespad=0.25,title=r"$w$")
+leg_bottom=ax_bottom.legend(loc='upper center',bbox_to_anchor=(0.9,1.0),numpoints=1,frameon=False,handlelength=0.8,handletextpad=0.25,labelspacing=0.75,borderaxespad=0.25,title=r"$w$")
 #
 top_title = leg_top.get_title()
 bottom_title = leg_bottom.get_title()
@@ -471,9 +496,9 @@ bottom_title.set_fontweight('bold')
 ax_top.xaxis.set_tick_params(labeltop='off')
 ax_top.xaxis.set_tick_params(labelbottom='off')
 #
-ax_bottom.set_xlabel('$T$, forcefield units',labelpad = 2)
-ax_bottom.set_ylabel('$R_M$',rotation='horizontal',labelpad = 6)
-ax_top.set_ylabel('$R_T$',rotation='horizontal',labelpad = 6)
+ax_bottom.set_xlabel(r'$T$, p.u.',labelpad = 2)
+ax_bottom.set_ylabel(r'$R_M$',rotation='horizontal',labelpad = 9)
+ax_top.set_ylabel(r'$R_T$',rotation='horizontal',labelpad = 9)
 #
 ax_bottom.yaxis.label.set_size(9)
 ax_top.yaxis.label.set_size(9)
@@ -486,12 +511,12 @@ ax_top.add_artist(ConnectionPatch(xyA=[T_T,RMT_max.RT_max.max()], xyB=[T_T,ax_to
 ax_bottom.add_artist(ConnectionPatch(xyA=[T_T,ax_bottom.get_ylim()[1]], xyB=[T_T,ax_bottom.get_ylim()[0]], coordsA="data", coordsB="data", axesA=ax_bottom, axesB=ax_bottom,color="#F71231",lw=2,zorder=100,ls='dashed'))
 ax_bottom.add_artist(ConnectionPatch(xyA=[T_M,RMT_max.RT_max.max()], xyB=[T_M,ax_bottom.get_ylim()[0]], coordsA="data", coordsB="data", axesA=ax_bottom, axesB=ax_bottom,color="#046ABE",lw=2,zorder=100,ls='dashed'))
 #
-ax_bottom.text(T_M,ax_bottom.get_ylim()[0]+0.01,'$T_M$',fontsize=11,verticalalignment='bottom',horizontalalignment='right',color="#046ABE")
-ax_bottom.text(T_T,ax_bottom.get_ylim()[0]+0.01,'$T_T$',fontsize=11,verticalalignment='bottom',horizontalalignment='right',color="#F71231")
+ax_bottom.text(T_M-0.1*(T_T-T_M),ax_bottom.get_ylim()[0]+0.00,r'$T_M$',fontsize=11,verticalalignment='bottom',horizontalalignment='right',color="#046ABE",fontweight='bold')
+ax_bottom.text(T_T-0.1*(T_T-T_M),ax_bottom.get_ylim()[0]+0.00,r'$T_T$',fontsize=11,verticalalignment='bottom',horizontalalignment='right',color="#F71231",fontweight='bold')
 #
 width = 0.16
-rectangle = Rectangle((0.9-0.5*width, 0.48), width, 0.075, fill=False, lw=2,color='red', transform=ax_top.transAxes, zorder=20)
-rectangle2 = Rectangle((0.9-0.5*width, 0.48), width, 0.075, fill=False, lw=2,color='blue', transform=ax_bottom.transAxes, zorder=20)
+rectangle = Rectangle((0.9-0.5*width, 0.54), width, 0.075, fill=False, lw=2,color="#F71231", transform=ax_top.transAxes, zorder=20)
+rectangle2 = Rectangle((0.9-0.5*width, 0.54), width, 0.075, fill=False, lw=2,color="#046ABE", transform=ax_bottom.transAxes, zorder=20)
 ax_top.add_patch(rectangle)
 ax_bottom.add_patch(rectangle2)
 #
@@ -506,13 +531,14 @@ ax_up = ax_TMAD[0,1]
 ################################
 ################################
 ################################
-wcf_plt_A = [0.,0.01,0.03]+[wopM,]+[0.11,0.15]
-wcf_plt_D = [0.,0.01,0.03]+[wopT,]+[0.11,0.15]
+wcf_plt_A = [0.,0.01,0.03]+[wopMT,]+[0.11,0.15]
+wcf_plt_D = [0.,0.01,0.03]+[wopMT,]+[0.11,0.15]
 # min , max are the same for both ...
 wmin,wmax = min(wcf_plt_A),max(wcf_plt_A)
 color = lambda www: plt.cm.brg(np.sqrt((www-wmin)/(wmax-wmin)))
 cola = ["#843A36","#F0924F","#70831C","#046ABE","#A61E84","#E45A79"]
-cold = ["#843A36","#F0924F","#70831C","#F71231","#A61E84","#E45A79"]
+# cold = ["#843A36","#F0924F","#70831C","#F71231","#A61E84","#E45A79"]
+cold = ["#843A36","#F0924F","#70831C","#046ABE","#A61E84","#E45A79"]
 # plotting M, i.e. for bottom:
 for i,wa in enumerate(wcf_plt_A):
     if wa not in data_sorted[(data_sorted.Model==mod)&(data_sorted.FFTemp==fft)]['W_coeff'].unique():
@@ -540,8 +566,8 @@ ax_up.yaxis.set_ticks_position('left')
 ax_up.xaxis.set_ticks_position('bottom')
 #
 #
-leg_top=ax_down.legend(loc='upper center',bbox_to_anchor=(0.9,1.0),numpoints=1,frameon=False,handlelength=0.8,handletextpad=0.25,labelspacing=0.75,borderaxespad=0.25)
-leg_bottom=ax_up.legend(loc='upper center',bbox_to_anchor=(0.9,1.0),numpoints=1,frameon=False,handlelength=0.8,handletextpad=0.25,labelspacing=0.75,borderaxespad=0.25)
+leg_top=ax_down.legend(loc='upper center',bbox_to_anchor=(0.9,1.0),numpoints=1,frameon=False,handlelength=0.8,handletextpad=0.25,labelspacing=0.75,borderaxespad=0.25,title=r"$w$")
+leg_bottom=ax_up.legend(loc='upper center',bbox_to_anchor=(0.9,1.0),numpoints=1,frameon=False,handlelength=0.8,handletextpad=0.25,labelspacing=0.75,borderaxespad=0.25,title=r"$w$")
 #
 top_title = leg_top.get_title()
 bottom_title = leg_bottom.get_title()
@@ -553,9 +579,13 @@ bottom_title.set_fontweight('bold')
 ax_up.xaxis.set_tick_params(labeltop='off')
 ax_up.xaxis.set_tick_params(labelbottom='off')
 #
-ax_up.set_ylabel('$R_A$',rotation='horizontal',labelpad = 6)
-ax_down.set_ylabel('$R_D$',rotation='horizontal',labelpad = 6)
-ax_down.set_xlabel('$T$, a.u.',labelpad = 2)
+ax_up.set_ylabel('$R_A$',rotation='horizontal')#,labelpad = 9)
+ax_down.set_ylabel('$R_D$',rotation='horizontal')#,labelpad = 5)
+#
+ax_up.yaxis.set_label_coords(-0.12, 0.5, transform=ax_up.transAxes)
+ax_down.yaxis.set_label_coords(-0.12, 0.5, transform=ax_down.transAxes)
+#
+ax_down.set_xlabel('$T$, p.u.',labelpad = 2)
 #
 ax_up.yaxis.label.set_size(9)
 ax_down.yaxis.label.set_size(9)
@@ -578,7 +608,7 @@ ax_down.yaxis.set_major_locator( MaxNLocator(nbins = 7) )
 ax_up.axvspan(Top_M, Top_T, facecolor='yellow', alpha=0.5)
 ax_down.axvspan(Top_M, Top_T, facecolor='yellow', alpha=0.5)
 #
-plt.savefig(os.path.join(results_path,'%s_Figure_4.pdf'%exp_fname))
+plt.savefig(os.path.join(results_path,'%s_Figure_4.pdf'%exp_fname.replace('.','_')))
 
 
 
@@ -661,7 +691,7 @@ plt.savefig(os.path.join(results_path,'%s_SuppFigure4.pdf'%exp_fname))
 #################################
 # the brooms and their insets ...
 plt.clf()
-x_fig_size = 7.3
+x_fig_size = 7.4
 v_coeff = 0.45
 fig = plt.figure(figsize=(x_fig_size,v_coeff*x_fig_size))
 # between axes ...
@@ -690,21 +720,21 @@ for aa,col in zip(aacids,cols):
 ax_left.yaxis.set_ticks_position('both')
 ax_left.xaxis.set_ticks_position('bottom')
 #
-ax_left.set_xlabel('$T$, a.u.')
-ax_left.set_ylabel('$f_{a}$, %')
+ax_left.set_xlabel(r'T, p.u.')
+ax_left.set_ylabel(r'$f_{a}$, \%')
 #############################################################
 w_right = 0.05
 right_dat = data_sorted[(data_sorted['W_coeff']==w_right)&(data_sorted.Model == 64)&(data_sorted.FFTemp == 'MJ99')]
 for aa,col in zip(aacids,cols):
-    ax_right.plot(right_dat['Temp'],right_dat[aa]*100.0,'o-',ms=4, lw=2, mew=0.0, color=col, label=aa)
+    ax_right.plot(right_dat['Temp'],right_dat[aa]*100.0,'o-',ms=4, lw=2, mew=0.0, color=col, label=r'\texttt{%s}'%aa)
 ################################
 ax_right.yaxis.set_ticks_position('left')
 ax_right.xaxis.set_ticks_position('bottom')
 ################################
-ax_right.set_xlabel('$T$, a.u.')
-# ax_right.set_ylabel('$f_{a}$, %')
+ax_right.set_xlabel(r'T, p.u.')
+# ax_right.set_ylabel('$f_{a}$, \%')
 ################################
-leg = ax_right.legend(loc='upper left',numpoints=1, frameon=False, bbox_to_anchor=(1.01, 1.035),fontsize=7.5,handlelength=1.0,markerscale=1.5,labelspacing=0.35)
+leg = ax_right.legend(loc='upper left',numpoints=1, frameon=False, bbox_to_anchor=(1.01, 1.035),fontsize=8,handlelength=1.0,markerscale=1.5,labelspacing=0.35)
 # ax.legend(loc='best',numpoints=1,frameon=False,handlelength=0.8,handletextpad=0.25,labelspacing=0.75,borderaxespad=0.25)
 #
 # ax_right.axvspan()
@@ -738,23 +768,23 @@ left += (width + hor_space)
 inset_right = fig.add_axes([left+0.048, 0.65, 0.2, 0.3],zorder=500)
 
 
-left_charged = left_dat[['D','E','K','R']].sum(axis=1)
-left_hydrophob = left_dat[['A', 'G', 'N', 'Q', 'S', 'T', 'H', 'Y']].sum(axis=1)
-left_hydrophil = left_dat[['M', 'P', 'C', 'L', 'V', 'W', 'I', 'F']].sum(axis=1)    
+left_charged = left_dat[list('DEKR')].sum(axis=1)
+left_hydrophob = left_dat[list('AGNQSTHY')].sum(axis=1)
+left_hydrophil = left_dat[list('MPCLVWIF')].sum(axis=1)    
 
-right_charged = right_dat[['D','E','K','R']].sum(axis=1)
-right_hydrophob = right_dat[['A', 'G', 'N', 'Q', 'S', 'T', 'H', 'Y']].sum(axis=1)
-right_hydrophil = right_dat[['M', 'P', 'C', 'L', 'V', 'W', 'I', 'F']].sum(axis=1)    
-
-
-inset_left.plot(left_dat.Temp[::2],left_hydrophob[::2]*100.0,'o-',ms=6, lw=2, mew=0.0, color='g', label='AGNQSTHY')
-inset_left.plot(left_dat.Temp[::2],left_hydrophil[::2]*100.0,'o-',ms=6, lw=2, mew=0.0, color='b', label='MPCLVWIF')
-inset_left.plot(left_dat.Temp[::2],left_charged[::2]*100.0,'o-',ms=6, lw=2, mew=0.0, color='r', label='DEKR')
+right_charged = right_dat[list('DEKR')].sum(axis=1)
+right_hydrophob = right_dat[list('AGNQSTHY')].sum(axis=1)
+right_hydrophil = right_dat[list('MPCLVWIF')].sum(axis=1)    
 
 
-inset_right.plot(right_dat.Temp[::2],right_hydrophob[::2]*100.0,'o-',ms=6, lw=2, mew=0.0, color='g', label='AGNQSTHY')
-inset_right.plot(right_dat.Temp[::2],right_hydrophil[::2]*100.0,'o-',ms=6, lw=2, mew=0.0, color='b', label='MPCLVWIF')
-inset_right.plot(right_dat.Temp[::2],right_charged[::2]*100.0,'o-',ms=6, lw=2, mew=0.0, color='r', label='DEKR')
+inset_left.plot(left_dat.Temp[::2],left_hydrophob[::2]*100.0,'o-',ms=6, lw=2, mew=0.0, color='g', label=r'\texttt{AGNQSTHY}')
+inset_left.plot(left_dat.Temp[::2],left_hydrophil[::2]*100.0,'o-',ms=6, lw=2, mew=0.0, color='b', label=r'\texttt{MPCLVWIF}')
+inset_left.plot(left_dat.Temp[::2],left_charged[::2]*100.0,'o-',ms=6, lw=2, mew=0.0, color='r', label=r'\texttt{DEKR}')
+
+
+inset_right.plot(right_dat.Temp[::2],right_hydrophob[::2]*100.0,'o-',ms=6, lw=2, mew=0.0, color='g', label=r'\texttt{AGNQSTHY}')
+inset_right.plot(right_dat.Temp[::2],right_hydrophil[::2]*100.0,'o-',ms=6, lw=2, mew=0.0, color='b', label=r'\texttt{MPCLVWIF}')
+inset_right.plot(right_dat.Temp[::2],right_charged[::2]*100.0,'o-',ms=6, lw=2, mew=0.0, color='r', label=r'\texttt{DEKR}')
 
 
 inset_left.yaxis.set_major_locator( MaxNLocator(nbins = 4) )
@@ -781,11 +811,11 @@ inset_left.set_ylim((18,46))
 inset_right.set_ylim((18,46))
 
 
-inset_left.set_xlabel('$T$, a.u.',labelpad=1)
-inset_right.set_xlabel('$T$, a.u.',labelpad=1)
+inset_left.set_xlabel('T, p.u.',labelpad=1)
+inset_right.set_xlabel('T, p.u.',labelpad=1)
 #
-lab_left = inset_left.set_ylabel('$f_{a}$, %',labelpad=2)
-lab_right = inset_right.set_ylabel('$f_{a}$, %',labelpad=2)
+lab_left = inset_left.set_ylabel(r'$f_{a}$, \%',labelpad=2)
+lab_right = inset_right.set_ylabel(r'$f_{a}$, \%',labelpad=2)
 
 
 lab_left.set_bbox(dict(facecolor='white', alpha=1.0, edgecolor='None'))
@@ -793,8 +823,8 @@ lab_right.set_bbox(dict(facecolor='white', alpha=1.0, edgecolor='None'))
 # xxx.set_clip_on(True)
 
 # leg = plt.legend(loc='center left',fontsize=15)
-leg = inset_left.legend(loc='upper left',numpoints=1, bbox_to_anchor=(0.99, 1.02), frameon=False ,fontsize=8,handlelength=0.8,handletextpad=0.18,labelspacing=0.5,borderaxespad=0.1)
-leg = inset_right.legend(loc='upper left',numpoints=1, bbox_to_anchor=(0.99, 1.02), frameon=False ,fontsize=8,handlelength=0.8,handletextpad=0.18,labelspacing=0.5,borderaxespad=0.1)
+leg = inset_left.legend(loc='upper left',numpoints=1, bbox_to_anchor=(0.99, 1.02), frameon=False ,fontsize=10,handlelength=0.8,handletextpad=0.18,labelspacing=0.5,borderaxespad=0.1)
+leg = inset_right.legend(loc='upper left',numpoints=1, bbox_to_anchor=(0.99, 1.02), frameon=False ,fontsize=10,handlelength=0.8,handletextpad=0.18,labelspacing=0.5,borderaxespad=0.1)
 # # leg = plt.legend(loc='best')
 # leg.get_frame().set_alpha(0)
 # leg.get_frame().set_edgecolor('white')
@@ -858,19 +888,19 @@ sim_D = sim_D2.T[0]
 #
 for lab,xx,yy in zip(exp_D.index,exp_D,sim_D):
     ax.scatter(xx, yy,s=3, marker="o",c='white',edgecolors='none')
-    ax.text(xx,yy,lab,color='dimgray',horizontalalignment='center',verticalalignment='center',fontsize=10,fontweight='semibold')
+    ax.text(xx,yy,r"\texttt{%s}"%lab,color='dimgray',horizontalalignment='center',verticalalignment='center',fontsize=10,fontweight='semibold')
 #
 # ax.plot(exp_D,sim_D,'ro',label='slopes M%d FFT%s W%.4f'%(M,FFT,W))
 a,b,r,pval,_ = st.linregress(exp_D.values,sim_D.values)
 exp_D_range = np.linspace(exp_D.min()*1.01,exp_D.max()*1.01)
-ax.plot(exp_D_range,a*exp_D_range+b,'b-',label='linear fit: $R$=%.2f, $P$=%.3f'%(r,pval))
+ax.plot(exp_D_range,a*exp_D_range+b,'b-',label='linear fit: R=%.2f, p=%.3f'%(r,pval))
 # ax.set_title("sim_D = a*exp_D+b, a=%.4f, b=%.4f, r=%.2f"%(a,b,r))
 ax.legend(loc='upper left',bbox_to_anchor=(0.01,0.9),frameon=False)
 # ax.legend(loc='best',frameon=False)
 ax.set_xlabel(slopes_label,labelpad=1.5)
-ax.set_ylabel("simulated slopes, $1/T$",labelpad=0.5)
+ax.set_ylabel("simulated slopes, 1/p.u.",labelpad=0.5)
 #
-# '$f_{a}$, %'
+# '$f_{a}$, \%'
 # signif_cai10_bacter
 # top 10% CAI t.o. bacteria
 # top 10% CAI t.o. archaea
@@ -904,11 +934,11 @@ fig.savefig(os.path.join(results_path,"%s_Slopes_sim_vs_exp_protbact.png"%exp_fn
 ####################################################
 # plot the simulated proteome's cost (both Akashi and Argentina)
 plt.clf()
-x_fig_size = 7.5
-v_coeff = 0.45
+x_fig_size = 7.4
+v_coeff = 0.4
 fig = plt.figure(figsize=(x_fig_size,v_coeff*x_fig_size))
 # between axes ...
-hor_space = 0.1
+hor_space = 0.07
 # axes info ...
 left = 0.09
 bottom = 0.15
@@ -935,9 +965,9 @@ for i,(wcf,dat) in enumerate(grouped):
         ddt = datt[:20] #amino acids only ...
         proteome_argentina_cost = argentina_cost.T.dot(ddt)
         if wcf == wopMT:
-            ax_right.plot(datt.loc['Temp'],proteome_argentina_cost.T,color=cols[i],marker='o',ms=8,mew=0,lw=2,label="$w$=%.2f"%wcf)
+            ax_right.plot(datt.loc['Temp'],proteome_argentina_cost.T,color=cols[i],marker='s',ms=8,mew=0,lw=2,label="%.2f"%wcf)
         else:
-            ax_right.plot(datt.loc['Temp'],proteome_argentina_cost.T,color=cols[i],marker='o',ms=6,mew=0,lw=2,label="$w$=%.2f"%wcf)
+            ax_right.plot(datt.loc['Temp'],proteome_argentina_cost.T,color=cols[i],marker='o',ms=6,mew=0,lw=2,label="%.2f"%wcf)
 ##################################
 ax_left.yaxis.set_ticks_position('left')
 ax_left.xaxis.set_ticks_position('bottom')
@@ -959,22 +989,22 @@ for i,(wcf,dat) in enumerate(grouped):
         ddt = datt[:20] #amino acids only ...
         proteome_akashi_cost = akashi_cost.T.dot(ddt)
         if wcf == wopMT:
-            ax_left.plot(datt.loc['Temp'],proteome_akashi_cost.T,color=cols[i],marker='o',ms=8,mew=0,lw=2,label="$w$=%.2f"%wcf)
+            ax_left.plot(datt.loc['Temp'],proteome_akashi_cost.T,color=cols[i],marker='s',ms=8,mew=0,lw=2,label="%.2f"%wcf)
         else:
-            ax_left.plot(datt.loc['Temp'],proteome_akashi_cost.T,color=cols[i],marker='o',ms=6,mew=0,lw=2,label="$w$=%.2f"%wcf)
+            ax_left.plot(datt.loc['Temp'],proteome_akashi_cost.T,color=cols[i],marker='o',ms=6,mew=0,lw=2,label="%.2f"%wcf)
 ##################################
 ax_right.yaxis.set_ticks_position('left')
 ax_right.xaxis.set_ticks_position('bottom')
 # leg = ax_right.legend(loc='best',frameon=False,numpoints=1,markerscale=2,fontsize=13)
-leg = ax_right.legend(loc='upper left',numpoints=1, frameon=False, bbox_to_anchor=(1.01, 1.035),fontsize=7.5,handlelength=1.5,markerscale=1.5,labelspacing=0.7)
+leg = ax_right.legend(loc='upper left',numpoints=1, frameon=False, fontsize=9, bbox_to_anchor=(1.01, 1.035),handlelength=1.5,markerscale=1.5,labelspacing=0.9, title=r"$w$")
 #
 #
-ax_left.set_xlabel('$T$, a.u.',labelpad=1)
-ax_right.set_xlabel('$T$, a.u.',labelpad=1)
+ax_left.set_xlabel(r'T, p.u.',labelpad=1)
+ax_right.set_xlabel(r'T, p.u.',labelpad=1)
 #
 #
-ax_right.set_ylabel('Weighted methabolic synthesis cost, ATP/time',labelpad=1)
-ax_left.set_ylabel('Methabolic synthesis cost, ATP',labelpad=1)
+ax_right.set_ylabel('AA maintenance cost, ATP/time',labelpad=1)
+ax_left.set_ylabel('AA synthesis cost, ATP',labelpad=1)
 #
 #
 ax_left.axvspan(Top_M, Top_T, facecolor='yellow', alpha=0.5)
@@ -982,6 +1012,9 @@ ax_right.axvspan(Top_M, Top_T, facecolor='yellow', alpha=0.5)
 # leg.get_frame().set_alpha(0)
 # leg.get_frame().set_edgecolor('white')
 # ax_right.set_xlim((0.0,6.1))
+ax_left.set_xlim((0.4,1.7))
+ax_right.set_xlim((0.4,1.7))
+ax_right.set_ylim((25,230))
 # plt.tight_layout()
 # ax_right.set_title("Akashi_proteome_cost_mod%d_fft%s.ghpcc.png"%(mod,fft))
 fig.savefig(os.path.join(results_path,"%s_Fig7_costs.pdf"%exp_fname))

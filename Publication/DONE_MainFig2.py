@@ -8,11 +8,27 @@ from scipy import stats as st
 # for plotting ...
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-font = {'family' : 'sans-serif',
+#
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+## for Palatino and other serif fonts use:
+# rc('font',**{'family':'serif','serif':['Palatino']})
+rc('text', usetex=True)
+# #
+#
+mpl.rcParams['text.latex.preamble'] = [
+       r'\usepackage{textcomp}',   # i need upright \micro symbols, but you need...
+       # r'\sisetup{detect-all}',   # ...this to force siunitx to actually use your fonts
+       r'\usepackage{helvet}',    # set the normal font here
+       r'\usepackage{sansmath}',  # load up the sansmath so that math -> helvet
+       r'\sansmath'               # <- tricky! -- gotta actually tell tex to use!
+]
+#
+font = {#'family' : 'sans-serif',
         #'weight' : 'bold',
         'size'   :9}
-mpl.rc('font', **font)
-# data loading ...
+rc('font', **font)
+# # data loading ...
 
 aacids = list('ACDEFGHIKLMNPQRSTVWY')
 
@@ -20,7 +36,7 @@ def plot_comparison(ax,x,y,xlab='x',ylab='y'):
     #
     ax.plot(x,y,'bo',visible=False)
     for i,aa in enumerate(aacids):
-        ax.text(x[i], y[i], aa, transform=ax.transData)
+        ax.text(x[i], y[i], r"\texttt{%s}"%aa, transform=ax.transData,color='dimgray',horizontalalignment='center',verticalalignment='center',fontsize=12,fontweight='bold')
     ###################################################
     a,b,r,pval,_ = st.linregress(x,y)
     #
@@ -29,7 +45,7 @@ def plot_comparison(ax,x,y,xlab='x',ylab='y'):
     x_range = [middle-0.5*delta,middle+0.5*delta]
     #############################################
     fff = np.vectorize(lambda x: a*x + b)
-    lin_fit, = ax.plot(x_range,fff(x_range),color='gray',linewidth=1.5,linestyle='-',zorder=100,label='linear fit, R=%.3f'%r)
+    lin_fit, = ax.plot(x_range,fff(x_range),color='blue',linewidth=1.5,linestyle='-',zorder=100,label='linear fit, R=%.3f, p=%.3f'%(r,pval))
     ###################################################
     ###################################################
     ax.yaxis.set_ticks_position('left')
@@ -38,7 +54,8 @@ def plot_comparison(ax,x,y,xlab='x',ylab='y'):
     ###################################################
     ax.set_xlabel(xlab)
     ax.set_ylabel(ylab)
-    ax.legend((lin_fit,),('linear fit, R=%.3f'%r,),loc='best',frameon=False)
+    ax.legend(loc='best',frameon=False)
+    # ax.legend((lin_fit,),('linear fit, R=%.3f, p=%.3f'%(r,pval)),loc='best',frameon=False)
     plt.tight_layout(pad=0.4, h_pad=None, w_pad=None)
     ###################################################
     ###################################################
@@ -105,22 +122,22 @@ def get_axis_labels(combination):
     cds_crit,org_crit = combination['cds_criteria'], combination['org_criteria']
     label = ""
     if cds_crit == 'cai':
-        label += "top 10% CAI"
+        label += "top 10\% CAI"
     elif cds_crit == 'ribo':
         label += "ribosomal proteins"
     elif cds_crit == 'cai_noribo':
-        label += "top 10% CAI excl. ribosomal"
+        label += "top 10\% CAI excl. ribosomal"
     elif cds_crit == 'all':
         label += "proteome"
     else:
         raise ValueError("cds criteria not supported!")
     #
     if org_crit == 'all':
-        arch_label = ' '.join([label,"(archaea), 1/C"])
-        bact_label = ' '.join([label,"(bacteria), 1/C"])
+        arch_label = ' '.join([label,r"(archaea), 1/\textdegree C"])
+        bact_label = ' '.join([label,r"(bacteria), 1/\textdegree C"])
     elif org_crit == 'trop':
-        arch_label = ' '.join([label,"(t.o. archaea), 1/C"])
-        bact_label = ' '.join([label,"(t.o. bacteria), 1/C"])
+        arch_label = ' '.join([label,r"(CUS archaea), 1/\textdegree C"])
+        bact_label = ' '.join([label,r"(CUS bacteria), 1/\textdegree C"])
     #
     return (arch_label,bact_label)
 
@@ -128,30 +145,51 @@ def get_axis_labels(combination):
 cds_crits = ['cai','ribo','cai_noribo','all']
 org_crits = ['trop','all']
 
-combinations = [(cc,oo) for cc in cds_crits for oo in org_crits]
-combinations = [[{'cds_criteria':cc,'org_criteria':oo} for cc in cds_crits] for oo in org_crits]
-# # with trop
-# combinations[0][0,2,3]
-# # no trop ...
-# combinations[1][0,1,3]
+####################
+# THERE ARE JUST 4 COMBINATIONS OF CRITS, SO JUST DO THEM MANUALLY ...
+combinations = [{'cds_criteria':'all','org_criteria':'all'},
+                {'cds_criteria':'ribo','org_criteria':'all'},
+                {'cds_criteria':'all','org_criteria':'trop'},
+                {'cds_criteria':'cai','org_criteria':'trop'}]
+###########
+#
+# combinations = [(cc,oo) for cc in cds_crits for oo in org_crits]
+# combinations = [[{'cds_criteria':cc,'org_criteria':oo} for cc in cds_crits] for oo in org_crits]
+# # # with trop
+# # combinations[0][0,2,3]
+# # # no trop ...
+# # combinations[1][0,1,3]
 
 
+xsize, ysize = 2, 2
 # # draw the thing ...
-fig,ax = get_axis(vcoeff = 0.8)
+fig,ax = get_axis(xsize, ysize, vcoeff = 0.8)
 
-for i,(for_trop,for_notrop) in enumerate(zip([0,2,3],[0,1,3])):
-    #######################
-    criteria_combination = combinations[0][for_trop]
-    print i,criteria_combination
+for cid,criteria_combination in enumerate(combinations):
+    # axis coordinates ...
+    i, j = cid/xsize, cid%xsize
+    #
     arch,bact = get_arch_bact_slopes(criteria_combination)
     alab,blab = get_axis_labels(criteria_combination)
-    plot_comparison(ax[i,0],arch['exp_D'],bact['exp_D'],xlab=alab,ylab=blab)
-    #######################
-    criteria_combination = combinations[1][for_notrop]
-    print i,criteria_combination
-    arch,bact = get_arch_bact_slopes(criteria_combination)
-    alab,blab = get_axis_labels(criteria_combination)
-    plot_comparison(ax[i,1],arch['exp_D'],bact['exp_D'],xlab=alab,ylab=blab)
+    plot_comparison(ax[i,j],arch['exp_D'],bact['exp_D'],xlab=alab,ylab=blab)
+
+
+
+
+
+# for i,(for_trop,for_notrop) in enumerate(zip([0,2,3],[0,1,3])):
+#     #######################
+#     criteria_combination = combinations[0][for_trop]
+#     print i,criteria_combination
+#     arch,bact = get_arch_bact_slopes(criteria_combination)
+#     alab,blab = get_axis_labels(criteria_combination)
+#     plot_comparison(ax[i,0],arch['exp_D'],bact['exp_D'],xlab=alab,ylab=blab)
+#     #######################
+#     criteria_combination = combinations[1][for_notrop]
+#     print i,criteria_combination
+#     arch,bact = get_arch_bact_slopes(criteria_combination)
+#     alab,blab = get_axis_labels(criteria_combination)
+#     plot_comparison(ax[i,1],arch['exp_D'],bact['exp_D'],xlab=alab,ylab=blab)
 
 
 

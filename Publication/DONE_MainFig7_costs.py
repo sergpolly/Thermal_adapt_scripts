@@ -15,11 +15,36 @@ from matplotlib.patches import ConnectionPatch
 from matplotlib.patches import Rectangle
 from matplotlib.ticker import NullFormatter
 import scipy.interpolate as interpol
-font = {'family' : 'sans-serif',
+# font = {'family' : 'sans-serif',
+#         #'weight' : 'bold',
+#         'size'   :9}
+# #
+# mpl.rc('font', **font)
+# #
+# #
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+## for Palatino and other serif fonts use:
+# rc('font',**{'family':'serif','serif':['Palatino']})
+rc('text', usetex=True)
+# #
+#
+mpl.rcParams['text.latex.preamble'] = [
+       r'\usepackage{textcomp}',   # i need upright \micro symbols, but you need...
+       # r'\sisetup{detect-all}',   # ...this to force siunitx to actually use your fonts
+       r'\usepackage{helvet}',    # set the normal font here
+       r'\usepackage{sansmath}',  # load up the sansmath so that math -> helvet
+       r'\sansmath'               # <- tricky! -- gotta actually tell tex to use!
+]
+#
+#
+font = {#'family' : 'sans-serif',
         #'weight' : 'bold',
         'size'   :9}
+rc('font', **font)
+# # data loading ...
 #
-mpl.rc('font', **font)
+#
 #
 #
 aacids = list('CMFILVWYAGTSNQDEHRKP')
@@ -85,9 +110,9 @@ elif kingdom == 'arch':
 
 def label(rr,pp):
     if (pp<0.0008):
-        label = '$R=%.2f,\ P<0.001$'%rr
+        label = '$R=%.2f,\ p<0.001$'%rr
     else:
-        label = '$R=%.2f,\ P=%.3f$'%(rr,pp)
+        label = '$R=%.2f,\ p=%.3f$'%(rr,pp)
     return label
 
 
@@ -107,11 +132,11 @@ regress_lims = get_lims(dat[topt],coeff=0.95)
 ####################################################
 # plot the simulated proteome's cost (both Akashi and Argentina)
 plt.clf()
-x_fig_size = 7.5
-v_coeff = 0.45
+x_fig_size = 7.4
+v_coeff = 0.4
 fig = plt.figure(figsize=(x_fig_size,v_coeff*x_fig_size))
 # between axes ...
-hor_space = 0.1
+hor_space = 0.07
 # axes info ...
 left = 0.09
 bottom = 0.15
@@ -139,8 +164,8 @@ t_range = np.asarray(regress_lims)
 ax_left.plot(t_range,a*t_range+b,'-',color='dimgray',lw=2,label=label(r,pval))
 ax_left.legend(loc='best',frameon=False)
 #
-ax_left.set_xlabel('$T_{opt},^{o}C$')
-ax_left.set_ylabel('Methabolic synthesis cost, ATP')
+ax_left.set_xlabel(r'OGT,\textdegree C')
+ax_left.set_ylabel('AA synthesis cost, ATP')
 #
 #################################
 ax_left.yaxis.set_ticks_position('left')
@@ -164,8 +189,8 @@ t_range = np.asarray(regress_lims)
 ax_right.plot(t_range,a*t_range+b,'-',color='dimgray',lw=2,label=label(r,pval))
 ax_right.legend(loc='best',frameon=False)
 #
-ax_right.set_xlabel('$T_{opt},^{o}C$')
-ax_right.set_ylabel('Weighted methabolic synthesis cost, ATP/time')
+ax_right.set_xlabel(r'OGT,\textdegree C')
+ax_right.set_ylabel('AA maintenance cost, ATP/time')
 #################################
 ax_right.yaxis.set_ticks_position('left')
 ax_right.xaxis.set_ticks_position('bottom')
@@ -179,7 +204,7 @@ ticks = 5*(pd.np.arange(vmin//5,vmax//5)+1)
 ticklabels = map(str,ticks)
 cbar.set_ticks(ticks)
 cbar.set_ticklabels(ticklabels)
-cbar.set_label('GC content, %')
+cbar.set_label('GC content, \%')
 #
 # fig.savefig(os.path.join(results_path,"%s.png"%fname),dpi=300)
 fig.savefig("Fig7.%s.pdf"%kingdom)

@@ -1,0 +1,866 @@
+% Template for PLoS
+% Version 3.1 February 2015
+%
+% To compile to pdf, run:
+% latex plos.template
+% bibtex plos.template
+% latex plos.template
+% latex plos.template
+% dvipdf plos.template
+%
+% % % % % % % % % % % % % % % % % % % % % %
+%
+% -- IMPORTANT NOTE
+%
+% This template contains comments intended 
+% to minimize problems and delays during our production 
+% process. Please follow the template instructions
+% whenever possible.
+%
+% % % % % % % % % % % % % % % % % % % % % % % 
+%
+% Once your paper is accepted for publication, 
+% PLEASE REMOVE ALL TRACKED CHANGES in this file and leave only
+% the final text of your manuscript.
+%
+% There are no restrictions on package use within the LaTeX files except that 
+% no packages listed in the template may be deleted.
+%
+% Please do not include colors or graphics in the text.
+%
+% Please do not create a heading level below \subsection. For 3rd level headings, use \paragraph{}.
+%
+% % % % % % % % % % % % % % % % % % % % % % %
+%
+% -- FIGURES AND TABLES
+%
+% Please include tables/figure captions directly after the paragraph where they are first cited in the text.
+%
+% DO NOT INCLUDE GRAPHICS IN YOUR MANUSCRIPT
+% - Figures should be uploaded separately from your manuscript file. 
+% - Figures generated using LaTeX should be extracted and removed from the PDF before submission. 
+% - Figures containing multiple panels/subfigures must be combined into one image file before submission.
+% For figure citations, please use "Fig." instead of "Figure".
+% See http://www.plosone.org/static/figureGuidelines for PLOS figure guidelines.
+%
+% Tables should be cell-based and may not contain:
+% - tabs/spacing/line breaks within cells to alter layout or alignment
+% - vertically-merged cells (no tabular environments within tabular environments, do not use \multirow)
+% - colors, shading, or graphic objects
+% See http://www.plosone.org/static/figureGuidelines#tables for table guidelines.
+%
+% For tables that exceed the width of the text column, use the adjustwidth environment as illustrated in the example table in text below.
+%
+% % % % % % % % % % % % % % % % % % % % % % % %
+%
+% -- EQUATIONS, MATH SYMBOLS, SUBSCRIPTS, AND SUPERSCRIPTS
+%
+% IMPORTANT
+% Below are a few tips to help format your equations and other special characters according to our specifications. For more tips to help reduce the possibility of formatting errors during conversion, please see our LaTeX guidelines at http://www.plosone.org/static/latexGuidelines
+%
+% Please be sure to include all portions of an equation in the math environment.
+%
+% Do not include text that is not math in the math environment. For example, CO2 will be CO\textsubscript{2}.
+%
+% Please add line breaks to long display equations when possible in order to fit size of the column. 
+%
+% For inline equations, please do not include punctuation (commas, etc) within the math environment unless this is part of the equation.
+%
+% % % % % % % % % % % % % % % % % % % % % % % % 
+%
+% Please contact latex@plos.org with any questions.
+%
+% % % % % % % % % % % % % % % % % % % % % % % %
+
+\documentclass[10pt,letterpaper]{article}
+\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+
+% Use adjustwidth environment to exceed column width (see example table in text)
+\usepackage{changepage}
+
+% Use Unicode characters when possible
+\usepackage[utf8]{inputenc}
+
+% textcomp package and marvosym package for additional characters
+\usepackage{textcomp,marvosym}
+
+% fixltx2e package for \textsubscript
+\usepackage{fixltx2e}
+
+% amsmath and amssymb packages, useful for mathematical formulas and symbols
+\usepackage{amsmath,amssymb}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+% Use nameref to cite supporting information files (see Supporting Information section for more info)
+\usepackage{nameref,hyperref}
+
+% line numbers
+\usepackage[right]{lineno}
+
+% ligatures disabled
+\usepackage{microtype}
+\DisableLigatures[f]{encoding = *, family = * }
+
+% rotating package for sideways tables
+\usepackage{rotating}
+
+% Remove comment for double spacing
+%\usepackage{setspace} 
+%\doublespacing
+
+% Text layout
+\raggedright
+\setlength{\parindent}{0.5cm}
+\textwidth 5.25in 
+\textheight 8.75in
+
+% Bold the 'Figure #' in the caption and separate it from the title/caption with a period
+% Captions will be left justified
+\usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off]{caption}
+
+% Use the PLoS provided BiBTeX style
+\bibliographystyle{plos2015}
+
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+% Leave date blank
+\date{}
+
+% Header and Footer with logo
+\usepackage{lastpage,fancyhdr,graphicx}
+\usepackage{epstopdf}
+\pagestyle{myheadings}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\includegraphics[width=2.0in]{PLOS-submission.eps}}
+\rfoot{\thepage/\pageref{LastPage}}
+\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
+\fancyheadoffset[L]{2.25in}
+\fancyfootoffset[L]{2.25in}
+\lfoot{\sf PLOS}
+
+%% Include all macros below
+
+\newcommand{\lorem}{{\bf LOREM}}
+\newcommand{\ipsum}{{\bf IPSUM}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   THIS IS FOR HIGHLIGHTING - TO BE DELETED PRIOR SUBMISSION  %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{color,soul}
+\sethlcolor{yellow}
+
+
+
+
+\begin{document}
+\vspace*{0.35in}
+
+
+% Title must be 150 characters or less
+\begin{flushleft}
+{\Large
+\textbf{Thermophilic adaptation in prokaryotes is constrained by metabolic costs of proteostasis}
+}
+\newline
+% Insert Author names, affiliations and corresponding author email.
+\\
+Sergey V. Venev, 
+Konstantin B. Zeldovich\textsuperscript{*}
+\\
+\bigskip
+\bf{} Program in Bioinformatics and Integrative Biology, University of Massachusetts Medical School, Worcester, MA, USA
+\\
+\bigskip
+* konstantin.zeldovich@umassmed.edu
+\end{flushleft}
+
+% Please keep the abstract between 250 and 300 words
+\section*{Abstract}
+Prokaryotes evolved to thrive in an extremely diverse set of habitats, and their proteomes bear signatures of environmental conditions. Although correlations between amino acid usage and environmental temperature are well documented, the underlying molecular mechanisms of thermal adaptation remain poorly understood. We hypothesize that thermal adaptation is constrained by the energetic costs of protein homeostasis, balancing the energy spent on amino acid biosynthesis and chaperone-assisted protein folding. Low biosynthesis costs lead to low diversity of physical interactions between amino acid residues, which in turn makes proteins less stable and drives up chaperone activity to maintain appropriate levels of folded, functional proteins. At elevated temperatures, this balance changes due to increased protein stability requirements. Minimization of total energy cost provides an optimum set of amino acid frequencies for a given temperature and cost of chaperone activity. Assuming that the cost of chaperone activity is proportional to the fraction of unfolded protein at a given temperature, we simulated thermal adaptation of lattice proteins subject to minimization of protein homeostasis costs. For the first time, we were able to predict both the proteome-average amino acid abundances and their temperature trends within a single model, and found strong correlations between model predictions and 538 fully annotated genomes of bacteria and archaea. Furthermore, these energetic constraints on protein evolution are more apparent in the highly expressed proteins, selected by codon adaptation index. The thermal adaptations of highly expressed proteins in bacteria and archaea are nearly identical, suggesting that universal energetic constraints prevail over the phylogenetic differences between these domains of life.
+
+% Please keep the Author Summary between 150 and 200 words
+% Use first person. PLOS ONE authors please skip this step. 
+% Author Summary not valid for PLOS ONE submissions.   
+\section*{Author Summary}
+
+Bacteria and archaea evolved to thrive in habitats ranging from permafrost to hot springs and ocean vents. Their remarkable adaptations to these wildly varying environments had an imprint on their genomes. In particular, thermophilic organisms have a specific pattern of amino acid usage, distinguishing them from other species. Insights into why amino acid frequencies in the prokaryotic genomes evolved to their present levels, and why do thermophilic organisms have a preference for specific amino acid types are crucial for establishing the basic biophysical constraints of evolution. We propose that amino acid frequencies are set by the limited amount of energy a cell can spend on protein synthesis and repair of defective, misfolded proteins by chaperone molecules; extensive use of “cheap” amino acids leads to unstable proteins, driving up repair costs. Using simulations, we predicted the optimum amino acid frequencies for different environmental temperatures, and found a strong agreement between the model and bioinformatics data on 538 genomes. For proteins produced by the cells in largest quantities, today’s bacteria and archaea show identical adaptation patterns, demonstrating that universal energetic constraints persisted since these two domains of life have split billions years ago.
+
+
+\section*{Introduction}
+
+Over the 4 billion years of evolution, life has colonized an extreme diversity of physical environments on Earth, ranging from volcanic hot vents in the oceans to permafrost to hypersaline lakes. Adaptations to these diverse conditions allowed proteins and nucleic acids to properly function in a wide range of physical and chemical environments. The recent explosion
+of sequence data uncovered specific mechanisms of these adaptations on multiple levels~\cite{Berezovsky2007Positive,Galtier1997Relationships,Zeldovich2007Protein,England2003Natural,Sghaier2013There,Fukuchi2003Unique}. Although the variation of amino acid frequencies across species is relatively constrained for a given genomic GC composition~\cite{Krick2014Amino,Goncearenco2014Fundamental}, it has been shown that average amino acid compositions of prokaryotic proteomes are sensitive to the temperature and salinity of their natural environments~\cite{Fukuchi2003Unique,Kreil2001Identification}. Unraveling of the evolutionary origins of frequencies of amino acids in proteins, as well as their adaptations to environmental conditions would greatly enhance our understanding of the link between molecular and organismal evolutionary scales, and relative importance of biological and physical factors as selective pressures.
+
+Rationalizing amino acid usage in extant life involves two main questions, first, what are the origins of the generally similar average amino acid usage across multiple highly divergent species, and second, what biological mechanisms lead to adaptation of amino acid frequencies to environmental conditions such as temperature, salinity, or pH. Various biological phenomena have been implicated in setting the amino acid composition, including the structure of the genetic code~\cite{Jukes1975Amino,Knight2001Simple,Lightfield2011Across,Goncearenco2014Fundamental,King1969NonDarwinian}, metabolic costs of biosynthesis~\cite{Akashi2002Metabolic,Krick2014Amino,Seligmann2003CostMinimization,Swire2007Selection,Heizer2011Amino}, and biophysical constraints on protein stability~\cite{Berezovsky2007Positive}.
+
+
+Large scale measurements of amino acid composition~\cite{Sueoka1961Correlation} and early attempts to explain available protein data~\cite{Jukes1975Amino,King1969NonDarwinian} were undertaken long before the sequencing era began. It became clear that genomic composition reflects the pattern of amino acid usage~\cite{Sueoka1961Correlation} and the structure of the genetic code largely explains observed patterns~\cite{Jukes1975Amino,King1969NonDarwinian}. On one hand, modern understanding largely recapitulates these early conclusions on the detailed molecular level, \hl{\it leaving the causality question mostly unanswered (chicken vs egg)}. Genomic composition (GC content), largely determines pattern of amino acid and codon usage on the organismal level~\cite{Kreil2001Identification,Knight2001Simple,Lightfield2011Across}, and quantitative relation between those is well established~\cite{Goncearenco2014Fundamental}. At the same time, closely related species adapted to different environments demonstrate variation in amino acid usage unaccounted for by their similar genomic compositions~\cite{Singer2003Thermophilic,Haney1999Thermal,Fukuchi2003Unique}. On the scale of a single unicellular organism highly abundant proteins demonstrate established amino acid usage preferences~\cite{Akashi2002Metabolic}, as they tend to utilize biosynthetically cheaper amino acids~\cite{Akashi2002Metabolic,Heizer2006Amino} and at the same time demonstrate pattern of thermal adaptation~\cite{Cherry2010Highly}. Multiple models have been proposed to rationalize evolved amino acid compositions. Proteome-wide amino acid usage correlates with the amino acids biosynthesis costs~\cite{Seligmann2003CostMinimization,Heizer2011Amino,Krick2014Amino}. Alternatively, amino acid composition can be predicted from corrected GC-content of a genome~\cite{Goncearenco2014Fundamental}. The best correlation between predicted and observed proteomic amino acid composition to date is achieved with a phenomenological model~\cite{Krick2014Amino} taking into account metabolic cost of amino acids synthesis and their corresponding rates of degradation. This model proposed that proteomic amino acid composition evolved to maintain high sequence diversity, while minimizing the energy flux spent to maintain optimal amino acid levels. Optimization for sequence diversity under energy spending constraint, while reasonable, is not physical model and thus it cannot account for thermal adaptation.
+
+
+Thermal adaptation is perhaps the most studied example of evolution under a well-defined physical pressure. Specific trends in amino acid compositions of thermophilic species have been found~\cite{Zeldovich2007Protein,Singer2003Thermophilic,Kreil2001Identification,Haney1999Thermal}. Temperature span of life reaches almost 120K (from -10C to 110C) which is equivalent to 0.24 kcal/mol and comparable to the average effect of a single amino acid substitution in a folded protein ddG~1 kcal/mol~\cite{Zeldovich2007Proteinb} \hl{\it it is also comparable to the VdV ``bond'' energy, while smaller than hydrogen bond energy or typical energy of electrostatic interaction in folded proteins} underlying the importance of thermal adaptation in prokaryotes. There is evidence for the thermal adaptation in prokaryotes on every level of cellular structure, including altered composition of cell membranes' lipids~\cite{Chugunov2014Liquid}, improved stability of functional structural RNAs~\cite{Galtier1997Relationships} and proteins stabilized via structural optimizations~\cite{Szilagyi2000Structural,England2003Natural} and enhanced residue interactions~\cite{Berezovsky2007Positive}. Thermally adapted proteins utilize both positive and negative design strategies, stabilizing their native folds and destabilizing unfolded conformations~\cite{Berezovsky2007Positive}. Increased fraction of hydrophobic residues contributes to the protein's core stability, while increased fraction of the charged residues (mostly on the protein's surface, and in the ``compensated'' form of ionic pairs~\cite{Szilagyi2000Structural}) enforces the native fold's uniqueness by destabilizing unfolded conformations. Some of these general trends in thermal adaptation of proteins are captured with the simplistic model of protein folding~\cite{Berezovsky2007Positive}. Besides physical reasons for thermal stability against unfolding, even moderate decrease in foldability imposes an organismal fitness cost~\cite{Drummond2008MistranslationInduced,Samerotte2011Misfolded}. \hl{\it Transition?} Organisms evolved chaperone-assisted folding mechanism that aims to repair misfolded proteins~\cite{Hartl2011Molecular}, and known to accelerate evolution rate, allowing for permissive mutations that impair proteins foldability~\cite{Cetinbas2013Catalysis}. Chaperones, however, require energy input for their function, thus, keeping on the selective pressure for protein foldability, especially in the case of highly abundant proteins~\cite{Kepp2014Model}. Together with the amino acid and protein biosynthesis and recycling, chaperone-assisted folding (protein homeostasis) consumes up to 80\% of total metabolic rate (generated energy in the form of ATP and NADH) in the unicellular free-living organisms~\cite{Kepp2014Model}. Thus, adaptation towards more efficient protein homeostasis must be imprinted on the evolution of prokaryotes if they are subject to the environments with limited resources at least occasionally.
+
+
+
+Despite these advances in modeling either the average amino acid composition, or its temperature trends, we are still lacking an integrated model that would provide a satisfactory explanation of both phenomena. Here, we propose that the amino acid composition has evolved under the selective pressure of the energetic cost of proteostasis, maintenance of the appropriate amount of functional, folded proteins in a cell. As in previous studies, our model for the energy costs includes the cost of synthesizing amino acid residues, and maintaining their constant concentrations in the presence of chemical degradation. The key novelty of our model comes from considering the energy cost of chaperone assisted protein folding. Importantly, protein stability against thermal unfolding depends on the amino acid composition. Therefore, amino acid compositions delivering highly foldable proteins require lower energy expenditures on repairing misfolded proteins by chaperones. As detailed below, minimization of the total energy spent on amino acid synthesis and maintenance of folded proteins by chaperones results in a precise description of both average amino acid frequencies, and their trends with environmental temperature.
+
+
+
+
+
+% You may title this section "Methods" or "Models". 
+% "Models" is not a valid title for PLoS ONE authors. However, PLoS ONE
+% authors may use "Analysis" 
+% old name "Materials and Methods"
+\section*{Models}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Protein homeostasis model and the corresponding figure goes here.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+As it has been noted before, protein foldability requirement naturally arises from the need to optimize energy expenditure on the chaperone assisted folding as a part of the protein homeostasis. In this study we employ modified protein homeostasis model developed by Kepp~\cite{Kepp2014Model}. This model is based on a simple cellular energy balance equation:
+\begin{equation}
+	\label{cell_energy_balance}
+	\mathcal{E}_{t} \approx \mathcal{E}_{m} + \mathcal{E}_{r}
+\end{equation}
+where $\mathcal{E}_{t}$ is the cell's total energy extracted from food and recycling per time unit (metabolic rate), this energy is being spent on the cell's machinery maintenance $\mathcal{E}_{m}$ and reproduction $\mathcal{E}_{r}$. As in~\cite{Kepp2014Model} we assume that cellular fitness $\Phi$ is driven by the amount of energy spent on replication $\Phi \sim \mathcal{E}_{r}$ and we also neglect all maintenance costs except for protein homeostasis cost $\mathcal{E}_{m}\approx\mathcal{E}_{p}$. The latter simplification is justified by the fraction of energy spent on homeostasis, especially in the case of prokaryotes \hl{[REFS-see-Kepp2014]}. Cellular energy balance equation~\eqref{cell_energy_balance} warrants fitness advantage to the cells with optimized machinery maintenance, as it allows them to spend more energy on reproduction given, equal metabolic rate $\mathcal{E}_{t}$. Hence, it is plausible to assume that traces of the maintenance costs optimization are substantially imprinted on the evolution of single cellular prokaryotes.
+
+
+We focus on the details of the protein homeostasis model next. In order to quantify proteostasis costs we consider three major pathways: protein synthesis, chaperone assisted protein folding and protein degradation/recycling Fig.~\ref{fig:fig1}. Thus, proteostasis energy spending can be written as a sum of three terms:
+\begin{equation}
+	\label{proteostasis_cost_expansion}
+	\mathcal{E}_{p} \approx \mathcal{E}_{s} + \mathcal{E}_{f} + \mathcal{E}_{d}
+\end{equation}
+where subscripts $s,f,d$ corresponds to synthesis, folding and degradation respectively. We assume that protein synthesis cost $\mathcal{E}_{s}$ depends on the primary protein sequence $S$ only via amino acid composition and the sequence length $L$, i.e., for simplicity, we assume equal translation efficiency for any $S$, also neglecting co-translational folding details along with the codon usage and bias details. We also assume that the pool of amino acids is maintained at steady state condition (constant concentration of each type), i.e. amino acids consumed by protein synthesis are being replaced with newly synthesized or recycled ones. Thus, the protein synthesis cost $\mathcal{E}_{s}$ can be expressed as a two-term sum:
+\begin{equation}
+	\label{synthesis_cost}
+	\mathcal{E}_{s} \approx \sigma L + \sum\limits_{a=1}^{20}C_{a}n_{a}
+\end{equation}
+where the first term is the averaged translation cost of $L$ codons, $\sigma$-units each, and the second term accounts for the energy spent to synthesize $n_{a}$ amino acids of each kind $a=1,\dots,20$ ($\mathrm{A},\dots,\mathrm{Y}$), constituting the primary sequence $S$ and $\sum\limits_{i=1}^{20}n_{a} = L$. The vector $C_{a}, a=1,\dots,20$ in equation~\eqref{synthesis_cost} is the amount of energy required per unit time to maintain the constant concentration of each type of amino acids, which are being consumed by protein synthesis and are also being chemically degraded at vastly different rates. The energy expenditure vector $C_{a}$ is derived in~\cite{Krick2014Amino}, using costs of individual amino acid synthesis and corresponding rates of degradation. The average synthesis costs are estimated by Akashi and Gojobori~\cite{Akashi2002Metabolic} using known biochemical pathways, degradations rates are estimated by semi quantitative ranking based on chemical properties of amino acids~\cite{Krick2014Amino}.
+
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{../figure1.png}
+\caption{
+{\bf Schematics of the protein proteostasis model.}  Protein proteostasis model used in the study involves protein synthesis,chaperone-assisted folding/refolding, degradation and recycling. Protein synthesis costs accounts for the raw amino acid material, that is maintained at a steady state concentrations by resynthesis of the degraded monomers. Amino acid degradation and the protein life time are considered decoupled, or in other words the protein life time $\ll$ the life time of amino acid (in might not be the case actually).  
+}
+% \label{fig:proteostasis_sketch}
+\label{fig:fig1}
+\end{figure}
+
+
+
+
+
+Maintenance of the constant concentration of folded, functional proteins involves the action of chaperones, which help refold improperly folded proteins, reviewed in~\cite{Hartl2011Molecular}. Chaperone-assisted refolding consumes energy, primarily on conformational transitions required to form the hydrophobic cavity~\cite{Hartl2011Molecular}. We quantify chaperone assisted protein folding costs together with the cost of degradation, two terms in the equation \eqref{proteostasis_cost_expansion}, $\mathcal{E}_{f} + \mathcal{E}_{d}$, using a two-state folding model~\cite{Mirny2001Protein,Dill1995Principles}, i.e., assuming that the protein of sequence $S$ can be either in a natively-folded or in an unfolded state and the fraction of natively-folded proteins $P_{nat}$ determined by the protein's primary sequence $S$ and the environmental temperature $T$. This enables us to use simple energy-expenditure expression linear with respect to corresponding protein abundances or fractions:
+\begin{equation}
+	\label{chaperone_degradation_cost}
+	\mathcal{E}_{f} + \mathcal{E}_{d} \approx (F+D_{F})\cdot P_{nat} + (U+D_{U})\cdot\left(1-P_{nat}\right)
+\end{equation}
+where $F$ is the energy spent per unit time to assist successful folding, leading to the $P_{nat}$ of natively-folded protein, whereas $U$ is energy consumption rate by $1-P_{nat}$ proteins that fails to fold into the native state, requiring several rounds of refolding and potentially early degradation, $D_{F,U}$ are the energy consumption per unit time spent on degradation for natively-folded and non-natively-folded proteins, respectively. We assume that $|F+D_{F}|<|U+D_{U}|$, reflecting the fact that well-folding proteins do not require as much energy and effort to keep them functional and potentially experience a slower rate of degradation \hl{[REFS]}. Proposed linear approximation neglects a number of details associated with the chaperone assisted folding and degradation, primarily ``averaging'' all proteins of equal lengths and assuming narrow distribution of the protein turnover time $t_{1/2}$ within natively-folded and non-natively-folded groups in order to justify the constant rates $F,U,D_{F}$ and $D_{U}$ to describe such complex processes. Proposed model also neglects all details associated with the folding kinetics, as we calculate $P_{nat}$ for a given $S,T$ using equilibrium statistical physics based model of lattice protein folding that simulates globular proteins of equal lengths~\cite{Shakhnovich1990Enumeration}. In our study we consider lattice proteins of length $L=64$, and utilize a randomly generated subset of $N=10^{4}$ compact $4\times4\times4$ cubic conformations, to model both native state and an ensemble of unfolded states. We use energy of non-local contacts of a given primary sequence $S$ threaded onto all $N$ conformations to determine the native state of $S$ as the conformation with the lowest contact energy $E_{nat}$. Residue level knowledge-based potentials~\cite{Miyazawa1999SelfConsistent} $\epsilon_{a,b},\, a,b=1,\dots,20$ are used to calculate non-local contact energy in each conformation:
+\begin{equation}
+	\label{protein_globule_energy}
+	E_{i} = \sum\limits_{k=1}^{L}\sum\limits_{l=1}^{L}\epsilon_{S_{k}S_{l}}\delta^{i}_{kl}
+\end{equation}
+where $i=1,\dots,N$ is the conformation's index number, $S_{k}$ is the type of the amino acid at position $k$ of the sequence $S$, and $\delta^{i}_{kl}$ is a contact map of the conformation $i$, i.e., $\delta^{i}_{kl}=1$ if residues $k$ and $l$ are in contact ($|k-l|>1$), and $\delta^{i}_{kl}=0$ otherwise. Equilibrium fraction of natively-folded proteins $P_{nat}$ is calculated using Boltzmann distribution:
+\begin{equation}
+	\label{pnat_boltzmann}
+	P_{nat} = \frac{\exp\left(-E_{nat}/k_{B}T\right)}{\sum\limits_{i=1}^{N}\exp\left(-E_{i}/k_{B}T\right)}
+\end{equation}
+where $k_{B}$ is the Boltzmann constant. \hl{\it Use of such a simplified model is justified by the fact that ...}
+
+Combining all three terms \eqref{synthesis_cost},\eqref{chaperone_degradation_cost} in the equation \eqref{proteostasis_cost_expansion}, yields the following equation:
+\begin{equation}
+	\label{proteostasis_cost_detailed}
+	\mathcal{E}_{p} \approx \sigma L + \sum\limits_{a=1}^{20}C_{a}n_{a} + (F+D_{F})\cdot P_{nat} + (U+D_{U})\cdot\left(1-P_{nat}\right)
+\end{equation}
+which can be further simplified to:
+\begin{equation}
+	\label{proteostasis_cost_simplified}
+	\mathcal{E}_{p} \approx \alpha - \beta\left(P_{nat} - \mathit{w}\cdot\sum\limits_{a=1}^{20}C_{a}n_{a} \right)
+\end{equation}
+where $\alpha$,\, $\beta > 0$ and $\mathit{w}>0$, are constants within our framework, and $C_{a}$ is the vector of amino acid maintenance-costs, introduced above. 
+
+We employ protein design procedure to simulate proteomes evolved to minimize the costs of protein homeostasis. Equation \eqref{proteostasis_cost_simplified} sets up a framework for our evolutionary study and it defines the computable score for proteostasis of a given sequence $S$ at temperature $T$:
+\begin{equation}
+	\label{score_proteostasis}
+	\Pi(S,T,\mathit{w}) = P_{nat} - \mathit{w}\cdot\sum\limits_{a=1}^{20}C_{a}n_{a}
+\end{equation}
+where $\mathit{w}$ reflects the balance between the costs of amino acid synthesis \hl{(\it maintenance?)} and chaperone operation. As the exact experimental values of $F,D_{F},U$ and $D_{U}$ are not known, we treat $\mathit{w}$ as an adjustable parameter, and optimize it to find the best agreement between predicted and real amino acid frequencies. Optimization of the proteostasis costs $\mathcal{E}_{p}$ is equivalent to the maximization of the derived score, $\Pi(S,T,\mathit{w})$, as $\mathcal{E}_{p}$ linearly depends on it with the negative proportionality coefficient $-\beta$. Our protein design procedure mostly follows the standard one, described in~\cite{Berezovsky2007Positive}: it starts with $M=10^{4}$ randomly generated sequences (each having the same length $L=64$), then proteostasis score $\Pi$ is computed for each of $M$ sequences and the protein design criterion is evaluated:
+\begin{equation}
+	\label{design_criterion}
+	\frac{1}{M}\sum\limits_{i=1}^{M}\Pi(S_{i},T,\mathit{w}) > \Pi_{opt}
+\end{equation}
+where $\Pi_{opt}$ is the threshold proteostasis score that must be exceeded by the averaged score of all sequences $S_{i},i=1,\dots,M$. If criterion \eqref{design_criterion} is not satisfied, then we introduce a random single amino acid mutation in each of $M$ sequences and reevaluate the criterion for mutated ``proteome''. This mutation-reevaluation loop (iterative procedure) proceeds either until the criterion is met or the number of iterations exceeds a limit of $I_{max}=10^{3}$ iterations, the latter case implies that the design procedure failed and produced no results for further analysis. Protein design procedure is being repeated starting from random sequences for varying temperature and parameter $\mathit{w}$. Described simulations for varying parameters require significant computational resources. In this case we rely on the GPU-library, we developed earlier~\cite{Venev2015Massively}, to perform massively parallel lattice protein folding at each step of protein design.
+
+The proposed evolutionary simulation aims to produce sequences that are easy to fold and yet relatively ``cheap'' in terms of their contents. Hence, the foldability vs amino acids synthesis \hl{(\it maintenance?)} cost balance is crucial for the simulations: relaxing the foldability requirement, would yield homopolymers of the ``cheapest'' amino acid in the result, whereas thermally stable but very ``expensive'' proteins would be the result of simulations without restraining the price of amino acid synthesis \hl{(\it maintenance?)}. Simulations according to the latter scenario conducted in~\cite{Berezovsky2007Positive}, and although they fail to predict average amino acid frequencies observed in real proteomes, they capture experimentally observed temperature-trends of the amino acid frequencies~\cite{Szilagyi2000Structural,Haney1999Thermal,Kumar2001How,Singer2003Thermophilic}. 
+
+We use both average amino acid frequencies and their temperature-trends for comparison between designed sequences and real proteomes of prokaryote species ranging from mesophiles to extreme thermophiles. We optimize the balance parameter $\mathit{w}$, along with the range of artificial temperatures $T_{min},T_{max}$ \hl{(force field units)} for the best agreement with the temperature-trends of amino acid frequencies in the real proteomes.
+
+
+\hl{FORCE FIELD TERM TO BE REPLACED WITH RESIDUE LEVEL POTENTIAL OR ... POTENTIAL}
+
+% \subsection*{Bioinformatics analysis}
+% % \subsection*{Archaeal trends in amino acid composition}
+% {\it move this to Model and Materials, but consider, that Methanococci behavior as a subgroup in the Archaea group is interesting and can be considered as the result itself.}
+% Predicted temperature trends and relative amino acid frequencies can be directly compared with the ones observed in naturally evolved species. Increased number of fully sequenced genomes allows us to compose balanced datasets for comparison. We used 250 fully sequenced representative genomes of archaeal species available at NCBI (details, ftp, etc., maybe see Methods) in order to limit the influence of the phylogenetics on the amino acid trends.{\it Halophiles exluded: extremely high GC and clustered together.} This set uniformly covers wide range of GC genomic composition from 25 to 70 percent and a wide range of OGT (substituted with environmental T when OGT not available) from 30 to 120C, the set is available for download \underline{(supplement)}. Uniform coverage allowed us to select subsets with a narrow GC distribution (45 to 55) to diminish influence of GC-skew on the amino acid frequencies, similar approach was used earlier~\cite{Singer2003Thermophilic}. Archaeal class {\it Methanococci} represents another useful subset of species with narrow GC, wide OGT and additionally phylogenetic proximity~\cite{Armanet2011Phylogeny,Haney1999Thermal}, there are 14 fully sequenced representative genomes (with annotated genomes) of {\it Methanococci} species at NCBI database. Proposed datasets demonstrate similar trends in amino acid frequencies with OGT, except for some alteration due to the GC-poor genomes of Methanococci species. These trends also follow qualitatively the earlier results calculated for smaller datasets~\cite{Kreil2001Identification,Singer2003Thermophilic,Zeldovich2007Protein} (McDonald? \cite{Mcdonald2010Temperature}). Noteworthy, OGT in all of these datasets is significantly correlated with the IVYWREL OGT-predictor derived earlier~\cite{Zeldovich2007Protein}. {\it Bacterial dataset to be processed.}
+
+
+% Described datasets for archaea and bacteria were used separately to compare thermal adaptation in different phylogenetically distant groups and test our model predictions for each of these groups. Temperature trends of individual amino acid compositions calculated on the proteome level both for archaeal and bacterial species and their respective average values were primary focus of our dataset analysis. We used the least square linear regression analysis to estimate slopes $df/dT$ of amino acid composition temperature--trends and their respective Pearson correlation coefficient $R$. Fractions of amino acid groupings, such as hydrophobic ($LVIMWPCF$), charged ($DEKR$), hydrophilic ($AGNQSTHY$) and themophilicity--predictor ($IVYWREL$)[REF-Zeldovich2007PLoS] demonstrate nearly identical behavior in bacteria and archaea on the proteome level, however temperature trends of individual amino acids seem to obey different paths for these two phylogenetically distant groups of organisms.
+% However, as it has been demonstrated [refs - many refs], different protein in the proteome experience different evolutionary pressure with the protein abundance (or corresponding gene expression level) being one the most important determinants of such a selective pressure (long standing debate: ``essential'' proteins vs. ``highly-expressed'' or some other physical property related). 
+
+
+\subsection*{Datasets}
+Abundance of completely sequenced prokaryotic genomes requires careful selection of representative organisms, to avoid contamination of the dataset by phylogenetically close or other otherwise redundant sequences.
+We used the RefSeq and BioProject databases at NCBI to retrieve 543 (\texttt{get\_values\_paper.py}) completely sequenced, annotated, single-chromosome bacterial genomes with known OGT or a specified environmental temperature. BioPython was used to retrieve OGT data from NCBI Entrez. If only a temperature range was specified, the average temperature was used as OGT. The bacterial dataset covers the OGT range of 15--90C, and genome-wide GC content of 30--70\%, see \nameref{fig:s1}.
+As archaea are less well documented in the BioProject database, we performed a manual literature search for OGT of 617 (\texttt{get\_values\_paper.py}) species of archaea with completely sequenced genomes, resulting in 223 (\texttt{get\_values\_paper.py})  species with completely sequenced and annotated genome and known OGT or environmental temperature. 
+
+All halophiles and extreme halophiles (phylogenetic subdivision Halobacteria and newly discovered Nanohaloarchaea) have been excluded from our analysis, as they experience a strong evolutionary pressure of hypersaline environment, and appear as a clear outliers on the overall monotonous OGT-trends of amino acid usage (see \nameref{fig:s2}). The scatter plot of the genomic GC-content -- OGT coordinates for archaeas (see \nameref{fig:s1}) reveals substantially homogeneous coverage in the GC range 30-70\% and OGT 25-110C with a lower coverage at ~60C OGT, which may be attributed to the lack of corresponding environments. To summarize, we collected a dataset of prokaryotic species ( 543 bacteria and 140 archaea excluding halophiles) with complete and annotated genomes and with the OGT for each of these species. Both bacterial and archaeal subgroups of this dataset demonstrates sufficient and relatively homogeneous (except for the mentioned 37C bacterial spike and 60C archaeal dip) coverage in the OGT-GC plane, see \nameref{fig:s1}.
+
+\hl{ The list of species used this study, along with OGT, RefSeq genome identifiers and processing scripts is available in the Supplementary Information and at http://github.com/sergpolly/Thermal\_adapt\_scripts} \hl{[ADD HUGE TABLES WITH THE uid LISTS ...]}.
+
+
+%In order to compare predicted amino acid frequency trends, we created datasets of different prokaryotic species with known environmental features and the fully sequenced genomes. We approached the problem differently for bacterial and archaeal species, due to naturally higher attention to bacteria and thus its over-representation in the NCBI databases. Both bacterial environmental features (specifically OGT) and complete genomes were retrieved in a fully automated fashion using RefSeq and BioProject databases at NCBI. 
+
+%We used RefSeq bacterial dataset (ftp-blah-blah) as it is a database of presumably non-redundant or representative species with complete genomes or nearly-complete whole genome shotgun (WGS) sequences. Most of the species represented in the bacterial RefSeq database contain a cross-reference to the BioProject database that stores additional information species-information including environmental data and details on the sequencing procedure. BioProject entries can be accessed pro-grammatically through the Entrez system in the form of parseable XML files with consistent annotation of environmental data. We used BioPython-based scripts to access NCBI Entrez system and retrieve OGT (along with other environmental information) for a significant subset of bacterial RefSeq species. We further limited ourselves only to the species with the complete genomes of a single chromosome, which resulted in dataset of 400(check) complete and annotated bacterial genomes with known OGT. It is worth mentioning here, that we used term OGT and simply the environmental temperature interchangeably, moreover we used the mean of the temperature range limits if the range was the only available characteristic. To asses the dataset ``quality'' we used scatter plot in a genomic GC-content -- OGT coordinates (see supplementary information), which revealed that we have substantial coverage in the GC range 30-70\% and OGT 15-90C. However, the GC-OGT coverage is not homogeneous, as there is a strong over-representation of fully sequenced human pathogens near 37C OGT. Archaeal species are way less documented in the BioProject database (numbers? I don't have em), so we opted for manual retrieval of environmental information instead of an automated database mining. In order to increase our chances of finding related environmental information we used all ~700(check) archaeal entries available in the GenBank database at NCBI. GenBank stores all of the complete genomes and nearly-complete whole genome shotguns, rather than reduced and presumably representative set in the RefSeq, but it is less of a problem for archaeal species, as their numbers in both databases are comparable and limited (~700 GenBank and ~400RefSeq). In order to cover all of the ~700 archaeal species in the GenBank we generated an html-page containing links to google queries with the scientific names of all available archaeas. We used this html document to go over all ~700 entries in attempt to retrieve environmental information mostly from the original peer-reviewed publications, along with the genome NCBI database, web-version of which happens to carry that BioProject information that we used for bacteria in our automated scripts (instead, web-version of BioProject database appears to provide sequencing details only, without any notion of environmental features of organisms - that's rather confusing, but thanks to NCBI help-desk which won't respond you, unless you've got to have a friend working at NIH NCBI. ). Using the aforementioned semi-automated approach we were able to retrieve ~270(check) Optimal Growth Temperatures, Environmental temperatures and Optimal temperature ranges, we treated 2 former ones as OGT and used an average of the temperature-range limits in case a range was the only available information. For the purposes of further analysis we excluded archaeal species without annotated genomes, as our analysis primary focus is the proteomic-level composition of amino acids, however we kept GenBank entries with the annotated whole genome shotgun sequences in order to enrich our dataset of  rare and thus ``precious'' archaeas. We also excluded all halophiles and extreme halophiles (phylogenetic subdivision Halobacteria and newly discovered Nanohaloarchaea) from our analysis as they represent another group of species experiencing strong evolutionary pressure (excess of salt ions in the living environment) on their proteomes and they appear as a clear outliers on the overall monotonous OGT-trends of amino acid usage (see supplementary info or data not shown). Scatter plot of the genomic GC-content -- OGT coordinates for archaeas (see supplementary information), revealed that we have substantially homogeneous coverage in the GC range 30-70\% and OGT 25-110C with a coverage sink at ~60C OGT, which may be attributed to the lack of corresponding environments. To summarize we collected a dataset of prokaryotic species ( XXX bacteria and YYY archaea) with complete or nearly complete and annotated genomes and with the OGT for each of these species. Both bacterial and archaeal subgroups of this dataset demonstrates sufficient and relatively homogeneous (except for the mentioned 37C bacterial spike and 60C archaeal sink) coverage on the OGT-GC plane, thus enabling us with sufficient amount of proteomic-wide information to analyze.
+
+\subsection*{Identification of  highly abundant proteins}
+As our model links protein thermostability with energy costs of maintaining proper amounts of functional protein, protein abundance, or expression level, are important factors to consider. Unfortunately, for most of prokaryotes iwth completely sequenced genomes neither protein abundance nor expression have been directly characterized. Therefore, we used a sequence based approach to identiy putatively highly expressed proteins on a very large scale using codon adaptation index (CAI).  First, we selected all species with at least 25 properly annotated ribosomal (thus, highly expressed, \hl{REF}) proteins, and used the corresponding gene sequences to establish codon usage patterns in a given specie. Then, for all genes of a specie, CAI was calculated using a Python scripts, and used as a proxy for expression and abundance level. Genes with fuzzy locations in the genome have been aligned with the provided protein translation to identify codons in use.
+
+
+%CAI, as a measure predicting gene expression, is known to have many limitations itself, as it is mainly reflects the fact that particular gene tends to utilize similar codons as highly expressed genes (ribosomal protein genes in our case), and this may or may not be the indicator of high expression level [REF boltzman margalit].
+
+Previously, it has been shown that CAI has its limitations as a predictor of gene expression~\cite{Botzman2011Variation}, as in some species the CAI distribution is very narrow and codon usage of ribosomal protein genes is nearly indistinguishable from other genes. In these cases, the predictive power of CAI is doubtful. Following this observation, we only retained the genomes where at least 85\% of ribosomal protein genes were within the 25\% of all genes with the highest CAI rank. We hypothesize that in these cases the wide distribution of CAI and a marked difference in codon usage between ribosomal and other proteins warrants the use of CAI as proxy for gene expression and, statistically, abundance \hl{[REF]}. Selecting organisms according to this criteria yields around ~40\% of organisms both for Bacteria (347) and Archaea (65) [for distribution examples see \nameref{fig:s3}], and correlates well with the average CAI criteria proposed by Botzman Margalit~\cite{Botzman2011Variation}, see \nameref{fig:s4}. These organisms were referred to as ``significant organisms'' [\hl{Tr.Op.} CHECK TERM - organisms with translational optimization~\cite{Botzman2011Variation} further on. Temperature trends of individual amino acids were calculated for each of the aforementioned subsets: (0) proteome-wide amino acid compositions both for all organisms (1) ribosomal proteins for all organisms; (2) proteins with top 10\% CAI for all organisms; (3) proteome-wide trends for ``significant organisms'' only; (4) proteins with top 10\% CAI for ``significant organisms'' only (including genes coding for ribosomal proteins) and (5) proteins with top 10\% CAI for ``significant organisms'' only (excluding genes coding for ribosomal proteins).
+
+
+%Thus it is fair to assume that the temperature trends of amino acid compositions in the highly abundant or highly-expressed part of the proteome may look similar between bacteria and archaea despite the phylogenetic distance, as these groups of proteins experience same strong selective pressure towards higher folding stability. We set out to test this hypothesis using just a subset of most abundant (highly expressed) proteins in each organismal proteome. Because publicly available expression profiles for different organisms are limited in their number and moreover protein expression rankings for the same organism are not very reproducible using different gene expression profiles, for example from GEO database at NCBI, we opted to use functional groups of proteins that are well-known to be highly expressed (stably expressed) across all organisms and recruit computable measures that are known to correlate with gene expression to proceed with our analysis. Genes coding for ribosomal proteins are well known housekeeping genes that stably expressed across all organisms and are often used as a representative group of highly expressed (and/or abundant) proteins. 
+
+
+%Genes coding for ribosomal proteins are also used to extract preferred codon usage bias of a given organism, and this codon bias can be later used to calculate Codon Adaptation Index (CAI) for each coding gene of an organism, where CAI is known to correlate with gene expression levels, and thus can be used to predict them on the proteome wide level. CAI, as a measure predicting gene expression, is known to have many limitations itself, as it is mainly reflects the fact that particular gene tends to utilize similar codons as highly expressed genes (ribosomal protein genes in our case), and this may or may not be the indicator of high expression level [REF boltzman margalit]. Despite of its limitation it is possible to select organisms where higher CAI actually implies higher expression, these are presumably organisms that utilize translational elongation optimization to leverage protein expression levels. Such organisms can be identified using several criteria all based on the features of proteome wide distribution of CAI, including CAI average, CAI dispersion and the location of ribosomal protein genes (presumably highly expressed ones) on the CAI distribution [REF- margalit botzman], where all three measures tend to predict correct organisms ranking [CHECK!!! - we used the latter one]. In order to perform organismal proteome dissections to select either ribosomal proteins or a proteome subset with the top CAI values, we used our bacterial and archaeal datasets with the revised and more detailed proteome analysis: (1) for each organism from the dataset (all of them are annotated) we performed a proteome-wide scan to identify ribosomal proteins using features of the GenBank format -- simply checking if the gene ``product'' field contains phrase ``ribosomal protein'', this always resulted in ~50 ribosomal proteins on average, and organisms with the number of thus identified ribosomal proteins under 25 were discarder from the subsequent analysis; (2) CAI ranking of each proteome includes two steps (a) calculation of the codon usage bias using genes coding for ribosomal proteins and (b) using derived codon usage bias to calculate CAI of each individual coding gene in the proteome. We omitted all the genes with fuzzy locations in the genome, asserting that each gene is a complete CDS (coding DNA sequence) [REF], because it is harder to identify reading frame for these genes as well as extract used codons. At the same time, we were simply skipping ``illegal codons'', ones with any letters other than ``ATGC'', that one may encounter in the genomic sequences. It is also worth mentioning here that we used native genetic code for each organism, as it is specified in the ``trans-table'' field of each annotation entry in the GenBank format, most of the time that would imply using Bacterial and Archaeal genetic code (``trans-table''=11), that mostly resembles the Standard genetic code, with a wider selection of start codons. Described genes extracting procedure was used both to re--identify genes coding for ribosomal proteins (applying the same 20 cutoff for the number of ribosomal proteins per organism) and to extract easily tractable (good behaving) coding genes across all proteomes. Number of ribosomal proteins skipped never exceeded 3 with the majority ribosomal proteins having ideal CDSes, whereas the overall number of skipped protein coding genes was as high as 10\% in some organisms, but the majority of proteomes was still encoded by ``ideal'' CDSes, thus permitting CAI evaluation. After evaluating CAI on the proteome level for both Bacterial and Archaeal datasets we were able to analyze each CAI distribution and identify organisms which presumably utilize optimization of translational elongation to control gene expression and thus permitting CAI usage as a measure of genes expression level. After ranking CAI of all coding genes for each organism we selected those whose top 25\% of coding genes contain 85\% of ribosomal protein genes, i.e., those whose ribosomal genes tend to demonstrate much higher CAI than the proteome average. 
+
+% Results and Discussion can be combined.
+\section*{Results}
+
+\subsection{Thermal adaptations in highly abundant proteins are similar in bacteria and archaea}
+
+Although archaea and bacteria have diverged early on during evolution, today they share many of the same environments, with both domains spanning wide temperature ranges. Thermal adaptations in the two domains \hl{[check on HGT transfer hypothesis? Berezovsky papers?]} provide a unique test case for comparing phylogenetically distant responses to the same physical environment. In a very coarse-grained view, both archaea and bacteria show increased usage of hydrophobic (\texttt{LVIMWPCF}) and charged (\texttt{DEKR}) residues at elevated temperatures, with the corresponding decrease of the polar residues (\texttt{AGNQSTHY}), see \nameref{fig:s2}. However, at the level of individual amino acids, the correlation between the temperature trends in bacteria and archaea is not statistically significant, Fig.~\ref{fig:fig2} \hl{R~0.28 P=XXX}.  Therefore, phylogenetic divergence and ensuing biochemical differences had a profound effect on proteome-averaged amino acid usage in the two prokaryotic domains. 
+
+
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{../figure2.pdf}
+\caption{
+{\bf Convergence of the archaeal and bacterial trends of thermal adaptation.} Slopes of the amino acid frequency trends are compared between archaeal and bacterial domains of life in various circumstances.
+(A) full proteome-wide trends are used for both domains taking into account all species available, demonstrating low positive correlation,
+(B) full proteome-wide trends compared using the species identified as translationally optimized in our analysis,
+(C) top 10\% CAI ranked proteins are used instead of full proteomes, using , however, unrestricted list of species,
+(D) same as in (D) using, however, translationally optimized organisms only,
+(E) ribosomal protein are used to calculate the trends using all organisms,
+(F) same as (D), with the ribosomal proteins excluded from the calculations.
+}
+% \label{fig:arch_bacter_converge}
+\label{fig:fig2}
+\end{figure}
+
+
+
+To look for common statistical patterns of thermal adaptation between bacteria and archaea, we focused on highly expressed proteins, identified computationally using the CAI metric (see Methods).  Highly expressed proteins are known to evolve slowly \hl{[REF]}, suggesting a stronger evolutionary constraint, wihch is at least partially reflected in more stringent folding requirements \hl{[Shakhnovich]}~\cite{Drummond2008MistranslationInduced}. In our model, the selective constraint can be traced to the energy costs of proteostasis being proportional to protein expression levels. Therefore, we hypothesize that highly expressed proteins experience similar physico-chemical selective pressures in archaea and bacteria, so their thermal adaptation mechanisms may converge despite the deep phylogenetic divergence between domains; in other words, for highly expressed proteins, the physics of folding may prevail over phylogenetic history.
+
+Ribosomal proteins serve as a particularly well-defined group of highly expressed proteins in both arachaea and bacteria \hl{[REF]}. At the same, differences in ribosome structures and sequences between those domains are very deep, suggesting low amounts of HGT \hl{[REF]}. Therefore, we compared the amino acid compositions  of ribosomal proteins and their temperature trends in bacteria and archaea. Remarkably, both domains of life exhibit very similar strategies in thermal adaptation of ribosomal proteins, Fig.~\ref{fig:fig2}, \hl{R=0.721}. This finding, however, is confounded by the specific functions of ribosomal proteins, which may have limited their options for thermal adaptation irrespective of the phylogenetic history of bacteria vs archaea. To expand the our study to other abundant proteins, we assumed that abundance is positively correlated with expression, and used used CAI as a proxy for protein expression level~\cite{Jansen2003Revisiting}. We have identified proteins within the top 10\% CAI of the corresponding organism (including the ribosomal proteins), and found a weaker, but still significant correlation between the temperature trends in bacteria and archaea (Fig.~\ref{fig:fig2}, \hl{R=0.429, P=XXX}). 
+
+It has been shown that prokaryotes have significant differences in codon bias usage across the proteome~\cite{Botzman2011Variation}; some organisms have a wide distribution of CAI values across proteins, while others persistently employ a limited codon repertoire. Therefore, it is possible that the  power of CAI to predict protein expression depends on the overall codon usage pattern of an organism. In particular, organisms with a limited codon repertoire have nearly the same codon usage in ribosomal and other proteins, hindering CAI-based prediction of expression. To alleviate this problem, we analyzed the CAI distributions in prokaryotic genomes, and selected only the species where at least 75\% of ribosomal proteins lie within the top 25\% of CAI distribution. Presumably, in those organisms CAI serves as a more reliable expression predictor, as highly expressed ribosomal proteins are clearly segregated from the rest of the proteome. We identified \hl{347 bacteria (out of 543) and 65 archaea (out of 140)} satisfying this criterion. Remarkably, for those species, the trends in thermal adaptation in complete proteomes of bacteria and archaea become similar (Fig.~\ref{fig:fig2}, \hl{R=0.46}). This result is statistically significant, with a \hl{P-VALUE OF XX } \hl{(null model: R>0.46 in a correlation of 20 pairs of random variables)} and  BOOTSTRAP P-VALUE (null model: R>0.46 in a random selection of 40\% XXX bacteria and YYY archaea from the full dataset), see \nameref{fig:s5}.  For highly expressed proteins in those organisms, trends in thermal adaptation are nearly identical, R=0.799 for all proteins within the top 10\% of CAI, and R=0.752 if ribosomal proteins are excluded, Fig.~\ref{fig:fig2}.
+
+Therefore, bioinformatics analysis suggests existence of a common strategy of thermal adaptation in highly expressed proteins in bacteria and archaea, and the interdependence between thermal adaptation and protein expression levels. We propose that this common strategy may involve optimization of energetic costs of proteostasis, balancing amino acid metabolism and chaperone energy expenses. Specifically, since protein stability statistically depends on amino acid usage \hl{[REF Dill1985]}~\cite{Galtier1997Relationships,Zeldovich2007Protein,Venev2015Massively}, evolving thermostable proteomes is costly, as diverse pools of amino acids must be maintained. On other hand, a metabolically inexpensive proteome would produces significant fractions of misfolded proteins, requiring  chaperone assistance. Therefore, we hypothesize that amino acid frequencies of highly abundant proteins have evolved under the selective pressure of energy constraint on amino acid pool maintenance and chaperone activity, with folding physics linking the two phenomena. To test this hypothesis, we used a lattice protein model to design proteomes given the constraints of amino acid metabolic cost and protein foldability.
+
+
+\subsection*{Simulated environmental temperature affects amino acid composition}
+
+We designed lattice model proteins in a wide range of artificial temperatures $0.4\leq T\leq 1.7$ units of Miyazawa-Jernigan residue level force field~\cite{Miyazawa1999SelfConsistent}. The trade-off parameter \hl{[CHECK TERM]} was varied from  $\mathit{w}=0$, implying no cost of amino acid maintenance, to $\mathit{w}=0.15$, where amino acid frequencies of simulated proteomes were governed by the costs of amino acid maintenance $C_{a}$ rather than by protein foldability. Proteins designed with no synthesis costs constraint, $\mathit{w}=0$, mostly reproduce earlier results~\cite{Berezovsky2007Positive}.
+At low simulated temperatures, the folding constraint on protein sequences is weak. Accordingly, starting from a random sequence with $\approx 1/20$ amino acid abundances, it is possible to design a well-folding sequence by swapping the residues while retaining the overall amino acid composition.  As $T$ increases relative amino acid abundances change monotonically to allow designed proteins to increase their thermal stability, Fig.~\ref{fig:fig3}(A, inset). As shown before~\cite{Berezovsky2007Positive}, increasing frequencies of hydrophobic and charged residues increase the energy gap by decreasing the energy of the native state and increasing the average decoy energy, respectively. 
+
+
+%Low artificial temperature values imply vanishing constraint on the protein sequences within the lattice protein folding model, i.e., even randomly generated 64-mer has a sufficient energy gap between the ``native'' state and the next unfolded state, which explains nearly equivalent amino acid proportions of $\approx 1/20$ Fig.~\ref{fig:brooms}(A) at low $T$. 
+
+
+%Amino acids with similar physical properties and interaction energies have similar temperature trends, as all selection constraints arise from purely physical stability requirements. 
+%as there is an intrinsic connection between average amino acid abundance of proteins and thermal stability against unfolding that such proteins could achieve. 
+
+
+%Amino acids similar from the residue-level interaction perspective behave similarly during thermal adaptation design neglecting their metabolic cost differences and other biochemical factors.
+
+%  It is a significant limitation of the physics-only based model~\cite{Berezovsky2007Positive}, that we overcome in this study by simulating protein synthesis costs constraint. 
+
+Although the temperature trends of amino acid groups are similar to natural ones, as in~\cite{Berezovsky2007Positive}, the frequencies of individual amino acids do not match those in natural sequences (typical $R~0.3$ for $0.4\leq T\leq 1.7$, Fig.~\ref{fig:fig4} \hl{$R_A$ plot brown line at $w=0.0$}).  We hypothesize that by introducing the cost of amino acid maintenance, it will be possible to design protein sequences where both the average composition and its temperature trends are reflective of reality. Indeed, the outcome of protein design changes significantly, if the  trade-off \hl{[CHECK]} parameter $\mathit{w}$ is increased, Fig.~\ref{fig:fig3}(B). In this case, frequent usage of specific amino acids carries a significant penalty even if they are favorable for protein foldability.
+At $\mathit{w}=0.06$, proteome-averaged amino acids frequencies diverge already at low temperatures $T$, 
+and the distribution of amino acid frequencies is mostly determined by their relative metabolic maintenance costs, due to the small selective pressure on the foldability. The average frequencies of all amino acids vary strongly according to their metabolic costs, unlike in Fig.~\ref{fig:fig3}(A), where well-folding sequences at $w=0$ could be made by small changes in amino acid composition. However, even at $w>0$, the temperature trends of groups of amino acids remain generally similar to the case of $w=0$,  Fig.~\ref{fig:fig3}(B inset).
+
+% may need to join the the sections ...
+
+\subsection*{Simulated trends correlate with bioinformatics data}
+
+As shown in Fig.~\ref{fig:fig3}, amino acid frequencies produced by our model are controlled by two parameters, temperature $T$, and the trade-off \hl{[CHK]} parameter $w$. We hypothesize, therefore, that natural amino acid frequencies and their temperature trends could be well reproduced simultaneously by an appropriate choice of $w$ and temperature range. We used the Pearson correlation coefficient between naturally evolved and simulated frequencies of amino acids to assess how well does the model explain observed frequencies at a given $\mathit{w}$ and $T$. We separated the prokaryotic genomes into mesophilic ($20\leq OGT\leq 40^\circ C$) and thermophilic  $OGT\geq 60$ groups, and computed the correlation coefficients $R_M(T,w)$ and $R_T(T,w)$ between average amino acid frequencies in either group and simulated data for all values of $T$ and $w$. This analysis has been performed separately for bacteria and archaea; the data for bacteria are presented in Fig.~\ref{fig:fig4}. As expected, the correlation coefficients $R_M, R_T$ behave smoothly, and reach maxima at specific values of $T$ and $w$. The absolute values of $R_{\mathbf{M}}$ and $R_{\mathbf{T}}$ are extremely high (R~0.9), similar to the phenomenological model~\cite{Krick2014Amino}. 
+
+%but providing a clear biophysical interpretation of the predictions.   TO DISCUSSION
+
+
+Importantly, the best correlations are reached at meaningful simulated temperatures, e.g. $R_M$ reaches its maximum at $T=1XX$ while $R_T$ reaches the maximum at $T=2XXX$, i.e. our model correctly segregates thermophilic and mesophilic genomes. 
+Both $R_{\mathbf{M}}$ and $R_{\mathbf{T}}$ reach their maxima at nearly equal values of balance parameter $\mathit{w}_{\mathbf{M}}\approx \mathit{w}_{\mathbf{T} \approx 0.06}$ so the energetic balance between chaperone activity and costs of amino acid maintenance appears similar between thermophiles and mesophiles.
+ % (exact equality holds for some datasets, depending on the parameter step size $\Delta T, \Delta \mathit{w}$), 
+
+To find a global fit, i.e. the range of parameters where our model best represents both mesophilic and thermophilic proteomes, we used $R_M + R_T$ as the metric describing the agreement between model predictions and bioinformatic data. To avoid numerical instabilities when finding the the maxiumum of $R_M+R_T$ with respect to $(T_M, T_T, w)$, we have first established the optimum value of $w$ from
+$$
+w^* = \argmax_{w} (R_M(T_M^*, w) + R_T(T^*_T,w) ),
+$$
+where $T_M^*=\argmax_{T}R_M(T,w), \quad T_T^*=\argmax_{T}R_T(T,w))$, i.e. we have first maximized the correlations with respect to $T$ separately for mesophiles and thermophiles (Fig.~\ref{fig:fig4} - LEFT COLUMN), and then with respect to $w$. To check for consistency of this procedure, we have then used $w^*$ and found the simulated temperatures best fitting mesophiles and thermophiles, 
+$$
+T^{**}_M = \argmax_{T}R_M(T, w^*), \quad T^{**}_T = \argmax_{T}R_T(T, w^*).
+$$
+Specifically, we found $w^*=0.06,  T^{**}_M=0.9, T^{**}_T=1.1$, see \nameref{fig:s6}  Therefore, our procedure finds a self-consistent set of parameters describing the temperature range between mesophiles and thermophiles, and the value of the trade-off \hl{[CHECK]} parameter. These parameters successfully describe the complete dataset of both mesophiles and thermophiles in terms of amino acid composition and its temperature trends. Fig.~\ref{fig:fig4} RIGHT COLUMN shows the fit between predicted amino acid frequencies $\vec f$ and the full set of all genomes, measured as the correlation coefficient $R_A = R_{M \cup T}(\vec f_{model}, \vec f_{exp})$. The maximum correlation of $R=0.93 XXX, PVALUE$ is highly statistically significant. Importantly, the same of set of model parameters describes well the temperature trends of amino acid composition, or slopes $df_i/dT$ for most amino acids. Fig.~\ref{fig:fig4} shows the correlation $R_D= R_{M\cup T}(d\vec f_{model}{/dT}, d\vec f_{exp}/dT)$. Similar to $R_A$, $R_D$ exhibits a clear maximum with respect to both $w$ and $T$, reaching $R_D=0.60$ \hl{[CHECK]. [MORE DETAILS ON RD DEFINITION]}
+
+Therefore, we found that the best fit of the model to the experimental data is achieved for $0.9<T<1.1$ and $w=0.06$; for those parameters, $R_A=0.93$ and $R=0.60$, both very highly statistically significant values. Interestingly, the relative temperature range in the model, $(T_T-T_M)/T_M\approx 20\%$ compares well with the actual temperature range of prokaryotes, thriving between approximately 280K and 370K, i.e. an $\approx 30\%$ change in absolute temperature.
+
+
+
+%Simulated frequencies of amino acids are compared with the naturally evolved ones to find optimal values of the balance parameter $\mathit{w}$ and $T$-range bounds. 
+
+%Optimality of the parameters implies the best possible fit between the model and observed data both for mesophiles and thermophiles simultaneously. We define mesophiles as species with the $20\leq OGT\leq 40$, and thermophiles - as species living at $OGT\geq 60$, where $\mathbf{M}$ and $\mathbf{T}$ denote 20-vectors of amino acid frequencies averaged for both groups respectively.
+
+%  Correlations calculated independently for mesophiles and thermophiles $R_{\mathbf{M}}$ and $R_{\mathbf{T}}$ vary with $T$ and $\mathit{w}$ in a similar fashion, regardless of the particular dataset (bacterial, ribosomal, etc.), see Fig.~\ref{fig:correlation_curves}.
+  
+%    Importantly, both $R_{\mathbf{M}}$ and $R_{\mathbf{T}}$ realize their maxima at nearly equal values of balance parameter $\mathit{w}_{\mathbf{M}}\approx \mathit{w}_{\mathbf{T}}$ (exact equality holds for some datasets, depending on the parameter step size $\Delta T, \Delta \mathit{w}$), while 
+ 
+%    Convergence of the balance parameter $\mathit{w}$ is very reassuring as it implies that thermal adaptation in the whole $T$ range can be explained with a single model, this is intended but not guaranteed by the model. 
+    
+%    Combination of mesophilic and thermophilic coefficients of correlation $R_{\mathbf{MT}}(\mathit{w}) = R_{\mathbf{M}}(T^{\mathit{w}}_{\mathbf{M}},\mathit{w}) + R_{\mathbf{T}}$, where $T^{\mathit{w}}_{\mathbf{M,T}}$ is the temperature that yields maximal $R_{\mathbf{M,T}}$ at a given $\mathit{w}$, is used to find a single optimal value for the balance parameter $\mathit{w}_{op}$, see Fig.~\ref{fig:optimal_w_profiles}. 
+    
+    
+%Using that unified balance parameter $\mathit{w}_{op}$ we calculate optimal bounds of the $T$-range ($T_{\mathbf{M}}, T_{\mathbf{T}}$) and thus complete the model definition. $T_{\mathbf{M}}$ and $T_{\mathbf{T}}$ naturally serve as the boundaries of the most plausible range of artificial temperatures corresponding to the range of OGT in the dataset of naturlly evolved species. Thus the predicted temperature span of life can be estimated in relative units as $\delta T/<T>=T_{\mathbf{T}}-T_{\mathbf{M}}/<T>\approx33\%$ {\it BEWARE!!! 33\% is for narrower range from 1 to 1.4, which ultimately morphs into wide 1 to 1.6 as we embrace the proposed $\mathit{w}_{op}$ determination procedure. This is what I don't like, but let's wait until all datasets are ready...}, where $<T>=\left(T_{\mathbf{T}}+T_{\mathbf{M}}\right)/2$ is the average artificial temperature, this estimate is qualitatively close to the observed temperature span of life, $275K\lesssim T_{evolved}\lesssim 375K$, with the relative units estimate of $\delta T/<T>\approx31\%$. 
+    
+ \subsection*{Predicted temperature trends of specific amino acids}
+    
+Predicted temperature range is also used to calculate average temperature slopes of amino acid frequencies and compare them with the observed trends in bacteria and archaea. We use difference quotients of simulated amino acid frequencies $\Delta\mathit{f}_{a}/\Delta T, a=1\dots20$ in the $[T_{\mathbf{M}},T_{\mathbf{T}}]$ range to calculate the simulated slopes. For the evolved frequencies of amino acids, the slopes were derived from the  linear regression analysis over the entire OGT range, see \nameref{fig:s2}.
+
+The complete proteomes of both bacteria and archaea produced similar, statistically significant correlations with model predictions, $R=0.59$ and $R=0.60$, respectively, Fig.~\ref{fig:fig5}. We have then considered only highlt expressed proteins (top 10\% of CAI) from either domain, expecting that the selective pressure of proteostasis is stronger for this group of proteins. However, we did not find a significant difference between the temperature trends in complete proteomes and in highly expressed proteins, Fig.~\ref{fig:fig5}.  Consistent with previous findings~\cite{Venev2015Massively}, the temperature trends of leucine (L) frequency are not well captured by the model. Leucine is a very hydrophobic residue, which is properly reflected by the Miyazawa and Jernigan interaction potential. Accoringly, the frequency of leucine rapidly increases with temperature in simulated proteomes, as leucine allows of formation of attractive hydrophobic interactions in the protein's core. At the same time, bioinformatics data demonstrate that in bacteria, leucine frequency does not increase with temperature, although it does so in archaea, see \nameref{fig:s2}. Coupled to the fact that leucine is relatively simple to syntesize, and is coded by six different codons, these observations clearly point to the biochemical differences between archaea and bacteria, and the limitations of current biophysical models in predicting temperature trensd of amino acid composition. Aspartic acid (D) is as another outlier. This charged amino acid is predicted to increase in frequency as the temperature rises, just as glutamic acid, lysine, and arginine (E, K, R). However, while glutamic acid and lysine consistently increase in frequency in both bacteria and archaea, aspartic acid is surprisingly depleted in thermophilic proteomes.
+
+% LEU is cheap.
+   
+
+%       All temperature trends comparisons, including proteome-wide slopes and slopes estimated using highly expressed proteins only, yield statistically significant correlations $R>~0.55$. However, in this case slopes estimated from proteome-wide data yield slightly better correlation both for bacteria and archaea, $R_{bact}~0.59, R_{arch}~0.6$, than the highly expressed subsets of proteins, $R_{bact}~0.59, R_{arch}~0.56$, correspondingly. Thermal slopes derived from the ribosomal proteins of evolved species demonstrate similarly high correlations $R~0.55$ (data not shown), but it is important to note that actual average frequencies of amino acids $\mathbf{M}_{ribo}$ and $\mathbf{T}_{ribo}$ do not correlate as well as the proteome-wide or highly expressed proteins derived with the simulated frequencies, suggesting specific functions of ribosomal proteins, $R~0.8$. Interestingly, Leucine is the biggest outlier in all of the slopes comparisons, whose frequency is not growing with OGT in the evolved species, while our model predicts rapid increase of Leu's frequency in the whole range of temperatures.
+       
+       
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%This might be due to some collective compositional effect: some of the hydrophobic residues are known to be interchangeable $ILMV$ and thus their behavior is harder to predict {\it (that was a stupid speculation - need to think about it more)}. At the same time Spearman rank correlation is high enough to support the correct ranking of the simulated trends {\it check it?!}.
+%%%%%%%%%%%%%%%%%%%%%%%%%% to supplementary ...
+%Comparison of simulated temperature trends from the $[T_{\mathbf{M}},T_{\mathbf{T}}]$ range is supplemented with the correlation of local temperature trends in simulated data with the evolved trends, vector $\mathbf{D}$. Local slopes for the simulated temperature trends $\Delta \mathit{f}_{a}/\Delta T$ are calculated using central finite difference for every balance parameter value $\mathit{w}$ and Pearson correlation of these slopes with $\mathbf{D}$ is used for analysis, \underline{see [supplementary figure].} Temperature curve of $R_{\mathbf{D}}$ for the predicted above optimal balance parameter $\mathit{w}_{op}$ demonstrates nearly highest local value of $R_{\mathbf{D}}$. At the same time, $R_{\mathbf{D}}$ varies significantly throughout the $[T_{\mathbf{M}},T_{\mathbf{T}}]$ range, \underline{see [supplementary figure]} {\it why?}. Using manually determined boundaries of the plausible artificial temperature range $[T_{\mathbf{M}},T_{\mathbf{T}}]$, near the $T$ values corresponding to the highest $R_{\mathbf{D}}$, we recalculated the integral slopes $\Delta \mathit{f}_{a}/\Delta T$ and compared them with $\mathbf{D}$. Overall, the results obtained using the presented approaches agrees well with each other, \underline{see [supplementary figure]}. Noteworthy, using the entire range of OGT for calculation of the average amino acid frequencies in the dataset of the evolved species, vector $\mathbf{A}$, we compared simulated data with it, and confirmed that the absolute maximum value of the corresponding correlation coefficient $R_{\mathbf{A}}$ reached at the $\mathit{w}\approx\mathit{w}_{op}$ and $T_{\mathbf{A}}$ which is  $T_{\mathbf{M}} < T_{\mathbf{A}} < T_{\mathbf{T}}$, \underline{see [supplementary figure]}, supporting the unified balance parameter $\mathit{w}_{op}$ and our proteostasis model.
+
+\subsection{Statistical validation of the simulations}
+Values of the amino acid maintenance rate $C_{a}$ are crucial for explanation of amino acid frequencies and their temperature-trends in the naturally evolved species. We performed $100$ reshufflings of the maintenance rate vector $C_{a}$, and used these modified vectors to design proteomes according to the procedure used in the above analysis and described in {\bf Model} section. Design procedure was performed for a range of balance parameters $0.0\leq\mathit{w}\leq0.12$ and an artificial temperature $T=0.9$ corresponding to the optimal temperature, $T_{\mathbf{A}}$, explaining average amino acid frequencies over the entire dataset of evolved species. Simulated frequencies of amino acids are compared with the vector $\mathbf{A}$ using Pearson correlation coefficient $R_{\mathbf{A}}$. As expected, metabolic rate $C_{a}$ vector reshuffling does not alter the outcome of the simulations solely based on the foldability requirement at $\mathit{w}=0.0$, where the maintenance rates do not impose any restrictions on the usage of amino acids, see \nameref{fig:s7}. At the same time, $R_{\mathbf{A}}$ designed with the original $C_{a}$ stands out significantly as $\mathit{w}$ growths, see \nameref{fig:s7}. Distribution of the resulted $R_{\mathbf{A}}$ values at the balance parameter value $\mathit{w}=0.06$ is presented on Fig.~\ref{fig:fig6}(A), original (wild type) $R^{*}_{\mathbf{A}}$ is depicted in red and is significantly higher that the reshuffled values, \hl{$p-value=10^{-\infty}$}. We also extracted the balance parameter $\mathit{w}_{op}$ corresponding to the highest $R_{\mathbf{A}}$ for each one of the hundred reshuffles, and it is noteworthy, that the distribution of these $\mathit{w}_{op}$ is relatively uniform, see \nameref{fig:s7}, so that reshuffling obscures both the unified balance parameter $\mathit{w}_{op}\sim0.06$ specific for the original $C_{a}$ and the correlation with the naturally observed proteome level data. We also used the reshuffling of the maintenance rate vector $C_{a}$ to confirm that temperature trends of amino acid frequencies rely on the original (wild type) vector $C_{a}$ for meaningfull outcomes of the protein design simulation. One hundred reshuffles of the $C_{a}$ were used to design model proteins within the range of temperatures close to the most plausible one $[T_\mathbf{M},T_\mathbf{T}]$, $1.0\leq T\leq1.4$ with the step $\Delta T=0.2$ and the balance parameter assuming two nearly optimal values $\mathit{w}_{T}=0.06$ and $\mathit{w}_{M}=0.06$. We used Pearson correlarion coefficient, $R_{\mathbf{D}}$, to relate the designed trends with the evolved one, vector $\mathbf{D}$. Distribution of the resulted $R_{\mathbf{D}}$ values at the balance parameter value $\mathit{w}_{M}=0.05$ is presented on Fig.~\ref{fig:fig6}(B), original (wild type) $R^{*}_{\mathbf{D}}$ is depicted in red and is significantly higher that the reshuffled values, \hl{$p-value=10^{-\infty}$}. Performed validation implies that the agreement between our model and the observed compositional trends in amino acids is not accidental and the original values of the maintenance rate vector $C_{a}$ are highly non-random.
+
+\subsection{Metablolic cost, expression, and environmental temperature}
+
+Metabolic costs of amino acid synthesis are strongly, negatively correlated with protein expression levels across the three domains of life~\cite{Akashi2002Metabolic,Swire2007Selection}.  In Fig.~\ref{fig:fig7}, we plot the proteome-averaged Akashi-Gojobori synthesis cost against environmental temperature for 140 archaea and 543 bacteria, assuming equal expression levels of all proteins. We find a statistically significant positive correlation, confirming that thermal stability requires heavier usage of ``expensive'' proteins, in agreement with an earlier observation made on {\it Thermus thermophilus} genome~\cite{Swire2007Selection}. \st{On the other hand} \hl{In contrast with the synthesis costs by Akashi}, the Krick's proteostasis cost \hl{[CHECK TERM]} is not significantly correlated with environmental temperature. These observations are fully reproduced by our model, Fig.~\ref{fig:fig7}: in the relevant temperature range $1.1 < T < 1.6$ and $w=0.6$ \hl{CHECK}, the Akashi-Gojobori metabolic cost of evolved proteomes increases with temperature, while the Krick proteostasis cost does not.
+
+Our analysis demonstrates statistically significant negative correlation between the amino acids synthesis costs and CAI (proxy for expression), in full agreement with the Akashi and Swire findings, see \nameref{fig:s8}. At the same time, it has been proposed that amino acid composition of highly expressed proteins is similar to the composition of thermophilic proteins~\cite{Cherry2010Highly}. As noted earlier, this result is somewhat contradictory to the Akashi and Swire's findings \hl{[ShakhnovichREFCherryContradicts]}. 
+
+%pported by our analysis, however our analysis shows that these trends are not mutually exclusive, see supplementary Fig XXX. 
+
+To look for the origins of this controversy, we compared the protein expression levels, approximated by CAI, with their thermostability in bacteria and archaea. To assess protein thermostability of a group of proteins, we used the Pearson correlation coefficient $R_T$ between their average amino acid composition and the average amino acid composition of \hl{XXX} thermophilic proteomes (OGT>$50^\circ \mathrm{C}$).  We then split proteins into five groups, corresponding to the quintiles of their CAI levels, and plot $R_T$ as function of CAI. As shown in \nameref{fig:s9}, for bacteria, there is a statistically significant positive correlation between CAI and $R_T$. As a control, we have reshuffled synonymous codons within each genome, which would completely destroy the codon bias and thus CAI metric of each protein, but leave amino acid composition intact. No correlation was observed in reshuffled data for bacteria, see \nameref{fig:s9}. These findings seem to support Cherry's notion of highly expressed proteins having amino acid composition similar to themophilic ones. However, when we considered \hl{XXX} genomes of archaea, we did not find a correlation between CAI and $R_T$, see \nameref{fig:s9}. Moreover, for archaea, synonymous codon reshuffling resulted in a strong negative correlation between CAI and $R_T$, see \nameref{fig:s9}. These results partially support Cherry's findings and demonstrate the immense capacity of the 20-dimensional space of protein sequence composition. 
+
+We have also tried to approximate protein thermostability by the fraction of \texttt{IVYWREL} amino acids, which is strongly correlated with OGT at the proteomic level~\cite{Zeldovich2007Protein}. Although a strong negative correlation between \texttt{IVYWREL} and CAI was observed, see \nameref{fig:s10}, the same trend persisted upon synonymous codon reshuffling, in both bacteria and archaea. Therefore, an intrinsic connection between the amino acid and nucleotide frequencies, and the genetic code, precludes use of \hl{IVYWREL} metric for comparing protein expression (CAI) and thermostability.
+
+
+%\st{
+%TODO CHECKS:
+%(a)  Akashi cost vs expression (top 10\% CAI and others)
+%(b)  Akashi cost times expression vs temperature for supp information? 
+%}
+%\st{
+%TODO:
+%(c) IVYWREL in CAI 10\% excluding ribosomal proteins  vs IVYWREL in all proteins
+%(d) IVYWREL vs CAI for a given protein
+%}
+
+
+%One of the characteristics used in these studies is the cost $\mathcal{C}$ of a single amino acid synthesis averaged over large groups of proteins, simply being the dot product between the average amino acid frequencies vector $\mathit{f}_{a}$ and the cost vector $C_{a}$: $\mathcal{C} = \sum_{a=1}^{20}\mathit{f}_{a}C_{a}$. We calculated proteome-wide average cost of amino acid synthesis using Akashi cost vector along with the average maintenance rate using vector $C_{a}$ for the simulated data at $\mathit{w}_{op}$ parameter value. These two characteristics demonstrate interesting behavior within the $[T_{\mathbf{M}},T_{\mathbf{T}}]$ range: \underline{average synthesis cost growths with temperature} {\it automatic w detection fails, to make this hold true?!}, while the maintenance rate slightly declines with $T$. Same vectors were used to estimate corresponding characteristics using proteome-wide averages in the evolved species, and the results qualitatively agrees with the predicted trends, \underline{see [supp figure]}. This further supports the unified balance parameter $\mathit{w}_{op}$ and our proteostasis model.
+%{\it should we say something about modeling under Akashi cost constraint? Akashi contraint only worsens the 20 slopes vs slopes correlation, upon w increase. It is important mechanistically, meaning that Akashi cost prices is just part of the proteostasis story and balancing only this part with the foldability requirement yields temperature trends that are worse than even the ones predicted from the pure biophysics.}
+
+%\section{Convergent mechanisms - older text}
+
+%Indeed, as highly expressed proteins consume a large fraction of amino acid pools, one would hypothesize that they would under stronger pressure towards thermostability [cherry?] and optimized cost of proteostasis. Conversely, homeostasis of proteins with lower expression levels consumes less resources, and such proteins could be more variable in their amino acid composition. Furthermore, the generality of our model suggests that unless the chaperone costs in bacteria and archaea are dramatically different, the two domains must share the common, convergent mechanism of thermal adaptation in highly expressed proteins.  To test this hypothesis, we used the codon adaptation index (CAI) as an approximate metric of expression levels, and compared the temperature trends in amino acid composition in subsets of bacterial and archaeal proteins grouped by CAI.
+
+%As for each organism the CAI is calibrated on the codon usage in ribosomal proteins, we first decided to compare the thermal adaptations in the ribosomal proteins in bacteria and archaea. These temperature trends of all amino acids in the ribosomal proteins in the two domains are highly similar (R=0.72, Figure XX), suggesting a common mechanism of thermal adaptation. This finding is not particularly illuminating, however 
+
+%Considering all the proteins  A greater similarity between bacteria and archaea for the top 10\% CAI proteins (R=0.429) compared to complete proteomes (R=0.28) hints at the possibility of convergent thermal adaptations in these domains.
+
+%It is well known that CAI is not the sole determinant of gene expression level and moreover some organisms may not exhibit obvious codon usage bias on the proteome level (due to the lack of translational elongation optimization or other factors) at all, rendering CAI problematic for the purpose of protein expression level prediction. At the same time our prokaryotic datasets are large enough to perform a subsampling and choose organisms whose genes employ codon bias to achieve higher expression levels, in other words, organisms , where CAI can serve as a predictor of protein expression levels. Several similarly performing criteria can be used for this purpose [Boltzman,margalit] and the one we used would consider organism ``significant''  if 75\% of its ribosomal proteins are among the proteins with the top 25\% CAI (see Methods for details), assuming that in this case CAI can be correlated with expression levels. This selection reduced our datasets by about ~60\%, to XXX bacteria and XXX archaea. Remarkably, on these datasets, the trends of thermal adaptation in co bacteria and archaea become similar, R=0.46. 
+
+
+
+%This deviation inevitably commemorates divergent evolutionary paths and different lifestyles of the evolving Bacteria and Archaea, however as it has been demonstrated, different proteins experience different selective pressure during adaptation where protein abundance (or remotely speaking, corresponding gene expression) is the major determinant of selection intensity (unfolding of highly expressed proteins set higher fitness tax for the entire organism, etc.). Thus it is fair to assume that highly expressed proteins guided by the selective pressure towards higher thermostability must resemble each others evolutionary paths more closely. It is indeed the case, as the $df/dT$ slopes (quantitative descriptor of the amino acid composition temperature--trend) calculated for individual amino acids using Archaeal dataset and Bacterial dataset yield much higher R~0.72 (Bootstrap p-value $0.0$). 
+
+%However one may argue that ribosomal proteins belong to the same functional group, they do not sample enough conformations, etc., and even though it is not obvious is these factors may directly contribute to signature of thermal adaptation (take into account that archaeal ribosome is very different from the bacterial one [CHECK?!]), we set out to test the trends similarity hypothesis using proteome wide ranking of proteins by CAI to extract the top tier, that is presumably enriched with highly expressed or abundant proteins. Simple CAI--ranking of proteins in all organisms does not yield a profound change to the correlation between $df/dT$ slopes of Archaeal and bacterial counterparts, [see figure] R~0.45 for amino acid trends calculated using proteins with top 10\% CAI (maybe it is worth discussing the main outliers A, L?!) (bootstrap P-values $0.0$, but simple linear regression p-value~0.02). 
+
+
+%Yet, it is well known that CAI is not the sole determinant of gene expression level and moreover some organisms may not exhibit obvious codon usage bias on the proteome level (due to the lack of translational elongation optimization or other factors) at all, rendering CAI useless for the purpose of protein expression level prediction. At the same time our prokaryotic datasets are large enough to perform a subsampling and choose organisms whose genes employ codon bias to achieve higher expression levels, in other words, organisms , where CAI can serve as a predictor of protein expression levels. Several similarly performing criteria can be used for this purpose [Boltzman,margalit] and the one we used would consider organism ``significant'' (see Methods for explanation) if 75\% of its ribosomal proteins are among the proteins with the top 25\% CAI. Using this criteria narrow our datasets by ~60\% of organisms each, which does not affect our ``coverage'' significantly [see supp. info -> different color dots on the GC-OGT planes for different organismal subsets]. Surprisingly, even the proteome level amino acid temperature--trends $df/dT$ came out quite similar between archaea and bacteria, R~0.46 (bootstrap p-value? - haven't calculated that one!), we are unable to explain this result just yet. Limiting proteomes to the proteins with the top 10\% CAI in these ``significant organisms'', we repeated the comparison between archaeal and bacterial $df/dT$ trends which yields the significant correlation, R~0.799 (bootstrap so fat P~0.06, because subsample is too big for the bootstrap) which is even higher than for ribosomal proteins of all organisms. However one may argue, that the chosen criteria selects the organisms whose proteins with top 10\% of CAI are enriched with the ribosomal ones and this may bias the comparison between the temperature trends. In order to address this, we simply excluded ribosomal proteins out of the consideration before ranking proteome according to CAI and repeated the analysis, which in this case yields still highly significant R~0.75 [see panel figure and supp info for bootstrap explanation]. It is worth noting here that the two latter sets of $df/dT$ slopes correlates with the slopes derived from the ribosomal proteins of all organisms (R ranging from ~0.59 to ~0.884), suggesting that all of these groups of proteins are being driven by the same selective pressure as they adapt to higher environmental temperatures. All of the described correlations emphasize the point that thermal adaptation indeed drives proteins along the same evolutionary path which is hidden by the ``noise'' originating from the extremely diverse set of environments and lifestyle of these organisms and to make it more apparent we must look at the subset of proteins that sense this selective pressure the most, the  highly abundant or highly expressed proteins [kinda strong, check that later].
+
+
+\section*{Discussion}
+
+Statistically significant correlations between environments and amino acid usage are well established, dating back at least to 1982, when Gromiha \hl{[et al?]} hypothesized that amino acid usage can be quantitatively linked to environmental temperature \hl{[REF Gromiha 1982]}. At the same time, despite abundant empirical observations, our microscopic understanding of the biological and physical selective pressures on amino acid composition remains limited.
+
+The earliest models attempting to rationalize marked differences in the frequencies of the 20 amino acids in protein sequences focused on the properties of the genetic code, such as difference in the number of codons per amino acids \hl{[REF]}. A relationship between genomewide GC content and amino acid composition was also established \hl{[REF]}. \hl{Discuss Singer-Hickey, Ouzounis-Kreil PCA.}  
+
+An important step in unraveling the physical drivers of amino acid composition has been made by Dill \hl{[REF]}, who developed a theoretical prediction of the ratio of hydrophobic to polar residues conferring the best stability to a globular protein. Although the model agreed well with experimental data, the focus of the field subsequently shifted to protein structure prediction, and physical modeling of proteome-wide amino acid usage received limited attention.  The interest in the statistical understanding of thermal adaptation increased as extensive simulations of protein evolution became possible \hl{[REF]}. \hl{Cite Bloom stability promotes evolvability, Goldstein.}  Berezovsky et al~\cite{Berezovsky2007Positive} hypothesized that protein foldability was the main selective pressure responsible for thermal adaptation, and analyzed amino acids usage in 27-mer lattice proteins designed to be stable in a wide range of temperatures. Although temperature trends in amino acid frequencies could be explained by a purely physical model, the frequencies themselves were weakly correlated with genomic data. Extension of the folding model to 64-mer lattice proteins yielded only a marginally better agreement with experimental data~\cite{Venev2015Massively}. This continued discrepancy suggests that either the physical models are still not precise enough to resolve individual amino acid  beyond their rough classification by hydrophobicity, or other factors, not directly related to protein folding, control amino acid usage.
+
+Complementary to protein folding constraints, metabolic costs and overall energy balance of a cell have been long identified as powerful evolutionary drivers \hl{[REF]}, as exemplified e.g. by the success of quantitative flux based metabolic models \hl{[Paulsen]}. Similarly, Akashi and Gojobori estimated the energy expended on the synthesis of each of the 20 typese of amino acid molecules, and found that highly expressed proteins are enriched in ``cheap'', easily synthesized amino acids \hl{[REF]}. These findings highlighted the importance of proteostasis as the major cellular process, coupling energy and material fluxes in a cell. \hl{[Kepp 80\%]}. The flux models were further advanced by an estimate of the amino acid decay rates within a cell~\cite{Krick2014Amino}. By combining the amino acid synthesis cost, decay rate, and sequence entropy into an empiric cost function, Krick et al made successful predictions of amino acid frequencies~\cite{Krick2014Amino}. However, this model does not explicitly address protein folding or other physical considerations, and so is difficult to extend to the study of thermal adaptation.
+
+To bridge this gap, we note that proteostasis is not limited to the chemical turnover of amino acid molecules, but, crucially, maintains appropriate levels of functional, correctly folded proteins. Molecular chaperones such as \hl{HspXXX} are an integral part of this process, attempting to refold proteins in an ATP-depenent manner. 
+
+\hl{\bf ADD Compare our approach to other simulations with chaperones. Geiler-Samerotte 2010 and Cetinbas\/Shakhnovich }
+
+Therefore, following Kepp et al~\cite{Kepp2014Model}, hypothesized that the energy consumed by chaperones is non-negligible and must be taken into account together with other metabolic costs. Specifically, we assumed that the total energy cost of proteostasis includes contributions from both amino acid turnover and chaperone activity. The key feature of the model is the statistical dependence between foldability of a protein and its amino acid composition \hl{[REF Dill1980s]}~\cite{Berezovsky2007Positive,Venev2015Massively}. Indeed, well-folded proteins typically  contain a balanced mix of charged and hydrophobic residues, while and intrinsically unfolded proteins do not \hl{[REF Uversky]}. Proteins with an imbalanced amino acid composition, statistically, are less stable and so may require more frequent chapereone intervention. Therefore, we posited that amino acid compositions have evolved to minimize the total energy spent on amino acid homeostasis and chaperone activity, and tested this hypothesis by simulations.
+
+%Previously, protein folding models revealed that thermal adaptation of proteins pursues dual strategy~\cite{Berezovsky2007Positive}, positive and negative design via stabilizing the natively folded conformation and destabilizing unfolded ones. Importantly, this dual strategy correctly identifies general trends in amino acid usage as the environmental temperature increases. While predicted trends for hydrophobic, charged and hydrophilic amino acid groups are in qualitative agreement with the corresponding trends observed in the proteomes of evolved species, temperature trends on the level of individual amino acids cannot be explained solely by the physics of protein folding [REF Berezovsky2007Positive, Venev2015GaleProt].
+
+By incorporating protein folding and metabolic cost in a single model, we were able to capture average amino acid composition and its temperature trends simultaneously, Fig.~\ref{fig:fig4}, significantly improving upon purely physical models~\cite{Berezovsky2007Positive,Venev2015Massively}. These  models are captured in our study as a limiting case $\mathit{w}=0$. As demonstrated in Fig.~\ref{fig:fig4}, the predictive power of the model dramatically increases when by considering an interplay between protein folding requirement and the metabolic cost constraints, $w\neq 0$.
+
+%Proteostasis model employed in the present study complements protein folding physics with the consideration of metabolic costs and degradation rates of amino acids, yielding a significantly improved predictions at the individual amino acid level. In addition, our model contains t %This restricted model yields poor correlations with the observed trends, and it is noteworthy, that the structure of the residue level potential itself prevents from distinguishing amino acids beyond the coarse classes.
+%As expected, amino acid residues similar from the residue-level potential perspective show similar temperature trends in the limiting case $\mathit{w}=0$. Thus it is important to stress that the trends predicted using the full model, , are the result of an . 
+%As already mentioned, protein folding models alone have limited predictive ability for the amino acid composition, while metabolic cost models require additional assumptions to introduce temperature and make them amenable to the study of thermal adaptation.
+%Moreover, the specificity of the employed constraint, the metabolic rate vector $C_{a}$, is emphasized by the validation, where $C_{a}$ re-shuffling degrades correlations both with the observed trends and average amino acid frequencies.
+
+It is instructive to consider the temperature trends of estimated cost of mesophilic and thermophilic proteomes according to two different metrics, amino acid synthesis cost as defined by Akashi and Gojobori~\cite{Akashi2002Metabolic}, and the proteostasis costs \hl{[CHECK TERM]} derived by Krick et al~\cite{Krick2014Amino}. As shown in Fig.~\ref{fig:fig7}, the Akashi-Gojobori metabolic cost markedly increases in thermophilic proteomes. \hl{[P-value to figure caption]}. This finding is explained by the lower costs of small, polar amino acids according to this scale, compared to larger ones, either hydrophobic or charged. However, the proteostasis cost according to the Krick scale is not significantly correlated with temperature in bacteria and weakly decreases with temperature in archaea, Fig.~\ref{fig:fig7}.  This may be interpreted as the lower fraction of metabolic costs  of proteostasis in the energy budget of thermophilic organisms or by severe energetic constraints imposed on thermophilic organisms. At the same time, the matematical origins of this result are evident from the comparison of the respective amino acid costs, as contrary to the Akashi-Gojobori cost $S_{a}$, hydrophobic, charged and polar classes of amino acids widely distributed in terms of the degradation-corrected Krick cost. Overall these additional observations support the results of our simulations and emphasize the importance of the selective pressure acting on protein homeostasis during evolution. Previously, the strong influence of protein homeostasis costs on the evolution has been shown to be as strong, if not stronger, than selection for protein function \hl{[CHECK] [REF Kondrashov]}.
+
+Metabolic synthesis costs are likely proportional to protein abundance, and so are correlated with expression levels, which can be either comprehensively measured using RNAseq or other techinques, or inferred from genomic data. It is well known that protein synthesis costs are negatively correlated with expression levels in multiple organisms~\cite{Akashi2002Metabolic,Seligmann2003CostMinimization,Heizer2006Amino}. \hl{CHECK FOR ANY YEAST PAPER?} Similarly, has been shown that highly expressed proteins experience lower rates of evolution \hl{[Shakhnovich]}~\cite{Drummond2008MistranslationInduced}, and so presumably undergo stronger selection. The mutual dependence of protein expression levels, stability, and evolutionary rate has been addressed by recent biophysical modeling \hl{[Shakhnovich Cell]}.
+
+Our analysis indicates that thermophilic proteins have an increased cost according the Akashi-Gojobori metric, Fig.~\ref{fig:fig7}, while highly expressed proteins are known to be ``cheap''~\cite{Akashi2002Metabolic}. On the other hand, it has been suggested that amino acid composition of highly expressed proteins is similar to that of thermophilic proteins~\cite{Cherry2010Highly}, creating a logical inconsistency. We attempted to address this issue by estimating the expression levels using CAI and correlating it with various composition-based predictors of thermostablity in a large set of bacterial and archaeal proteomes. In the bacterial dataset, we observed that highly expressed proteins had amino acid compositions more similar to the average composition of thermophilic proteomes. This finding parallels earlier results of Cherry~\cite{Cherry2010Highly}. However, no significant correlation was found in archaea, see \nameref{fig:s9}. 
+
+At the same, we demonstrate that temperature trends in amino acid frequencies of highly expressed proteins in archea and bacteria are strongly correlated, Fig.~\ref{fig:fig5}, while proteome-wide correlation is much lower, Fig.~\ref{fig:fig5}. This convergence of thermal responses in highly expressed but overall divergent proteins suggests a common selective pressure, such as metabolic or proteostasis costs. The apparent inconsistencies in the cost-expression-stability loop require further study, and may evidence a surprising flexibility of amino acid usage evolving to satisfy different constraints. Further development of high-throughput experimental methods for characterizing protein expression levels and stability will make it possible to transition away from sequence-based predictors, and stimulate the next generation of predictive, organism-level models of metabolism and selection.
+
+%Previously, the interplay between expression levels and stablitity has been explained using physical factors and population based selection [Shakhnovich-CHECK-SPELL HIS IDEA]. Here, we proposed an alternative, albeit not mutually exclusive, model for this phenomenon, whereby the limited energetic resources available for chapreone activitiy link protein stability and abundance or expression. 
+
+
+%While the origin of this inconsistency are not entirely clear, it is worth noting that similarity between thermophilic and highly expressed proteins has been established by the analysis of orthologous pairs of primarily eukaryotic proteins [citeCherry], while other observations were made on genome-wide analyses of prokaryotes.
+%Differences in metabolic pathways between prokaryotes and eukaryotes, as well as the overall limited compositional diversity of the latter can contribute to the apparent contradictions in the data.  
+
+%At the same time, the synthesis costs vector $S_{a}$ alone demonstrated striking versatility and importance, negatively correlating with the gene expression estimators in a broad range of organisms even with different metabolic pathways~\cite{Seligmann2003CostMinimization,Heizer2006Amino}, i.e. highly expressed proteins tend to use synthetically ``cheaper'' amino acids. The specific characteristic used in the mentioned analysis is the synthesis cost of a single amino acid averaged in a large group of proteins. 
+
+%Interestingly, the proteome-average synthesis cost of a single amino acid is positively correlated with temperature in all our datasets, smallest $p=10^{-\infty}$. 
+
+%On one hand, it conflicts with the observed compositional similarity between highly expressed, conserved and thermophilic proteins~\cite{Cherry2010Highly}, but on the other hand it is clear from purely compositional stand point, as most of the hydrophilic amino acids are synthetically cheaper with respect to either charged or hydrophobic ones. These discrepancy can be attributed to the weak correlations observed in~\cite{Cherry2010Highly} or different values of genes expression used in~\cite{Akashi2002Metabolic} and~\cite{Cherry2010Highly} {\it OR, maybe highly expressed genes tend to be cheaper yet more thermophilic like at the same time, there 20 amino acids to adjust both quantities, are they really that mutual exclusive?! Check trending amino acids from Cherry.} \underline{Our simulations yield the correct behavior of average synthesis cost at $\mathit{w}_{op}$ and within the plausible temperature range, slightly increasing with temperature throughout the range, except for the last data-point.} Using similar approach both for simulated and observed data, we calculated proteome-average metabolic rate required to maintain steady pool of amino acids. Surprisingly, this characteristic does not correlate with temperature (or slightly decreases with it) both for observed and simulated data. 
+
+%Discuss highly expressed protein composition and translationally optimized organisms.
+%Proactively answer McDonald-style criticism.
+
+%Discuss successful and weaker parts of the model.
+
+
+%{\bf older text below}
+
+%In this study we deployed the proteostasis energy cost model~\cite{Kepp2014Model} to address questions of the average amino acid composition on the proteome level and their      trends with adaptation to high environmental temperature. The proteostasis model includes major pathways consuming significant portion of energy generated by cell, accounting for up to 80\% for unicellular microorganisms. We expressed proteostasis cost function in simple terms, considering such pathways as: protein synthesis, chaperone assisted folding and protein degradation/recycling. Protein synthesis is coupled with the recycling, as the latter generates raw amino acids material for the former. At the same time, additional amino acids must be generated to maintain the stationary levels of raw amino acids available for synthesis in order to compensate for inevitable degradation of amino acids. Ultimately the process of protein degradation depends on the degradation of individual amino acids, but in this study we assume $\tau_{protein}\ll\tau_{amino acid}$, so that these two degradation processes are considered decoupled. Decoupling the degradation of functional proteins and their components allows us to formulate the expression for proteostasis costs essentially as a balance equation between protein foldability and the costs of protein synthesis, including required regeneration of amino acids. Protein synthesis costs impose compositional constraints on the proteins undergoing thermal adaptation and vice versa, thermally adapted proteins deviate from the amino acid composition distribution that is optimal from the synthesis costs perspective. {\it this isn't 100\% true actually, as Argentina cost doesn't correlate with $T$, we should try plotting $R_{Argentina}$ vs $T$ to look if it is decreasing curve or not. However, the other extreme of solely costs constrained amino acid composition is the homopolymer out of the cheapest amino acid, and with respect to this situation we do indeed have a balance/trade off. Consider different wording.} Balance between these two factors guides exploration of the sequence space within the frames of our protein design simulations. As a biophysics based model, it renders sequence diversity implicitly through the protein design procedure, rather then introducing phenomenological sequence-entropy term favoring scrambled protein sequences as in~\cite{Krick2014Amino}. Mentioned phenomenological model yields significant correlation $R\lesssim0.9$ in amino acid composition, however it holds true only for employed dataset that combines proteomes of phylogenetically unrelated species with the similar GC content within $40\lesssim GC\lesssim60$. This phenomenological model cannot account for the amino acid composition modulation with the genomic composition or specific environmental features such as temperature and salinity. At the same time, the striking correlation between the predicted amino acid composition and evolved ones underlines the importance of the amino acid metabolism, including both synthesis of amino acids and the rates of their respective degradation. Thus that model improves the results of the earlier models concerned only with the synthesis of amino acids~\cite{Akashi2002Metabolic,Seligmann2003CostMinimization,Heizer2006Amino}, and we use its interpretation of amino acids metabolism for our proteostasis cost function. Our model concerns with the compositional properties of proteomes and neglects the influence of the underlying compositional properties of a genome, thus it cannot account for the amino acid composition modulation with the GC content either. However it is noteworthy that there is no clear relation between the average genomic composition and organismal fitness {\it(except for some populational models - cite Ugo Bastolla PLoS CompBio)} and moreover there is no significant correlation between environmental temperature and the genomic GC content [REFS]. Thus the success of the biophysics based models~\cite{Akashi2002Metabolic,Seligmann2003CostMinimization,Heizer2006Amino,Berezovsky2007Positive} including ours, manifests that genomes and proteomes co-evolved under multiple selective pressures including metabolism of amino acids, environmental factors, etc. Contrary, models explaining observed frequencies of amino acids using solely genomic compositional considerations~\cite{Goncearenco2014Fundamental} are unable to reason either about the origin of the observed GC range or discriminate between selective pressures on protein or genomic levels, as there is no sufficient first-principle fitness model based on genome composition. 
+
+
+\hl{\it Dataset choice problem. Prokaryotes 250 gives wonderful results both without costs constraints and with them, using different temperature ranges though. We would need to address this question using Bacteria only and fairly-mixed datasets. Prokaryotes 250 is not fair actually, as all the trends are skewed by the massive amount of mesophilic bacteria living within 25-40 Celsius range.}
+
+
+
+
+% Do NOT remove this, even if you are not including acknowledgments.
+
+\section*{Acknowledgments}
+
+We acknowledge help of Alexey Shaytan and Alexander Goncearenco for their advices on dealing with the NCBI databases and NCBI help-desk.
+
+\section*{References}
+
+% Either type in your references using
+% \begin{thebibliography}{}
+% \bibitem{}
+% Text
+% \end{thebibliography}
+%
+% OR
+%
+% Compile your BiBTeX database using our plos2009.bst
+% style file and paste the contents of your .bbl file
+% here.
+% 
+
+\bibliography{Remote}
+
+
+\section*{Figure Legends}
+% This section is for figure legends only, do not include
+% graphics in your manuscript file.
+%
+%\begin{figure}
+%\caption{
+%{\bf Bold the first sentence.}  Rest of figure caption.  
+%}
+%\label{Figure_label}
+%\end{figure}
+
+% \begin{figure}[h!]
+% \caption{
+% {\bf Schematics of the protein proteostasis model.}  Protein proteostasis model used in the study involves protein synthesis,chaperone-assisted folding/refolding, degradation and recycling. Protein synthesis costs accounts for the raw amino acid material, that is maintained at a steady state concentrations by resynthesis of the degraded monomers. Amino acid degradation and the protein life time are considered decoupled, or in other words the protein life time $\ll$ the life time of amino acid (in might not be the case actually).  
+% }
+% % \label{fig:proteostasis_sketch}
+% \label{fig:fig1}
+% \end{figure}
+
+
+
+% \begin{figure}[h!]
+% \caption{
+% {\bf Convergence of the archaeal and bacterial trends of thermal adaptation.} Slopes of the amino acid frequency trends are compared between archaeal and bacterial domains of life in various circumstances.
+% (A) full proteome-wide trends are used for both domains taking into account all species available, demonstrating low positive correlation,
+% (B) full proteome-wide trends compared using the species identified as translationally optimized in our analysis,
+% (C) top 10\% CAI ranked proteins are used instead of full proteomes, using , however, unrestricted list of species,
+% (D) same as in (D) using, however, translationally optimized organisms only,
+% (E) ribosomal protein are used to calculate the trends using all organisms,
+% (F) same as (D), with the ribosomal proteins excluded from the calculations.
+% }
+% % \label{fig:arch_bacter_converge}
+% \label{fig:fig2}
+% \end{figure}
+
+
+
+\begin{figure}[h!]
+\caption{
+{\bf Temperature courses of the amino acid frequencies in the simulated proteomes.} (A) Neglecting the metabolic costs of amino acid synthesis, $\mathit{w}=0$, simulation are able to capture the observed trends in the charged,hydrophobic and hydrophilic groups of amino acids (inset). (B) Imposing metabolic costs constraints on the simulated proteomes, $\mathit{w}=0.06$,alters both low-temperature distribution of amino acid usage and their overall temperature trends, preserving the observed trends for charged, hydrophobic and hydrophilic groups of amino acids (inset).
+}
+% \label{fig:brooms}
+\label{fig:fig3}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+\caption{
+{\bf Simulated frequencies of amino acids compared with the naturally evolved ones.} Pearson correlation coefficient is used to compare simulated frequencies with averaged amino acid frequencies for mesophiles and thermophiles, $R_{\mathbf{M}}$ and $R_{\mathbf{T}}$. Corresponding temperature courses of the correlation coefficients yields optimal values for $T$ and $\mathit{w}$. MENTION $R_{\mathbf{A}}$ and $R_{\mathbf{D}}$ ...
+}
+% \label{fig:correlation_curves}
+\label{fig:fig4}
+\end{figure}
+
+
+
+
+\begin{figure}[h!]
+\caption{
+{\bf Comparison between temperature trends in amino acid frequencies: simulated vs evolved.} Simulated slopes vs the evolved slopes are presented for all 20 amino acids using full proteome data from (A) archaea and (B) bacteria, and using top 10\% of CAI ranked proteins in the translationally optimized organisms only, both for (C) archaea and (D) bacteria. Slopes predicted from the simulations are in good agreement with the naturally evolved data, correltaion coefficients $R=0.56$ to $R=0.6$ $p=10^{-\infty}$. Most of the amino acids are well on the trend, while for the most part Leucine stands out, being overestimated.
+ [DESCRIBE BACTERIA VS ARCHAEA ...]
+}
+% \label{fig:aa_slopes}
+\label{fig:fig5}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+\caption{
+{\bf Validation of the simulated data using amino acid maintenance rate vector reshuffling.} Amino acid maintenance rate vector $C_{a}$ was reshuffled 100 times and used in the protein design procedure at $\mathit{w}_{op}$ and $T=0.9$. Resulted amino acid frequencies were compared with the evolved average amino acid frequencies, vector $\mathbf{A}$, using Pearson correlation coefficient $R_{\mathbf{A}}$. Histogram of thus simulated $R_{\mathbf{A}}$ values displayed on the figure, $R_{\mathbf{A}}$ value obtained original vector $C_{a}$ depicted as red dot.
+}
+% \label{fig:validation}
+\label{fig:fig6}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+\caption{
+{\bf Akashi average cost per amino acid and Maintenance rate (Argentina cost) temperature dependencies.} Optimal balance parameter $\mathit{w}_{op}=0.05\sim0.06$ demonstrates Akashi growth and Argentina slight decrease in the most plausible $T$ range. MENTION OBSERVED TRENDS OF AKASHI AND KRICK'S COSTS ...
+}
+% \label{fig:cost_vs_temp}
+\label{fig:fig7}
+\end{figure}
+
+
+
+
+
+\section*{Supporting Information}
+
+\subsection*{S1 Fig}
+\label{fig:s1}
+{\bf Dataset quality plot GC/OGT.}
+description description ...
+
+\subsection*{S2 Fig}
+\label{fig:s2}
+{\bf Thermal adaptation: 20 amino acid thermal trends. }
+description description ...
+
+\subsection*{S3 Fig}
+\label{fig:s3}
+{\bf Tr.Op. organisms example}
+description description ...
+
+\subsection*{S4 Fig}
+\label{fig:s4}
+{\bf Tr.Op. criteria comparison}
+description description ...
+
+\subsection*{S5 Fig}
+\label{fig:s5}
+{\bf Thermal adaptation ``convergence'' checked by bootstrapping.}
+description description ...
+
+\subsection*{S6 Fig}
+\label{fig:s6}
+{\bf $R_M$ and $R_T$ used to identify $w_{op}$ }
+description description ...
+
+\subsection*{S7 Fig}
+\label{fig:s7}
+{\bf Krick's maintenance vector validation}
+description description ...
+
+\subsection*{S8 Fig}
+\label{fig:s8}
+{\bf Methabolic synthesis cost vs. CAI, supported by codon shuffling}
+description description ...
+
+\subsection*{S9 Fig}
+\label{fig:s9}
+{\bf $R_T$ vs. CAI, supported by codon shuffling}
+description description ...
+
+\subsection*{S10 Fig}
+\label{fig:s10}
+{\bf \texttt{IVYWREL} vs. CAI, supported by codon shuffling}
+description description ...
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+% OLDER SUPP FIG CAPTIONS: SEE FIGURE_SX.pdf FOR NOW.
+%%%%%%%%%%%%%%%%%%%%
+
+% \begin{figure}[h!]
+% \caption{
+% {\bf Dataset quality plots} (A) archaeal and (B) bacterial species used in our analysis are depicted on the GC , OGT plane to demonstrate uniform coverage and wide range of both values. Archaeal 'dip' around 60C and bacterial peak around 37C are clearly visible. GC and OGT histograms are presented next to the corresponding axis. [ANY COLORING TO ADD? Translationally Optimized organisms seems like a natural choice ...]  
+% }
+% \label{fig:dataset_quality}
+% \end{figure}
+% %%%%%%%%%%%%%%%%%%
+% \begin{figure}[h!]
+% \caption{
+% {\bf Synthesis costs negatively correlated with CAI} Proteins of each organism are divided into 5 quantiles according to their CAI rank and amino acid composition is averaged within each group, so that statistically averaged trend with expression level (CAI) can be conveniently analyzed. (A) archaeal and (B) bacterial trends are presented along with a random realization of the codon reshuffling procedure to emphasize statistical significance of the original trend. P-value is calculated using XXX number of random reshufflings. 
+% }
+% \label{fig:Akashi_vs_CAI}
+% \end{figure}
+% %%%%%%%%%%%%%%%%%%%%%
+% \begin{figure}[h!]
+% \caption{
+% {\bf $R_T$ subtle correlation with CAI} Proteins of each organism are divided into 5 quantiles according to their CAI rank and amino acid composition is averaged within each group, so that statistically averaged trend with expression level (CAI) can be conveniently analyzed. $R_T$ is a Pearson correlation coefficient between the average amino acid composition in each quantile and the thermophilic composition of amino acids, calculated used OGT>50C criteria. (A) archaeal and (B) bacterial trends are presented along with a random realization of the codon reshuffling procedure to emphasize statistical significance of the original trend (or lack of thereof). P-value is calculated using XXX number of random reshufflings. [CHECK ...]
+% }
+% \label{fig:RT_vs_CAI}
+% \end{figure}
+% %%%%%%%%%%%%%%%%%%%%%
+% \begin{figure}[h!]
+% \caption{
+% {\bf IVYWREL trends with CAI} Proteins of each organism are divided into 5 quantiles according to their CAI rank and amino acid composition is averaged within each group, so that statistically averaged trend with expression level (CAI) can be conveniently analyzed.
+% IVYWREL metric is averaged for each quantile and (A) archaeal and (B) bacterial trends are presented along with a random realization of the codon reshuffling procedure. Original result can be expected by the random and can be explained using specificity of IVYWREL and the genetic code link. [CHECK ...]
+% }
+% \label{fig:IVYWREL_vs_CAI}
+% \end{figure}
+% %%%%%%%%%%%%%%%%%%%%%
+% \begin{figure}[h!]
+% \caption{
+% {\bf Validation of the simulated data using amino acid maintenance rate vector reshuffling.} Amino acid maintenance rate vector $C_{a}$ was reshuffled 100 times and used in the protein design procedure at $\mathit{w}_{op}$ and $T=0.9$. Resulted amino acid frequencies were compared with the evolved average amino acid frequencies, vector $\mathbf{A}$, using Pearson correlation coefficient $R_{\mathbf{A}}$. Histogram of thus simulated $R_{\mathbf{A}}$ values displayed on the figure, $R_{\mathbf{A}}$ value obtained original vector $C_{a}$ depicted as red dot.
+% }
+% \label{fig:validation}
+% \end{figure}
+% %%%%%%%%%%%%%%%%%%%%%
+% \begin{figure}[h!]
+% \caption{
+% {\bf validation} Statistical validation of the ... using bootstrapping procedure ...
+% }
+% \label{fig:validation}
+% \end{figure}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \begin{figure}[h!]
+% \caption{
+% {\bf Unified optimal balance parameter determined from $R_{\mathbf{M}}$ and $R_{\mathbf{T}}$.} Equally weighted dependencies of $R_{\mathbf{M}}$ and $R_{\mathbf{T}}$ on the balance parameter $\mathit{w}$ are combined to determine the unique optimal balance parameter $\mathit{w}_{op}$, explaining both mesophilic and thermophilic data $\mathbf{M}$ and $\mathbf{T}$ equally well.
+% }
+% \label{fig:optimal_w_profiles}
+% \end{figure}
+
+
+\section*{Tables}
+% 
+% See introductory notes if you wish to include sideways tables.
+%
+% NOTE: Please look over our table guidelines at http://www.plosone.org/static/figureGuidelines#tables to make sure that your tables meet our requirements. Certain types of spacing, cell merging, and other formatting tricks may have unintended results and will be returned for revision.
+%
+%\begin{table}[!ht]
+%\caption{
+%\bf{Table title}}
+%\begin{tabular}{|c|c|c|}
+%table information
+%\end{tabular}
+%\begin{flushleft}Table caption
+%\end{flushleft}
+%\label{tab:label}
+% \end{table}
+
+\begin{table}[!ht]
+	\caption{\bf{Temperature trends at amino acid resolution}}
+	\begin{tabular}{|c|c|c|c|c|}
+		% \toprule
+		{} &   {\bf Archaea} &  $\mathbf{GC_{30}}$ &   $\mathbf{GC_{50}}$ &  {\it\bf Methanococci} \\
+		% \midrule
+		{\bf C} &    -0.52 &  0.13 & -0.58 &         -0.20 \\
+		{\bf M} &    -0.59 & -0.59 & -0.61 &         -0.79 \\
+		{\bf F} &    -0.11 & -0.08 & -0.13 &          0.41 \\
+		{\bf I} &    -0.06 &  0.66 & -0.09 &          0.48 \\
+		{\bf L} &     0.78 &  0.73 &  0.81 &          0.61 \\
+		{\bf V} &     0.53 &  0.49 &  0.74 &          0.59 \\
+		{\bf W} &     0.56 &  0.32 &  0.73 &          0.77 \\
+		{\bf Y} &     0.49 &  0.58 &  0.58 &          0.56 \\
+		{\bf A} &     0.08 & -0.25 & -0.02 &          0.14 \\
+		{\bf G} &    -0.03 & -0.15 & -0.22 &         -0.33 \\
+		{\bf T} &    -0.76 & -0.75 & -0.72 &         -0.91 \\
+		{\bf S} &    -0.58 & -0.82 & -0.61 &         -0.96 \\
+		{\bf N} &    -0.38 & -0.56 & -0.59 &         -0.76 \\
+		{\bf Q} &    -0.70 & -0.75 & -0.76 &         -0.89 \\
+		{\bf D} &    -0.79 & -0.58 & -0.83 &         -0.26 \\
+		{\bf E} &     0.33 &  0.66 &  0.35 &          0.76 \\
+		{\bf H} &    -0.48 & -0.27 & -0.48 &         -0.29 \\
+		{\bf R} &     0.44 &  0.72 &  0.60 &          0.92 \\
+		{\bf K} &     0.07 &  0.61 &  0.21 &          0.89 \\
+		{\bf P} &     0.34 &  0.42 &  0.41 &          0.45 \\		% \bottomrule
+	\end{tabular}
+	\begin{flushleft} Temperature trends of the frequencies of individual amino acids in different datasets and subsets. 
+	\end{flushleft}
+	\label{tab:correlations}
+\end{table}
+
+
+
+\section*{Supporting Information Legends}
+%
+% Please enter your Supporting Information captions below in the following format:
+%\item{\bf Figure SX. Enter mandatory title here.} Enter optional descriptive information here.
+% 
+%\begin{description}
+%\item {\bf}
+%\item {\bf}
+%\end{description}
+
+% \newpage
+
+
+\end{document}
+

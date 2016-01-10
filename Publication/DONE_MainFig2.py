@@ -5,7 +5,9 @@ import pandas as pd
 import numpy as np
 from scipy import stats as st
 
+
 # for plotting ...
+import subprocess as sub
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 #
@@ -32,11 +34,11 @@ rc('font', **font)
 
 aacids = list('ACDEFGHIKLMNPQRSTVWY')
 
-def plot_comparison(ax,x,y,xlab='x',ylab='y'):
+def plot_comparison(ax,x,y,xlab='x',ylab='y',xlims=None,ylims=None):
     #
     ax.plot(x,y,'bo',visible=False)
     for i,aa in enumerate(aacids):
-        ax.text(x[i], y[i], r"\texttt{%s}"%aa, transform=ax.transData,color='dimgray',horizontalalignment='center',verticalalignment='center',fontsize=12,fontweight='bold')
+        ax.text(x[i], y[i], r"\texttt{%s}"%aa, transform=ax.transData,color='black',horizontalalignment='center',verticalalignment='center',fontsize=13,fontweight='bold')
     ###################################################
     a,b,r,pval,_ = st.linregress(x,y)
     #
@@ -44,31 +46,37 @@ def plot_comparison(ax,x,y,xlab='x',ylab='y'):
     delta = 1.1*(x.max()-x.min())
     x_range = [middle-0.5*delta,middle+0.5*delta]
     #############################################
+    label_f = lambda r,pval:("linear fit, R=%.3f, "%r) + (r"$p=%.3f$"%pval if pval>=0.001 else r"$p<0.001$")
     fff = np.vectorize(lambda x: a*x + b)
-    lin_fit, = ax.plot(x_range,fff(x_range),color='blue',linewidth=1.5,linestyle='-',zorder=100,label='linear fit, R=%.3f, p=%.3f'%(r,pval))
+    lin_fit, = ax.plot(x_range,fff(x_range),color='silver',linewidth=1.5,linestyle='-',zorder=100,label=label_f(r,pval))
+    y_eq_x, = ax.plot(x_range,x_range,color='red',linewidth=1.0,linestyle='--',zorder=102)
     ###################################################
     ###################################################
     ax.yaxis.set_ticks_position('left')
     ax.xaxis.set_ticks_position('bottom')
     ###################################################
     ###################################################
-    ax.set_xlabel(xlab)
-    ax.set_ylabel(ylab)
-    ax.legend(loc='best',frameon=False)
+    ax.set_xlabel(xlab)#,labelpad=1.5)
+    ax.set_ylabel(ylab)#,labelpad=0.5)
+    ax.legend(loc='upper left',frameon=False)
     # ax.legend((lin_fit,),('linear fit, R=%.3f, p=%.3f'%(r,pval)),loc='best',frameon=False)
     plt.tight_layout(pad=0.4, h_pad=None, w_pad=None)
     ###################################################
     ###################################################
-    # axis limits ...
-    middle = 0.5*(x.min()+x.max())
-    delta = 1.3*(x.max()-x.min())
-    x_lims = [middle-0.5*delta,middle+0.5*delta]
-    middle = 0.5*(y.min()+y.max())
-    delta = 1.3*(y.max()-y.min())
-    y_lims = [middle-0.5*delta,middle+0.5*delta]
-    # ###################################################
-    ax.set_xlim(x_lims)
-    ax.set_ylim(y_lims)
+    if (xlims is None) or (ylims is None):
+        # axis limits ...
+        middle = 0.5*(x.min()+x.max())
+        delta = 1.3*(x.max()-x.min())
+        x_lims = [middle-0.5*delta,middle+0.5*delta]
+        middle = 0.5*(y.min()+y.max())
+        delta = 1.3*(y.max()-y.min())
+        y_lims = [middle-0.5*delta,middle+0.5*delta]
+        # ###################################################
+        ax.set_xlim(x_lims)
+        ax.set_ylim(y_lims)
+    else:
+        ax.set_xlim(xlims)
+        ax.set_ylim(ylims)
     ###################################################
     # ax.locator_params(axis='both',tight=True)#nbins=10)
     # ax.locator_params(axis='x',nbins=5)
@@ -80,7 +88,9 @@ def get_axis(xbins = 2, ybins = 3,vcoeff=1.0):
     plt.clf()
     # create grid of subplots on a large figure canvas
     # share x&y axes among all plots
-    fig, ax = plt.subplots(ybins, xbins, figsize=(7.5,ybins*vcoeff*7.5/xbins))#, sharex=True, sharey=True)
+    # fig, ax = plt.subplots(ybins, xbins, figsize=(7.5,ybins*vcoeff*7.5/xbins))#, sharex=True, sharey=True)
+    x_fig_size = 3.34
+    fig, ax = plt.subplots(ybins, xbins, figsize=(x_fig_size,vcoeff*x_fig_size))#, sharex=True, sharey=True)
     # # no space between subplots
     # fig.subplots_adjust(hspace=0.0, wspace=0.08)
     # # make some room for the axes' labels
@@ -120,26 +130,28 @@ def get_arch_bact_slopes(combination):
 def get_axis_labels(combination):
     # unpack criteria ...
     cds_crit,org_crit = combination['cds_criteria'], combination['org_criteria']
+    #
     label = ""
     if cds_crit == 'cai':
-        label += "top 10\% CAI"
+        label += " (top 10\% CAI)"
     elif cds_crit == 'ribo':
-        label += "ribosomal proteins"
+        label += " (ribosomal proteins)"
     elif cds_crit == 'cai_noribo':
-        label += "top 10\% CAI excl. ribosomal"
+        label += " (top 10\% CAI excl. ribosomal)"
     elif cds_crit == 'all':
-        label += "proteome"
+        label += " (proteome)"
     else:
         raise ValueError("cds criteria not supported!")
     #
     if org_crit == 'all':
-        arch_label = ' '.join([label,r"(archaea), 1/\textdegree C"])
-        bact_label = ' '.join([label,r"(bacteria), 1/\textdegree C"])
+        arch_label = ''.join(["archaea slopes",label,r", 1/\textdegree C"])
+        bact_label = ''.join(["bacteria slopes",label,r", 1/\textdegree C"])
     elif org_crit == 'trop':
-        arch_label = ' '.join([label,r"(CUS archaea), 1/\textdegree C"])
-        bact_label = ' '.join([label,r"(CUS bacteria), 1/\textdegree C"])
+        arch_label = ''.join(["CUS archaea slopes",label,r", 1/\textdegree C"])
+        bact_label = ''.join(["CUS bacteria slopes",label,r", 1/\textdegree C"])
     #
     return (arch_label,bact_label)
+
 
 
 cds_crits = ['cai','ribo','cai_noribo','all']
@@ -161,17 +173,37 @@ combinations = [{'cds_criteria':'all','org_criteria':'all'},
 # # combinations[1][0,1,3]
 
 
-xsize, ysize = 2, 2
+xsize, ysize = 1,1
+xlims = [(-0.035,0.035),(-0.035,0.035),(-0.035,0.035),(-0.035,0.035)]
+ylims = [(-0.065,0.075),(-0.055,0.055),(-0.055,0.065),(-0.04,0.05)]
 # # draw the thing ...
-fig,ax = get_axis(xsize, ysize, vcoeff = 0.8)
-
 for cid,criteria_combination in enumerate(combinations):
-    # axis coordinates ...
-    i, j = cid/xsize, cid%xsize
+    fig,ax = get_axis(xsize, ysize, vcoeff = 0.85)
+    # # axis coordinates ...
+    # i, j = cid/xsize, cid%xsize
     #
     arch,bact = get_arch_bact_slopes(criteria_combination)
     alab,blab = get_axis_labels(criteria_combination)
-    plot_comparison(ax[i,j],arch['exp_D'],bact['exp_D'],xlab=alab,ylab=blab)
+    plot_comparison(ax,arch['exp_D'],bact['exp_D'],xlab=alab,ylab=blab,xlims=xlims[cid],ylims=ylims[cid])
+    plt.savefig("figure2_%s.png"%'abcd'[cid],dpi=300)
+
+cmd = "montage "+\
+"figure2_a.png "+\
+"figure2_b.png "+\
+"figure2_c.png "+\
+"figure2_d.png "+\
+"-geometry +0+0 "+\
+"-tile 2x "+\
+"-border 0 "+\
+"-bordercolor white "+\
+"-background white "+\
+"figure2.png"
+# "-geometry +0-15 "+\
+
+retcode = sub.call(cmd,shell=True)
+
+
+
 
 
 
@@ -193,7 +225,6 @@ for cid,criteria_combination in enumerate(combinations):
 
 
 
-plt.savefig("figure2.pdf")
 
 
 

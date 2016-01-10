@@ -1,4 +1,5 @@
-
+python DONE_MainFig7_costs.py bact
+python DONE_MainFig7_costs.py arch
 
 convert \
 -append \

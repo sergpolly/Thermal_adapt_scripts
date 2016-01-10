@@ -859,15 +859,7 @@ plt.clf()
 ###########
 x_fig_size = 3.34
 v_coeff = 0.85
-fig = plt.figure(figsize=(x_fig_size,v_coeff*x_fig_size))
-# axes info ...
-left = 0.17
-bottom = 0.17
-width = 0.95 - left
-height = 0.95 - bottom
-# bottom axes 
-ax = plt.axes([left, bottom, width, height])
-fig = plt.gcf()
+fig, ax = plt.subplots(1,1,figsize=(x_fig_size,v_coeff*x_fig_size))#, sharex=True, sharey=True)
 ###########
 sub_data = data_sorted[(data_sorted.Model == M)&(data_sorted.FFTemp == FFT)&(data_sorted.W_coeff == W)].copy()
 # data used to be offsetted by the quantity of rows ....
@@ -888,17 +880,21 @@ sim_D = sim_D2.T[0]
 #
 for lab,xx,yy in zip(exp_D.index,exp_D,sim_D):
     ax.scatter(xx, yy,s=3, marker="o",c='white',edgecolors='none')
-    ax.text(xx,yy,r"\texttt{%s}"%lab,color='dimgray',horizontalalignment='center',verticalalignment='center',fontsize=10,fontweight='semibold')
+    ax.text(xx,yy,r"\texttt{%s}"%lab,color='black',horizontalalignment='center',verticalalignment='center',fontsize=13,fontweight='bold')
 #
 # ax.plot(exp_D,sim_D,'ro',label='slopes M%d FFT%s W%.4f'%(M,FFT,W))
 a,b,r,pval,_ = st.linregress(exp_D.values,sim_D.values)
 exp_D_range = np.linspace(exp_D.min()*1.01,exp_D.max()*1.01)
-ax.plot(exp_D_range,a*exp_D_range+b,'b-',label='linear fit: R=%.2f, p=%.3f'%(r,pval))
+ax.plot(exp_D_range,a*exp_D_range+b,color='silver',linewidth=1.5,linestyle='-',zorder=100,label=r'linear fit: R=%.2f, $p=%.3f$'%(r,pval))
+# ax.plot(exp_D_range,exp_D_range,color='red',linewidth=1.0,linestyle='--',zorder=102)
 # ax.set_title("sim_D = a*exp_D+b, a=%.4f, b=%.4f, r=%.2f"%(a,b,r))
 ax.legend(loc='upper left',bbox_to_anchor=(0.01,0.9),frameon=False)
 # ax.legend(loc='best',frameon=False)
-ax.set_xlabel(slopes_label,labelpad=1.5)
-ax.set_ylabel("simulated slopes, 1/p.u.",labelpad=0.5)
+ax.set_xlabel(slopes_label)
+ax.set_ylabel("simulated slopes, 1/p.u.")
+# ax.set_xlabel(slopes_label,labelpad=1.5)
+# ax.set_ylabel("simulated slopes, 1/p.u.",labelpad=0.5)
+plt.tight_layout(pad=0.4, h_pad=None, w_pad=None)
 #
 # '$f_{a}$, \%'
 # signif_cai10_bacter
@@ -915,6 +911,10 @@ ax.tick_params(axis='y',which='both',left='on',right='off',pad=3)
 #
 # ax.set_xlim((-0.025,0.03))
 # ax.set_ylim((-0.04,0.081))
+ymax,ymin = ax.get_ylim()
+xmax,xmin = ax.get_xlim()
+ax.plot([0,0],[-0.1*(ymax-ymin),0],color='blue',linewidth=1.0,linestyle='-',zorder=104)
+ax.plot([-0.1*(xmax-xmin),0],[0,0],color='blue',linewidth=1.0,linestyle='-',zorder=104)
 #
 # plt.legend(loc='best')
 fig.savefig(os.path.join(results_path,"%s_Slopes_sim_vs_exp_protbact.png"%exp_fname),dpi=300)

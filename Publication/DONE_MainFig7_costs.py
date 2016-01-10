@@ -108,11 +108,12 @@ elif kingdom == 'arch':
 
 
 
-def label(rr,pp):
+def label(rr,pp,kingdom):
     if (pp<0.0008):
         label = '$R=%.2f,\ p<0.001$'%rr
     else:
         label = '$R=%.2f,\ p=%.3f$'%(rr,pp)
+    label += " (archaea)" if kingdom=='arch' else " (bacteria)"
     return label
 
 
@@ -156,13 +157,13 @@ evolved_proteome_akashi_cost = evolved_proteome_akashi_cost[evolved_proteome_aka
 #
 ymin,ymax = get_lims(evolved_proteome_akashi_cost,coeff=1.1)
 #
-scatter = ax_left.scatter(dat[topt],evolved_proteome_akashi_cost,s=65,c=dat['GC'],edgecolor='none',vmin=vmin,vmax=vmax,cmap=plt.get_cmap('jet'))
+scatter = ax_left.scatter(dat[topt],evolved_proteome_akashi_cost,s=65,c=dat['GC'],edgecolor='none',vmin=vmin,vmax=vmax,cmap=plt.get_cmap('rainbow'))
 # linear regression & fit ...
 a,b,r,pval,_ = st.linregress(dat[topt],evolved_proteome_akashi_cost)
 print "all:    ",a,b,r,pval
 t_range = np.asarray(regress_lims)
-ax_left.plot(t_range,a*t_range+b,'-',color='dimgray',lw=2,label=label(r,pval))
-ax_left.legend(loc='best',frameon=False)
+ax_left.plot(t_range,a*t_range+b,'-',color='dimgray',lw=2,label=label(r,pval,kingdom))
+ax_left.legend(loc='upper left',frameon=False,handlelength=1.5,handletextpad=0.1)
 #
 ax_left.set_xlabel(r'OGT,\textdegree C')
 ax_left.set_ylabel('AA synthesis cost, ATP')
@@ -171,8 +172,9 @@ ax_left.set_ylabel('AA synthesis cost, ATP')
 ax_left.yaxis.set_ticks_position('left')
 ax_left.xaxis.set_ticks_position('bottom')
 #
+y_span = ymax-ymin
 ax_left.set_xlim((xmin,xmax))
-ax_left.set_ylim((ymin,ymax))
+ax_left.set_ylim((ymin,ymax+0.1*y_span))
 #################################
 print "Argentina corrs (a,b,R,P) ..."
 #
@@ -181,13 +183,13 @@ evolved_proteome_argentina_cost = evolved_proteome_argentina_cost[evolved_proteo
 #
 ymin,ymax = get_lims(evolved_proteome_argentina_cost,coeff=1.1)
 #
-scatter = ax_right.scatter(dat[topt],evolved_proteome_argentina_cost,s=65,c=dat['GC'],edgecolor='none',vmin=vmin,vmax=vmax,cmap=plt.get_cmap('jet'))
+scatter = ax_right.scatter(dat[topt],evolved_proteome_argentina_cost,s=65,c=dat['GC'],edgecolor='none',vmin=vmin,vmax=vmax,cmap=plt.get_cmap('rainbow'))
 # linear regression & fit ...
 a,b,r,pval,_ = st.linregress(dat[topt],evolved_proteome_argentina_cost)
 print "all:    ",a,b,r,pval
 t_range = np.asarray(regress_lims)
-ax_right.plot(t_range,a*t_range+b,'-',color='dimgray',lw=2,label=label(r,pval))
-ax_right.legend(loc='best',frameon=False)
+ax_right.plot(t_range,a*t_range+b,'-',color='dimgray',lw=2,label=label(r,pval,kingdom))
+ax_right.legend(loc='upper left',frameon=False,handlelength=1.5,handletextpad=0.1)
 #
 ax_right.set_xlabel(r'OGT,\textdegree C')
 ax_right.set_ylabel('AA maintenance cost, ATP/time')
@@ -195,8 +197,9 @@ ax_right.set_ylabel('AA maintenance cost, ATP/time')
 ax_right.yaxis.set_ticks_position('left')
 ax_right.xaxis.set_ticks_position('bottom')
 #
+y_span = ymax-ymin
 ax_right.set_xlim((xmin,xmax))
-ax_right.set_ylim((ymin,ymax))
+ax_right.set_ylim((ymin,ymax+0.1*y_span))
 #
 cax = fig.add_axes([left+width+0.01,bottom,0.03,height])
 cbar = fig.colorbar(scatter,cax=cax,orientation='vertical')
@@ -208,7 +211,6 @@ cbar.set_label('GC content, \%')
 #
 # fig.savefig(os.path.join(results_path,"%s.png"%fname),dpi=300)
 fig.savefig("Fig7.%s.pdf"%kingdom)
-
 
 
 

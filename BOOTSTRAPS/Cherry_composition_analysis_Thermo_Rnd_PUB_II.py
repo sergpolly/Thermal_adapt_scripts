@@ -9,6 +9,31 @@ import numpy as np
 from scipy import stats
 from scipy import stats as st
 
+import matplotlib as mpl
+#
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+## for Palatino and other serif fonts use:
+# rc('font',**{'family':'serif','serif':['Palatino']})
+rc('text', usetex=True)
+# #
+#
+mpl.rcParams['text.latex.preamble'] = [
+       r'\usepackage{textcomp}',   # i need upright \micro symbols, but you need...
+       # r'\sisetup{detect-all}',   # ...this to force siunitx to actually use your fonts
+       r'\usepackage{helvet}',    # set the normal font here
+       r'\usepackage{sansmath}',  # load up the sansmath so that math -> helvet
+       r'\sansmath'               # <- tricky! -- gotta actually tell tex to use!
+]
+#
+font = {#'family' : 'sans-serif',
+        #'weight' : 'bold',
+        'size'   :8}
+rc('font', **font)
+# # data loading ...
+
+
+
 # path = os.path.join(os.path.expanduser('~'),'GENOMES_BACTER_RELEASE69/genbank')
 root_path = os.path.expanduser('~')
 bact_path = os.path.join(root_path,'GENOMES_BACTER_RELEASE69/genbank')
@@ -51,7 +76,7 @@ def get_quantiles_summary(cds_cai_dat,num_of_quantiles,R20_vec_compare,vec_cost)
     # we can use this 'qcut' function from pandas to divide our proteins by the quantiles ...
     category,bins = pd.qcut(cds_cai_dat['CAI'],q=num_of_quantiles,retbins=True,labels=False)
     # then we could iterate over proteins/cDNAs in these categories ...
-    fivywrel_cat, r20_cat, cost_cat, prot_len_cat = [],[],[],[]
+    fivywrel_cat, r20_cat, cost_cat = [],[],[]
     for cat in range(num_of_quantiles):
         cds_cai_category = cds_cai_dat[category==cat]
         protein_length_distro = cds_cai_category['protein'].str.len()
@@ -72,9 +97,8 @@ def get_quantiles_summary(cds_cai_dat,num_of_quantiles,R20_vec_compare,vec_cost)
         fivywrel_cat.append(f_IVYWREL)
         r20_cat.append(R20)
         cost_cat.append(cost)
-        prot_len_cat.append(average_length)
     #returning ...
-    return (fivywrel_cat,r20_cat,cost_cat,prot_len_cat)
+    return (fivywrel_cat,r20_cat,cost_cat)
 
 
 
@@ -90,7 +114,7 @@ def quantile_summary_storage_init(num_of_quantiles=5):
         the_storage['q%d'%i] = []
         the_storage['R20_q%d'%i] = []
         the_storage['Akashi_q%d'%i] = []
-        the_storage['ProtLen_q%d'%i] = []
+        # the_storage['ProtLen_q%d'%i] = []
     # returning ...
     return the_storage
 
@@ -132,6 +156,8 @@ akashi_cost.sort_index(inplace=True)
 argentina_cost.sort_index(inplace=True)
 thermo_freq.sort_index(inplace=True)
 
+
+# 
 #####################################################
 #  QUANTILE STATISTICALL DATA EXTRACTION ....
 #####################################################
@@ -144,38 +170,39 @@ stat_dat = quantile_summary_storage_init(num_of_quantiles=the_num_of_quantiles)
 original_stat_dat = quantile_summary_storage_init(num_of_quantiles=the_num_of_quantiles)
 # start iterating over different organisms ...
 for idx,topt in env_dat[[uid,topt_id]].itertuples(index=False):
-    # halophiles already excluded ...
-    cds_cai_dat = gen_dat_org.get_group(idx) 
-    original_cds_cai_dat = original_gen_dat_org.get_group(idx) 
-    # is it a translationally optimized organism ?
-    # after messing up codons, 0 organisms are going to be TrOp..
-    # so, just use the original definition to check if TrOp affects the results ...
-    trop_status = get_one_trop(original_gen_dat_org,idx)
-    #
-    if trop_status != 'none':
-        # fill in the record for each quantile (random-shuffled) ...
-        stat_dat[uid].append(idx)
-        stat_dat[topt_id].append(topt)
-        stat_dat['TrOp'].append(trop_status)
-        counter = 0
-        for fivywrel_qs,r20_qs,cost_qs,protlen_qs in zip(*get_quantiles_summary(cds_cai_dat,the_num_of_quantiles,thermo_freq[1],akashi_cost[1])):
-            stat_dat['q%d'%counter].append(fivywrel_qs)
-            stat_dat['R20_q%d'%counter].append(r20_qs)
-            stat_dat['Akashi_q%d'%counter].append(cost_qs)
-            stat_dat['ProtLen_q%d'%counter].append(protlen_qs)
-            counter += 1
-        ########################################
-        # fill in the record for each quantile (ORIGINAL) ...
-        original_stat_dat[uid].append(idx)
-        original_stat_dat[topt_id].append(topt)
-        original_stat_dat['TrOp'].append(trop_status)
-        counter = 0
-        for fivywrel_qs,r20_qs,cost_qs,protlen_qs in zip(*get_quantiles_summary(original_cds_cai_dat,the_num_of_quantiles,thermo_freq[1],akashi_cost[1])):
-            original_stat_dat['q%d'%counter].append(fivywrel_qs)
-            original_stat_dat['R20_q%d'%counter].append(r20_qs)
-            original_stat_dat['Akashi_q%d'%counter].append(cost_qs)
-            original_stat_dat['ProtLen_q%d'%counter].append(protlen_qs)
-            counter += 1
+    if topt < 1000:
+        # halophiles already excluded ...
+        cds_cai_dat =  gen_dat_org.get_group(idx) 
+        original_cds_cai_dat = original_gen_dat_org.get_group(idx) 
+        # is it a translationally optimized organism ?
+        # after messing up codons, 0 organisms are going to be TrOp..
+        # so, just use the original definition to check if TrOp affects the results ...
+        trop_status = get_one_trop(original_gen_dat_org,idx)
+        #
+        if trop_status != 'none':
+            # fill in the record for each quantile (random-shuffled) ...
+            stat_dat[uid].append(idx)
+            stat_dat[topt_id].append(topt)
+            stat_dat['TrOp'].append(trop_status)
+            counter = 0
+            for fivywrel_qs,r20_qs,cost_qs in zip(*get_quantiles_summary(cds_cai_dat,the_num_of_quantiles,thermo_freq[1],akashi_cost[1])):
+                stat_dat['q%d'%counter].append(fivywrel_qs)
+                stat_dat['R20_q%d'%counter].append(r20_qs)
+                stat_dat['Akashi_q%d'%counter].append(cost_qs)
+                # stat_dat['ProtLen_q%d'%counter].append(protlen_qs)
+                counter += 1
+            ########################################
+            # fill in the record for each quantile (ORIGINAL) ...
+            original_stat_dat[uid].append(idx)
+            original_stat_dat[topt_id].append(topt)
+            original_stat_dat['TrOp'].append(trop_status)
+            counter = 0
+            for fivywrel_qs,r20_qs,cost_qs in zip(*get_quantiles_summary(original_cds_cai_dat,the_num_of_quantiles,thermo_freq[1],akashi_cost[1])):
+                original_stat_dat['q%d'%counter].append(fivywrel_qs)
+                original_stat_dat['R20_q%d'%counter].append(r20_qs)
+                original_stat_dat['Akashi_q%d'%counter].append(cost_qs)
+                # original_stat_dat['ProtLen_q%d'%counter].append(protlen_qs)
+                counter += 1
 #
 cai_stats_quant = pd.DataFrame(stat_dat)
 cai_stats_quant_TrOp = cai_stats_quant[cai_stats_quant['TrOp']=='true']
@@ -202,37 +229,66 @@ def quantile_plotter(dat,kx,fname,ax=None,savefig=False,title='',color='blue',li
     ###############################
     if ax is None:
         plt.clf()
+        fig,ax = plt.subplots(nrows=1,ncols=1,figsize=(3.5,3.0))
         ax = plt.gca()
     else:
         pass
     ###############################
-    x_toplot, y_toplot, err_plot = [],[],[]
+    x_toplot, y_toplot, err_plot_up, err_plot_down = [],[],[],[]
     for i in range(the_num_of_quantiles):
         kxi,ylabel = kx(i,label=True)
         x_toplot.append(i+1+x_offset)
-        y_toplot.append(dat[kxi].mean())
-        err_plot.append(dat[kxi].std())
+        # # old - mean +/- std
+        # y_toplot.append(dat[kxi].mean())
+        # err_plot.append(dat[kxi].std())
+        # median +/- percentile attempt ...
+        # the_median = dat[kxi].median()
+        the_median = dat[kxi].mean()
+        y_toplot.append(the_median)
+        err_plot_up.append(dat[kxi].quantile(q=0.7)-the_median)
+        err_plot_down.append(the_median-dat[kxi].quantile(q=0.3))
     # plotting ...
-    ax.errorbar(x_toplot,y_toplot,yerr=err_plot,fmt='o',color=color, label=title)
-    ax.set_xlim(0,6)
+    err_plot = [err_plot_down, err_plot_up]
+    (_,caps,_) = ax.errorbar(x_toplot,y_toplot,yerr=err_plot,fmt='s',color=color, label=title, mew=0,ms=4,
+                ecolor='dimgrey', lw=1, capsize=2.,elinewidth=1)
+    #
+    for cap in caps:
+        cap.set_color('dimgrey')
+        cap.set_markeredgewidth(1)
+    #
+    ax.set_xlim(0,the_num_of_quantiles+1)
+    ax.set_xticks(range(1,the_num_of_quantiles+1))
+    ax.set_xticklabels([str(_) for _ in range(1,the_num_of_quantiles+1)])
     ax.set_ylabel(ylabel)
     ax.set_xlabel('CAI quantile')
     #
+    ax.yaxis.set_ticks_position('left')
+    ax.xaxis.set_ticks_position('bottom')
     #########################
     a,b,r,pval,_ = st.linregress(x_toplot,y_toplot)
     # label = flabel(r,pval)
-    x_toplot = np.asarray(x_toplot)
-    ax.plot(x_toplot,a*x_toplot+b,'-',color=color,lw=3,label="fit R=%.2f p=%.3f"%(r,pval))
+    # x_toplot = np.asarray(x_toplot)
+    x_toplot_regress = np.linspace(0.5,the_num_of_quantiles+0.5,num=2)
+    f_label = lambda r,pval: "linear fit, R=%.2f "%r + (r"$p=%.3f$"%pval if pval>=0.001 else r"$p<0.001$")
+    # ax.plot(x_toplot,a*x_toplot+b,'-',color=color,lw=2,label=f_label(r,pval))
+    ax.plot(x_toplot_regress,a*x_toplot_regress+b,'--',color=color,lw=0.8,alpha=0.8,label="guide line")
     ######################
     # # ...
     # if title:
     #     ax.set_title(title)
     if lims:
         ax.set_ylim( lims_to_range(lims) )
+    # make room for legends ...
+    ymin,ymax = ax.get_ylim()
+    y_span = ymax-ymin
+    ax.set_ylim((ymin-0.4*y_span,ymax))
+    # ax.set_ylim((ymin-0.3*y_span,ymax+0.3*y_span))
+    #
     # save figures on demand ...
     if savefig:
-        ax.legend(loc='best')
-        plt.savefig(fname)
+        ax.legend(loc='lower left',ncol=1,frameon=False,markerscale=1,fontsize=8,handlelength=3, numpoints=1, handletextpad=0.01)
+        plt.tight_layout(pad=0.4, h_pad=None, w_pad=None)
+        plt.savefig(fname,dpi=300)
     else:
         return ax
 
@@ -260,13 +316,13 @@ def IVYWREL_key(i,label=False):
     return ('q%d'%i,'IVYWREL') if label else 'q%d'%i
 
 def R20_key(i,label=False):
-    return ('R20_q%d'%i,'R20 self-exp_T') if label else 'R20_q%d'%i
+    return ('R20_q%d'%i,r'$R_T$') if label else 'R20_q%d'%i
 
 def Akashi_key(i,label=False):
     return ('Akashi_q%d'%i,'Akashi cost') if label else 'Akashi_q%d'%i
 
-def ProtLen_key(i,label=False):
-    return ('ProtLen_q%d'%i,'mean protein length') if label else 'ProtLen_q%d'%i
+# def ProtLen_key(i,label=False):
+#     return ('ProtLen_q%d'%i,'mean protein length') if label else 'ProtLen_q%d'%i
 
 
 
@@ -298,9 +354,9 @@ Akashi_lims = update_lims(cai_stats_quant_TrOp,Akashi_key)
 # Akashi_lims = update_lims(original_cai_stats_quant_noTrOp,Akashi_key,old_lims=Akashi_lims)
 # Akashi_lims = update_lims(original_cai_stats_quant_TrOp,Akashi_key,old_lims=Akashi_lims)
 Akashi_lims = update_lims(original_cai_stats_quant_TrOp,Akashi_key,old_lims=Akashi_lims)
-#########################
-ProtLen_lims = update_lims(cai_stats_quant_TrOp,ProtLen_key)
-ProtLen_lims = update_lims(original_cai_stats_quant_TrOp,ProtLen_key,old_lims=ProtLen_lims)
+# #########################
+# ProtLen_lims = update_lims(cai_stats_quant_TrOp,ProtLen_key)
+# ProtLen_lims = update_lims(original_cai_stats_quant_TrOp,ProtLen_key,old_lims=ProtLen_lims)
 #########################
 
 
@@ -309,60 +365,10 @@ def get_fname_title(keyid,kingdom,shuff_stat,trop_stat):
     fname = "%s_%s_qunatile_trend.%s.%s.png"%(keyid,kingdom,shuff_stat,trop_stat)
     # figure out the readable title ...
     the_kingdom = 'Archaea' if kingdom=='arch' else 'Bacteria'
-    the_shuff_stat = 'Shuffled' if shuff_stat=='shuff' else 'Original'
-    the_trop_stat = 'Tr.Op.' if trop_stat=='trop' else ('non-Tr.Op.' if trop_stat=='notrop' else 'All')
+    the_shuff_stat = 'shuffled codons' if shuff_stat=='shuff' else 'original'
+    the_trop_stat = 'CUS' if trop_stat=='trop' else ('non-CUS' if trop_stat=='notrop' else 'All')
     title = "%s %s (%s)"%(the_shuff_stat,the_kingdom,the_trop_stat)
     return (fname,title)
-
-
-# SHUFFLED ...
-# fname,title = get_fname_title('IVYWREL','bact','shuff','notrop')
-# quantile_plotter(cai_stats_quant_noTrOp,IVYWREL_key,fname,title,lims=IVYWREL_lims)
-# fname,title = get_fname_title('R20','bact','shuff','notrop')
-# quantile_plotter(cai_stats_quant_noTrOp,R20_key,fname,title,lims=R20_lims)
-# fname,title = get_fname_title('Akashi','bact','shuff','notrop')
-# quantile_plotter(cai_stats_quant_noTrOp,Akashi_key,fname,title,lims=Akashi_lims)
-# #####################################################################################################
-# fname,title = get_fname_title('IVYWREL','bact','shuff','all')
-# quantile_plotter(cai_stats_quant,IVYWREL_key,fname,title,lims=IVYWREL_lims)
-# fname,title = get_fname_title('R20','bact','shuff','all')
-# quantile_plotter(cai_stats_quant,R20_key,fname,title,lims=R20_lims)
-# fname,title = get_fname_title('Akashi','bact','shuff','all')
-# quantile_plotter(cai_stats_quant,Akashi_key,fname,title,lims=Akashi_lims)
-# #####################################################################################################
-# # TROP ONLY ...
-# fname,title = get_fname_title('IVYWREL','bact','shuff','trop')
-# quantile_plotter(cai_stats_quant_TrOp,IVYWREL_key,fname,title,lims=IVYWREL_lims)
-# fname,title = get_fname_title('R20','bact','shuff','trop')
-# quantile_plotter(cai_stats_quant_TrOp,R20_key,fname,title,lims=R20_lims)
-# fname,title = get_fname_title('Akashi','bact','shuff','trop')
-# quantile_plotter(cai_stats_quant_TrOp,Akashi_key,fname,title,lims=Akashi_lims)
-# #####################################################################################################
-
-
-# ORIGINAL ...
-# fname,title = get_fname_title('IVYWREL','bact','original','notrop')
-# quantile_plotter(original_cai_stats_quant_noTrOp,IVYWREL_key,fname,title,color='red',lims=IVYWREL_lims)
-# fname,title = get_fname_title('R20','bact','original','notrop')
-# quantile_plotter(original_cai_stats_quant_noTrOp,R20_key,fname,title,color='red',lims=R20_lims)
-# fname,title = get_fname_title('Akashi','bact','original','notrop')
-# quantile_plotter(original_cai_stats_quant_noTrOp,Akashi_key,fname,title,color='red',lims=Akashi_lims)
-# #####################################################################################################
-# fname,title = get_fname_title('IVYWREL','bact','original','all')
-# quantile_plotter(original_cai_stats_quant,IVYWREL_key,fname,title,color='red',lims=IVYWREL_lims)
-# fname,title = get_fname_title('R20','bact','original','all')
-# quantile_plotter(original_cai_stats_quant,R20_key,fname,title,color='red',lims=R20_lims)
-# fname,title = get_fname_title('Akashi','bact','original','all')
-# quantile_plotter(original_cai_stats_quant,Akashi_key,fname,title,color='red',lims=Akashi_lims)
-# #####################################################################################################
-# # TROP ONLY ...
-# fname,title = get_fname_title('IVYWREL','bact','original','trop')
-# quantile_plotter(original_cai_stats_quant_TrOp,IVYWREL_key,fname,title,color='red',lims=IVYWREL_lims)
-# fname,title = get_fname_title('R20','bact','original','trop')
-# quantile_plotter(original_cai_stats_quant_TrOp,R20_key,fname,title,color='red',lims=R20_lims)
-# fname,title = get_fname_title('Akashi','bact','original','trop')
-# quantile_plotter(original_cai_stats_quant_TrOp,Akashi_key,fname,title,color='red',lims=Akashi_lims)
-# #####################################################################################################
 
 
 # TROP ONLY ...
@@ -384,38 +390,11 @@ fname,title = get_fname_title('Akashi','bact','original','trop')
 quantile_plotter(original_cai_stats_quant_TrOp,Akashi_key,fname,ax=ax_Akashi,savefig=True,title=title,color='red',lims=Akashi_lims,x_offset=0.05)
 
 
-fname,title = get_fname_title('ProtLen','bact','shuff','trop')
-ax_ProtLen = quantile_plotter(cai_stats_quant_TrOp,ProtLen_key,fname,ax=None,savefig=False,title=title,lims=ProtLen_lims,x_offset=-0.05)
-fname,title = get_fname_title('ProtLen','bact','original','trop')
-quantile_plotter(original_cai_stats_quant_TrOp,ProtLen_key,fname,ax=ax_ProtLen,savefig=True,title=title,color='red',lims=ProtLen_lims,x_offset=0.05)
-
-
-# # TROP ONLY ...
-# fname,title = get_fname_title('IVYWREL','bact','original','trop')
-# quantile_plotter(original_cai_stats_quant_TrOp,IVYWREL_key,fname,ax=ax_IVYWREL,savefig=True,title=title,color='red',lims=IVYWREL_lims)
-# fname,title = get_fname_title('R20','bact','original','trop')
-# quantile_plotter(original_cai_stats_quant_TrOp,R20_key,fname,ax=ax_R20,savefig=True,title=title,color='red',lims=R20_lims)
-# fname,title = get_fname_title('Akashi','bact','original','trop')
-# quantile_plotter(original_cai_stats_quant_TrOp,Akashi_key,fname,ax=ax_Akashi,savefig=True,title=title,color='red',lims=Akashi_lims)
 
 
 
 
 
-# quantile_plotter(dat,kx,fname,ax=None,savefig=False,title='',color='blue',lims=False)
-
-
-
-# # nice looking, however rather misleading box and violin plots here ...
-# viodat = original_cai_stats_quant[[Akashi_key(i) for i in range(the_num_of_quantiles)]]
-# viodat = original_cai_stats_quant[[IVYWREL_key(i) for i in range(the_num_of_quantiles)]]
-# viodat = original_cai_stats_quant[[R20_key(i) for i in range(the_num_of_quantiles)]]
-# viodat = original_cai_stats_quant_TrOp[[Akashi_key(i) for i in range(the_num_of_quantiles)]]
-# ####################
-# plt.clf()
-# sns.boxplot(viodat)
-# sns.violin(viodat)
-# plt.show()
 
 
 

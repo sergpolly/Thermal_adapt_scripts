@@ -10,11 +10,34 @@ from functools import partial
 # for plotting ...
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-font = {'family' : 'sans-serif',
+# font = {'family' : 'sans-serif',
+#         #'weight' : 'bold',
+#         'size'   :9}
+# mpl.rc('font', **font)
+# # data lopading ...
+
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+## for Palatino and other serif fonts use:
+# rc('font',**{'family':'serif','serif':['Palatino']})
+rc('text', usetex=True)
+# #
+#
+mpl.rcParams['text.latex.preamble'] = [
+       r'\usepackage{textcomp}',   # i need upright \micro symbols, but you need...
+       # r'\sisetup{detect-all}',   # ...this to force siunitx to actually use your fonts
+       r'\usepackage{helvet}',    # set the normal font here
+       r'\usepackage{sansmath}',  # load up the sansmath so that math -> helvet
+       r'\sansmath'               # <- tricky! -- gotta actually tell tex to use!
+]
+#
+font = {#'family' : 'sans-serif',
         #'weight' : 'bold',
         'size'   :9}
-mpl.rc('font', **font)
-# data lopading ...
+rc('font', **font)
+# # data loading ...
+
+
 
 root_path = os.path.expanduser('~')
 bact_path = os.path.join(root_path,'GENOMES_BACTER_RELEASE69/genbank')
@@ -124,7 +147,7 @@ def TrOp_hist(ax,cds_grouped,unique_ids,title="",legend=True,xlims=None,ylims=No
     ax.set_title(title)
     ax.set_xlabel('mean organismal CAI')
     if legend:
-        ax.legend(loc='upper left',frameon=False)#,markeredgecolor='none')
+        ax.legend(loc='upper right',frameon=False)#,markeredgecolor='none')
     #
     # set ylims xlims ....
     if xlims is not None:
@@ -158,12 +181,12 @@ gta = lambda idx: get_trop(arch_cai_by_org,idx)
 get_org = lambda dat,idx,uid: dat[dat[uid]==idx]['organism_name'].iloc[0]
 goa = lambda idx: get_org(arch_nohalo,idx,'assembly_accession')
 #
-CAI_hist(ax[0],arch_cai_by_org,arch1,legend=False,xlims=None,ylims=None,title=goa(arch1))
-CAI_hist(ax[1],arch_cai_by_org,arch3,legend=True,xlims=None,ylims=None,title=goa(arch3))
+CAI_hist(ax[1],arch_cai_by_org,arch1,legend=False,xlims=None,ylims=None,title=goa(arch1))
+CAI_hist(ax[0],arch_cai_by_org,arch3,legend=True,xlims=None,ylims=None,title=goa(arch3))
 # CAI_hist(ax[0],arch_cai_by_org,arch1,legend=False,xlims=None,ylims=None,title='non Translationally Optimized')
 # CAI_hist(ax[1],arch_cai_by_org,arch3,legend=True,xlims=None,ylims=None,title='Translationally Optimized')
 # plt.title("%s, CAI median: %.2f, CoV %.3f, t.o. %s"%(idx,local_median,local_sigma/local_mean,str(qL_rib >= qH_all)))
-plt.savefig("SuppFig3.pdf")
+plt.savefig("SuppFig3.png",dpi=300)
 
 
 
@@ -180,7 +203,7 @@ bact_ids = bact['GenomicID']
 TrOp_hist(ax[0],arch_cai_by_org,arch_ids,title="Archaea",legend=True,xlims=None,ylims=None)
 TrOp_hist(ax[1],bact_cai_by_org,bact_ids,title="Bacteria",legend=False,xlims=None,ylims=None)
 #
-plt.savefig("SuppFig4.pdf")
+plt.savefig("SuppFig4.png",dpi=300)
 
 
 

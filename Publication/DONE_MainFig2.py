@@ -49,7 +49,7 @@ def plot_comparison(ax,x,y,xlab='x',ylab='y',xlims=None,ylims=None):
     label_f = lambda r,pval:("linear fit, R=%.3f, "%r) + (r"$p=%.3f$"%pval if pval>=0.001 else r"$p<0.001$")
     fff = np.vectorize(lambda x: a*x + b)
     lin_fit, = ax.plot(x_range,fff(x_range),color='silver',linewidth=1.5,linestyle='-',zorder=100,label=label_f(r,pval))
-    y_eq_x, = ax.plot(x_range,x_range,color='red',linewidth=1.0,linestyle='--',zorder=102)
+    y_eq_x, = ax.plot(x_range,x_range,color='red',linewidth=1.0,linestyle='--',zorder=102, label=r"y=x guide line")
     ###################################################
     ###################################################
     ax.yaxis.set_ticks_position('left')
@@ -58,7 +58,7 @@ def plot_comparison(ax,x,y,xlab='x',ylab='y',xlims=None,ylims=None):
     ###################################################
     ax.set_xlabel(xlab)#,labelpad=1.5)
     ax.set_ylabel(ylab)#,labelpad=0.5)
-    ax.legend(loc='upper left',frameon=False)
+    ax.legend(loc='upper left',frameon=False,handlelength=1.5,handletextpad=0.1)
     # ax.legend((lin_fit,),('linear fit, R=%.3f, p=%.3f'%(r,pval)),loc='best',frameon=False)
     plt.tight_layout(pad=0.4, h_pad=None, w_pad=None)
     ###################################################

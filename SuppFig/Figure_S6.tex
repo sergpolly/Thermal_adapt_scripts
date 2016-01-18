@@ -3,24 +3,57 @@
 \usepackage{graphicx}
 \usepackage[lofdepth,lotdepth]{subfig}
 \usepackage[top=0.8in, bottom=0.8in, left=0.5in, right=0.8in]{geometry}
+\usepackage[percent]{overpic}
 
 \begin{document}
 
-{\bf Figure S6. Unified optimal balance parameter determined from $R_{\mathbf{M}}$ and $R_{\mathbf{T}}$.} Equally weighted dependencies of $R_{\mathbf{M}}$ and $R_{\mathbf{T}}$ on the balance parameter $\mathit{w}$ are combined to determine the unique optimal balance parameter $\mathit{w}_{op}$, explaining both mesophilic and thermophilic data $\mathbf{M}$ and $\mathbf{T}$ equally well.
+{\bf Figure S6. Overall optimal chaperone--adjusted synthesis cost $w^*$ determined from $R_M$ and $R_T$.} Correlation between predicted frequencies of amino acids and observed frequencies in mesophiles $R_M(w)$ and thermophiles $R_T(w)$ are used for analysis.
+We combine two correlations with equal weights $R_M(w)+R_T(w)$ and use this combination as a metric to determine overall optimal value of the parameter $w^*$, explaining both mesophilic and thermophilic data.
+({\bf A}) $w^*=0.05$ calculated for proteome--wide archaeal data,
+({\bf B}) $w^*=0.07$ calculated for proteome--wide bacterial data,
+({\bf C}) $w^*=0.05$ calculated for proteins within the top 10\% CAI from archaea with codon usage selection (CUS),
+({\bf D}) $w^*=0.06$ calculated for proteins within the top 10\% CAI from bacteria with CUS.
+
+% \begin{figure}[h!]
+% 	\centering
+% 	\subfloat[Subfigure 1 list of figures text][Archaeal data]{
+% 		\includegraphics{../Publication/exp_MTAD_all_all_arch_summary_SuppFigure4.pdf}
+% 		\label{fig:subfig1}
+% 	}
+% 	\subfloat[Subfigure 2 list of figures text][Bacterial data]{
+% 		\includegraphics{../Publication/exp_MTAD_all_all_bact_summary_SuppFigure4.pdf}
+% 		\label{fig:subfig2}
+% 	}
+% \end{figure}
 
 
-\begin{figure}[h!]
-	\centering
-	\subfloat[Subfigure 1 list of figures text][Archaeal data]{
-		\includegraphics{../Publication/exp_MTAD_all_all_arch_summary_SuppFigure4.pdf}
-		\label{fig:subfig1}
-	}
-	\subfloat[Subfigure 2 list of figures text][Bacterial data]{
-		\includegraphics{../Publication/exp_MTAD_all_all_bact_summary_SuppFigure4.pdf}
-		\label{fig:subfig2}
-	}
-\end{figure}
 
+\begin{center}
+% \begin{overpic}[grid,tics=20,width=\textwidth]{../Publication/Supp9_quintiles.png}
+\begin{overpic}[width=\textwidth]{../Publication/SuppFigure6.png}
+% \put(32,74){\includegraphics[scale=.3] {busstop.mps}}
+\put(7,95){\LARGE{\bf A}}
+\put(57,95){\LARGE{\bf B}}
+\put(7,45){\LARGE{\bf C}}
+\put(57,45){\LARGE{\bf D}}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\put(35,95){\Large Archaea}
+\put(86,95){\Large Bacteria}
+\put(30,45){\Large CUS Archaea}
+\put(80,45){\Large CUS Bacteria}
+	% \put(32,77){\llap{\scriptsize \colorbox{back}{Windm\"uhle}}}
+% \put(28,63){\small\textcolor{red}{\ding{55}}}
+% \put(17.5,11){\scriptsize\colorbox{back}{{\Pisymbol{ftsy}{65} Fr}}}
+% \put(6.3,13){\colorbox{back}{{\Pisymbol{ftsy}{68}}}}
+% \put(29.8,61.4){\color{blue}\vector(-1,-3){2}}
+% \put(38.6,63){\color{blue}\vector(1,3){2}}
+\end{overpic}
+\end{center}
+
+
+
+
+% ../PublicationSuppFigure6.png
 
 
 \end{document}

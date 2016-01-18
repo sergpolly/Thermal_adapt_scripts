@@ -1,4 +1,4 @@
-import os
+,import os
 import sys
 import pandas as pd
 from Bio import SeqIO
@@ -7,6 +7,31 @@ import matplotlib as mpl
 import scipy.stats as st
 import random as rnd
 import numpy as np
+#
+#
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+## for Palatino and other serif fonts use:
+# rc('font',**{'family':'serif','serif':['Palatino']})
+rc('text', usetex=True)
+# #
+#
+mpl.rcParams['text.latex.preamble'] = [
+       r'\usepackage{textcomp}',   # i need upright \micro symbols, but you need...
+       # r'\sisetup{detect-all}',   # ...this to force siunitx to actually use your fonts
+       r'\usepackage{helvet}',    # set the normal font here
+       r'\usepackage{sansmath}',  # load up the sansmath so that math -> helvet
+       r'\sansmath'               # <- tricky! -- gotta actually tell tex to use!
+]
+#
+font = {#'family' : 'sans-serif',
+        #'weight' : 'bold',
+        'size'   :9}
+rc('font', **font)
+# # data loading ...
+#
+#
+#
 #################################
 # before we proceed to plotting, add the TrOp status calculator for organisms ...
 def get_one_trop(all_cds_grouped,idx):
@@ -34,10 +59,6 @@ from matplotlib.patches import ConnectionPatch
 from matplotlib.patches import Rectangle
 from matplotlib.ticker import NullFormatter
 import scipy.interpolate as interpol
-font = {'family' : 'sans-serif',
-        #'weight' : 'bold',
-        'size'   :9}
-mpl.rc('font', **font)
 ###########################################
 aacids = list('CMFILVWYAGTSNQDEHRKP')
 aa_combinations = ['IVYWREL', 'DEKR', 'AGNQSTHY', 'MPCLVWIF', 'ILVM']
@@ -285,8 +306,8 @@ def figure_level_caps(axis,scatters,coloring_type,color_vlims=None,scnames=None)
     # extract axis ...
     fig,ax,ax_comb,cax = axis
     # some text for x&y axis ...
-    fig.text(0.015,0.5,'composition, %',rotation='vertical',transform=fig.transFigure,fontsize=13,ha='center',va='center')
-    fig.text(0.5,0.01,'Temperature, $^{o}C$',transform=fig.transFigure,fontsize=13,ha='center',va='center')
+    fig.text(0.015,0.5,r'amino acid usage, \%',rotation='vertical',transform=fig.transFigure,fontsize=13,ha='center',va='center')
+    fig.text(0.5,0.01,r'Temperature, \textcelsius',transform=fig.transFigure,fontsize=13,ha='center',va='center')
     #
     #
     if (coloring_type == 'map') and (len(scatters)>1):
@@ -300,7 +321,7 @@ def figure_level_caps(axis,scatters,coloring_type,color_vlims=None,scnames=None)
         left = pos.x0
         cax_bottom = pos.y0
         cax_height = pos.height
-        fig.text(left-0.2, cax_bottom+0.5*cax_height,'GC content, %',transform=fig.transFigure,fontsize=14,ha='left',va='center')
+        fig.text(left-0.2, cax_bottom+0.5*cax_height,r'GC content, \%',transform=fig.transFigure,fontsize=14,ha='left',va='center')
         cbar = fig.colorbar(scatter,cax=cax,orientation='horizontal')
         ticks = 5*np.arange(color_vlims[0]//5,color_vlims[1]//5)+5
         ticklabels = [str(_) for _ in ticks]
@@ -390,13 +411,13 @@ def dq_plot_data(x,y,color,label,xlims,ylims,fig,axScatter,axHistx,axHisty,num_p
     # now determine nice limits by hand:
     # num_points = 20
     xbins = np.linspace(*xlims,num=num_points)
-    ybins = np.linspace(*ylims,num=num_points)
+    ybins   = np.linspace(*ylims,num=num_points)
     #
     axScatter.set_xlim( *xlims )
     axScatter.set_ylim( *ylims )
     #
-    axScatter.set_xlabel('GC',fontsize=14)
-    axScatter.set_ylabel('Temperature',fontsize=14)
+    axScatter.set_xlabel(r'GC content,\%',fontsize=14)
+    axScatter.set_ylabel(r'Temperature,\textcelsius',fontsize=14)
     #
     axHistx.hist(np.asarray(x), bins=xbins,edgecolor='none',facecolor=color, alpha=0.8, log=False, normed=True)
     axHisty.hist(np.asarray(y), bins=ybins,edgecolor='none',facecolor=color, orientation='horizontal',alpha=0.8, log=False, normed=True)
@@ -423,7 +444,7 @@ lims = update_lims(bact_dat['GC'],bact_dat['OptimumTemperature'])
 dq_plot_data(arch_halo_dat['GC'],arch_halo_dat['OptimumTemperature'],'red','Halophiles',*(lims+axes))
 dq_plot_data(arch_nohalo_dat['GC'],arch_nohalo_dat['OptimumTemperature'],'blue','Archaea',*(lims+axes))
 dq_plot_data(bact_dat['GC'],bact_dat['OptimumTemperature'],'green','Bacteria',*(lims+axes))
-plt.savefig("SuppFig1.pdf")
+plt.savefig("SuppFig1.png",dpi=300)
 
 
 
@@ -441,7 +462,7 @@ lims = update_lims(dat_two['GC'],dat_two['OptimumTemperature'])
 #
 dq_plot_data(dat_one['GC'],dat_one['OptimumTemperature'],'red','CUS Bacteria',*(lims+axes))
 dq_plot_data(dat_two['GC'],dat_two['OptimumTemperature'],'blue','Non-CUS Bacteria',*(lims+axes))
-plt.savefig("SuppFig1_bact_trop.pdf")
+plt.savefig("SuppFig1_bact_trop.png",dpi=300)
 
 
 
@@ -459,7 +480,7 @@ lims = update_lims(dat_two['GC'],dat_two['OptimumTemperature'])
 #
 dq_plot_data(dat_one['GC'],dat_one['OptimumTemperature'],'red','CUS Archaea',*(lims+axes))
 dq_plot_data(dat_two['GC'],dat_two['OptimumTemperature'],'blue','Non-CUS Archaea',*(lims+axes))
-plt.savefig("SuppFig1_arch_trop.pdf")
+plt.savefig("SuppFig1_arch_trop.png",dpi=300)
 
 
 
@@ -481,7 +502,7 @@ scatter2 = fill_palette(dat_two,axis,coloring_type='solid',color_vlims=ranges[2]
 # ...
 scnames = list(reversed(['Tr.Op.Bacteria','Non-Tr.Op.Bacteria']))
 figure_level_caps(axis,scatters=[scatter1,scatter2],coloring_type='solid',color_vlims=ranges[2],scnames=scnames)
-plt.savefig('SuppFig2_bact_trop.pdf')
+plt.savefig('SuppFig2_bact_trop.png',dpi=300)
 
 
 
@@ -501,7 +522,7 @@ scatter2 = fill_palette(dat_two,axis,coloring_type='solid',color_vlims=ranges[2]
 # ...
 scnames = list(reversed(['Tr.Op.Archaea','Non-Tr.Op.Archaea']))
 figure_level_caps(axis,scatters=[scatter1,scatter2],coloring_type='solid',color_vlims=ranges[2],scnames=scnames)
-plt.savefig('SuppFig2_arch_trop.pdf')
+plt.savefig('SuppFig2_arch_trop.png',dpi=300)
 
 
 
@@ -516,9 +537,9 @@ axis = aap_get_axes(ranges)
 scatter1 = fill_palette(arch_nohalo_dat,axis,coloring_type='solid',color_vlims=ranges[2],temp='OptimumTemperature',gc='GC',color='green',alpha=0.7)
 scatter2 = fill_palette(arch_halo_dat,axis,coloring_type='solid',color_vlims=ranges[2],color='red',alpha=0.7,fit=False,label=False)
 # ...
-scnames = ['Archaea','Halophilic Archaea']
+scnames = ['Archaea','Halophilic archaea']
 figure_level_caps(axis,scatters=[scatter1,scatter2],coloring_type='solid',color_vlims=ranges[2],scnames=scnames)
-plt.savefig('SuppFig2_halo.pdf')
+plt.savefig('SuppFig2_halo.png',dpi=300)
 
 
 
@@ -529,7 +550,7 @@ axis = aap_get_axes(ranges)
 # only GC lims are needed for "fill_palette" ...
 scatter = fill_palette(bact_dat,axis,coloring_type='map',color_vlims=ranges[2],temp='OptimumTemperature',gc='GC',color='green',alpha=1.0)
 figure_level_caps(axis,scatters=[scatter,],coloring_type='map',color_vlims=ranges[2])
-plt.savefig('SuppFig2_bact.pdf')
+plt.savefig('SuppFig2_bact.png',dpi=300)
 
 
 ###############################################################
@@ -539,7 +560,7 @@ axis = aap_get_axes(ranges)
 # only GC lims are needed for "fill_palette" ...
 scatter = fill_palette(arch_nohalo_dat,axis,coloring_type='map',color_vlims=ranges[2],temp='OptimumTemperature',gc='GC',color='green',alpha=1.0)
 figure_level_caps(axis,scatters=[scatter,],coloring_type='map',color_vlims=ranges[2])
-plt.savefig('SuppFig2_arch.pdf')
+plt.savefig('SuppFig2_arch.png',dpi=300)
 
 
 

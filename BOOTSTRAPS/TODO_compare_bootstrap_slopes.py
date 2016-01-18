@@ -6,15 +6,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 import random as rnd
-import matplotlib as mpl
 aacids  = list("CMFILVWYAGTSNQDEHRKP")
 freq_keys = sorted(aacids)
-# mpl.rcParams['font.family'] = 'sans-serif'
-font = {'family' : 'sans-serif',
+######################################################
+import matplotlib as mpl
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+## for Palatino and other serif fonts use:
+# rc('font',**{'family':'serif','serif':['Palatino']})
+rc('text', usetex=True)
+mpl.rcParams['text.latex.preamble'] = [
+       r'\usepackage{textcomp}',   # i need upright \micro symbols, but you need...
+       # r'\sisetup{detect-all}',   # ...this to force siunitx to actually use your fonts
+       r'\usepackage{helvet}',    # set the normal font here
+       r'\usepackage{sansmath}',  # load up the sansmath so that math -> helvet
+       r'\sansmath'               # <- tricky! -- gotta actually tell tex to use!
+]
+font = {#'family' : 'sans-serif',
         #'weight' : 'bold',
-        'size'   : 8}
-
-mpl.rc('font', **font)
+        'size'   :8}
+rc('font', **font)
+# # data loading ...
 #
 #
 #################################
@@ -22,7 +34,7 @@ def plot_the_hist(dat,ref_point,pval,fname):
 	#######################
 	plt.clf()
 	# fig = plt.gcf()
-	hsize = 4.0
+	hsize = 3.9
 	coeff = 0.75
 	fig = plt.figure(figsize=(hsize,coeff*hsize))
 	heights,bins,patches = plt.hist(dat,bins=50,label='bootstrap corrs.',color='blue',linewidth=0,alpha=0.8)
@@ -35,10 +47,11 @@ def plot_the_hist(dat,ref_point,pval,fname):
 	# plt.title("Archaeal vs Bacterial slopes correlation in bootstrap test: random Tr.Op. assignment")
 	plt.xlabel("correlation")
 	#
-	plt.legend(loc='best',frameon=False,title="P-value:%.3f"%pval)
+	f_title = lambda pval: "p=%.3f"%pval if pval>=0.001 else r"p\textless 0.001"
+	plt.legend(loc='best',frameon=False,title=f_title(pval))
 	plt.tight_layout()
 	#
-	plt.savefig(fname)
+	plt.savefig(fname,dpi=300)
 #################################
 def get_pval(dat,ref_point):
 	# calculate pval:

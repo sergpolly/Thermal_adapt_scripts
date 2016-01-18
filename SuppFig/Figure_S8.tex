@@ -3,12 +3,16 @@
 \usepackage{graphicx}
 \usepackage[lofdepth,lotdepth]{subfig}
 \usepackage[top=0.7in, bottom=0.2in, left=0.3in, right=0.3in]{geometry}
+\renewcommand{\thesubfigure}{\Alph{subfigure}}
+\usepackage[percent]{overpic}
+
 
 \begin{document}
 
 
 
-{\bf Figure S8. Synthesis costs negatively correlated with CAI} Proteins of each organism are divided into 5 quantiles according to their CAI rank and amino acid composition is averaged within each group, so that statistically averaged trend with expression level (CAI) can be conveniently analyzed. (A) archaeal and (B) bacterial trends are presented along with a random realization of the codon reshuffling procedure to emphasize statistical significance of the original trend.
+{\bf Figure S8. Average cost of amino acid biosynthesis is negatively correlated with CAI.} Proteins in each organism are grouped into 5 quantiles according to their CAI rank and amino acid composition is averaged within each group. Trends of average biosynthesis costs  with expression level (CAI) are analyzed. Both archaeal ({\bf A}) and bacterial ({\bf B}) trends (red) demonstrate significant negative correlation, in accordance with earlier research by Akashi and Gojobori (see main text for details). Codon reshuffling distrupts protein--level CAI, while keepign genome-wide codon usage and GC intact. Using codon reshuffling we generated a control trend of biosynthesis cost with CAI that demonstrates no significant correlation and thus indicated that the trend observed for original data is not accidental. Error bars represent the 30\% and 70\% percentiles of the underlying distrbutions (data not shown).
+
 
 % {\bf $R_T$ subtle correlation with CAI} Proteins of each organism are divided into 5 quantiles according to their CAI rank and amino acid composition is averaged within each group, so that statistically averaged trend with expression level (CAI) can be conveniently analyzed. $R_T$ is a Pearson correlation coefficient between the average amino acid composition in each quantile and the thermophilic composition of amino acids, calculated used OGT>50C criteria. (A) archaeal and (B) bacterial trends are presented along with a random realization of the codon reshuffling procedure to emphasize statistical significance of the original trend (or lack of thereof). P-value is calculated using XXX number of random reshufflings. [CHECK ...]
 
@@ -16,28 +20,45 @@
 % IVYWREL metric is averaged for each quantile and (A) archaeal and (B) bacterial trends are presented along with a random realization of the codon reshuffling procedure. Original result can be expected by the random and can be explained using specificity of IVYWREL and the genetic code link. [CHECK ...]
 
 
-\begin{figure}[h!]
-	\centering
-	\subfloat[Subfigure 1 list of figures text][Archaeal data]{
-		\includegraphics[width=0.5\textwidth]{../ArchNew/BOOTSTRAP/Akashi_arch_qunatile_trend_original_trop.png}
-		\label{fig:subfig1}
-	}
-	\subfloat[Subfigure 2 list of figures text][Bacterial data]{
-		\includegraphics[width=0.5\textwidth]{../BOOTSTRAPS/Akashi_bact_qunatile_trend_original_trop.png}
-		\label{fig:subfig2}
-	}
-\end{figure}
-
-% \begin{figure}[b!]
+% \begin{figure}[h!]
 % 	\centering
-% 	\includegraphics[width=\textwidth]{../ArchNew/BOOTSTRAP/Akashi_arch_qunatile_trend.original.trop.png}
+% 	\subfloat[Subfigure 1 list of figures text][Archaeal data]{
+% 		\includegraphics[width=0.5\textwidth]{../ArchNew/BOOTSTRAP/Akashi_arch_qunatile_trend_original_trop.png}
+% 		\label{fig:subfig1}
+% 	}
+% 	\subfloat[Subfigure 2 list of figures text][Bacterial data]{
+% 		\includegraphics[width=0.5\textwidth]{../BOOTSTRAPS/Akashi_bact_qunatile_trend_original_trop.png}
+% 		\label{fig:subfig2}
+% 	}
 % \end{figure}
 
 
-% \begin{figure}[b!]
+
+
+
+\begin{center}
+% \begin{overpic}[grid,tics=20,width=\textwidth]{../Publication/Supp9_quintiles.png}
+\begin{overpic}[width=\textwidth]{../Publication/Supp9_quintiles.png}
+% \put(32,74){\includegraphics[scale=.3] {busstop.mps}}
+\put(9,38){\LARGE{\bf A}}
+\put(59,38){\LARGE{\bf B}}
+	% \put(32,77){\llap{\scriptsize \colorbox{back}{Windm\"uhle}}}
+% \put(28,63){\small\textcolor{red}{\ding{55}}}
+% \put(17.5,11){\scriptsize\colorbox{back}{{\Pisymbol{ftsy}{65} Fr}}}
+% \put(6.3,13){\colorbox{back}{{\Pisymbol{ftsy}{68}}}}
+% \put(29.8,61.4){\color{blue}\vector(-1,-3){2}}
+% \put(38.6,63){\color{blue}\vector(1,3){2}}
+\end{overpic}
+\end{center}
+
+
+% \begin{figure}[h!]
 % 	\centering
-% 	\includegraphics[width=\textwidth]{../BOOTSTRAPS/Akashi_bact_qunatile_trend.original.trop.png}
+% 	\includegraphics[width=\textwidth]{../Publication/Supp8_quintiles.png}
+% 	\label{fig:subfig1}
 % \end{figure}
+
+
 
 
 \end{document}

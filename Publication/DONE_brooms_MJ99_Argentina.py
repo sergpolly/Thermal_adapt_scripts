@@ -608,7 +608,7 @@ ax_down.yaxis.set_major_locator( MaxNLocator(nbins = 7) )
 ax_up.axvspan(Top_M, Top_T, facecolor='yellow', alpha=0.5)
 ax_down.axvspan(Top_M, Top_T, facecolor='yellow', alpha=0.5)
 #
-plt.savefig(os.path.join(results_path,'%s_Figure_4.pdf'%exp_fname.replace('.','_')))
+plt.savefig(os.path.join(results_path,'%s_Figure_4.png'%exp_fname.replace('.','_')),dpi=300)
 
 
 
@@ -653,8 +653,8 @@ ax.legend(loc='best',numpoints=1,frameon=False,handlelength=0.8,handletextpad=0.
 
 ax.xaxis.set_tick_params(labeltop='off')
 
-ax.set_xlabel('$w$, balance parameter',labelpad = 2)
-ax.set_ylabel('$R$, correlation',rotation='vertical',labelpad = 2)
+ax.set_xlabel('$w$, adjustment parameter',labelpad = 2)
+ax.set_ylabel('$R$, correlation--based metric',rotation='vertical',labelpad = 2)
 
 ax_bottom.yaxis.label.set_size(9)
 ax_top.yaxis.label.set_size(9)
@@ -667,7 +667,7 @@ ax.add_artist(ConnectionPatch(xyA=[wopMT,RMT_max['RMT_max'].max()], xyB=[wopMT,R
 
 ax.text(wopM-0.002,ax.get_ylim()[0]+0.02,'$w_{M}$',fontsize=11,verticalalignment='bottom',horizontalalignment='right',color="blue")
 ax.text(wopT+0.002,ax.get_ylim()[0]+0.02,'$w_{T}$',fontsize=11,verticalalignment='bottom',horizontalalignment='left',color="red")
-ax.text(wopMT-0.002,RMT_max.RM_max.max()+0.02,'$w_{op}$',fontsize=11,verticalalignment='bottom',horizontalalignment='right',color="black")
+ax.text(wopMT-0.002,RMT_max.RM_max.max()+0.02,'$w^{*}$',fontsize=11,verticalalignment='bottom',horizontalalignment='right',color="black")
 
 
 # ax_bottom.yaxis.set_major_locator( MaxNLocator(nbins = 7) )
@@ -679,7 +679,7 @@ ax.text(wopMT-0.002,RMT_max.RM_max.max()+0.02,'$w_{op}$',fontsize=11,verticalali
 # ax_bottom.text(T_M,ax_bottom.get_ylim()[0],'$T_M$',fontsize=11,verticalalignment='bottom',horizontalalignment='right',color="#046ABE")
 # ax_bottom.text(T_T,ax_bottom.get_ylim()[0],'$T_T$',fontsize=11,verticalalignment='bottom',horizontalalignment='right',color="#F71231")
 
-plt.savefig(os.path.join(results_path,'%s_SuppFigure4.pdf'%exp_fname))
+plt.savefig(os.path.join(results_path,'%s_SuppFigure4.png'%exp_fname),dpi=300)
 
 
 
@@ -836,7 +836,7 @@ leg = inset_right.legend(loc='upper left',numpoints=1, bbox_to_anchor=(0.99, 1.0
 # # ax2.text(-0.15, 1.15, 'B', transform=ax2.transAxes, fontsize=10, weight='bold', va='top', color='black')
 ###########################################
 ###########################################
-fig.savefig(os.path.join(results_path,"Figure_3.pdf"))
+fig.savefig(os.path.join(results_path,"Figure_3.png"),dpi=300)
 ###########################################
 ###########################################
 
@@ -888,7 +888,8 @@ exp_D_range = np.linspace(exp_D.min()*1.01,exp_D.max()*1.01)
 ax.plot(exp_D_range,a*exp_D_range+b,color='silver',linewidth=1.5,linestyle='-',zorder=100,label=r'linear fit: R=%.2f, $p=%.3f$'%(r,pval))
 # ax.plot(exp_D_range,exp_D_range,color='red',linewidth=1.0,linestyle='--',zorder=102)
 # ax.set_title("sim_D = a*exp_D+b, a=%.4f, b=%.4f, r=%.2f"%(a,b,r))
-ax.legend(loc='upper left',bbox_to_anchor=(0.01,0.9),frameon=False)
+ax.legend(loc='upper left',frameon=False,handlelength=1.5,handletextpad=0.1)
+# ax.legend(loc='upper left',bbox_to_anchor=(0.,0.9),frameon=False,handlelength=1.5,handletextpad=0.1)
 # ax.legend(loc='best',frameon=False)
 ax.set_xlabel(slopes_label)
 ax.set_ylabel("simulated slopes, 1/p.u.")
@@ -909,13 +910,16 @@ ax.yaxis.set_major_locator( MaxNLocator(nbins = 6) )
 ax.tick_params(axis='x',which='both',top='off',bottom='on',pad=3)
 ax.tick_params(axis='y',which='both',left='on',right='off',pad=3)
 #
-# ax.set_xlim((-0.025,0.03))
-# ax.set_ylim((-0.04,0.081))
-ymax,ymin = ax.get_ylim()
-xmax,xmin = ax.get_xlim()
-ax.plot([0,0],[-0.1*(ymax-ymin),0],color='blue',linewidth=1.0,linestyle='-',zorder=104)
-ax.plot([-0.1*(xmax-xmin),0],[0,0],color='blue',linewidth=1.0,linestyle='-',zorder=104)
-#
+# # ax.set_xlim((-0.025,0.03))
+# # ax.set_ylim((-0.04,0.081))
+ymin,ymax = sim_D.min(),sim_D.max()
+y_span = ymax-ymin
+ax.set_ylim((ymin-0.1*y_span,ymax+0.3*y_span))
+# ymax,ymin = ax.get_ylim()
+# xmax,xmin = ax.get_xlim()
+# ax.plot([0,0],[-0.1*(ymax-ymin),0],color='blue',linewidth=1.0,linestyle='-',zorder=104)
+# ax.plot([-0.1*(xmax-xmin),0],[0,0],color='blue',linewidth=1.0,linestyle='-',zorder=104)
+# #
 # plt.legend(loc='best')
 fig.savefig(os.path.join(results_path,"%s_Slopes_sim_vs_exp_protbact.png"%exp_fname),dpi=300)
 
@@ -1017,7 +1021,7 @@ ax_right.set_xlim((0.4,1.7))
 ax_right.set_ylim((25,230))
 # plt.tight_layout()
 # ax_right.set_title("Akashi_proteome_cost_mod%d_fft%s.ghpcc.png"%(mod,fft))
-fig.savefig(os.path.join(results_path,"%s_Fig7_costs.pdf"%exp_fname))
+fig.savefig(os.path.join(results_path,"%s_Fig7_costs.png"%exp_fname),dpi=300)
 
 
 

@@ -260,7 +260,7 @@ def quantile_plotter(dat,kx,fname,ax=None,savefig=False,title='',color='blue',li
     ax.set_xticks(range(1,the_num_of_quantiles+1))
     ax.set_xticklabels([str(_) for _ in range(1,the_num_of_quantiles+1)])
     ax.set_ylabel(ylabel)
-    ax.set_xlabel('CAI quantile')
+    ax.set_xlabel('CAI quintile')
     #
     ax.yaxis.set_ticks_position('left')
     ax.xaxis.set_ticks_position('bottom')
@@ -271,7 +271,7 @@ def quantile_plotter(dat,kx,fname,ax=None,savefig=False,title='',color='blue',li
     x_toplot_regress = np.linspace(0.5,the_num_of_quantiles+0.5,num=2)
     f_label = lambda r,pval: "linear fit, R=%.2f "%r + (r"$p=%.3f$"%pval if pval>=0.001 else r"$p<0.001$")
     # ax.plot(x_toplot,a*x_toplot+b,'-',color=color,lw=2,label=f_label(r,pval))
-    ax.plot(x_toplot_regress,a*x_toplot_regress+b,'--',color=color,lw=0.8,alpha=0.8,label="guide line")
+    ax.plot(x_toplot_regress,a*x_toplot_regress+b,'--',color=color,lw=0.8,alpha=0.8,label=f_label(r,pval))
     ######################
     # # ...
     # if title:

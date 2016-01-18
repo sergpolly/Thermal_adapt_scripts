@@ -15,12 +15,29 @@ from matplotlib.patches import ConnectionPatch
 from matplotlib.patches import Rectangle
 
 import scipy.interpolate as interpol
-
-font = {'family' : 'sans-serif',
+#
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+## for Palatino and other serif fonts use:
+# rc('font',**{'family':'serif','serif':['Palatino']})
+rc('text', usetex=True)
+# #
+#
+mpl.rcParams['text.latex.preamble'] = [
+       r'\usepackage{textcomp}',   # i need upright \micro symbols, but you need...
+       # r'\sisetup{detect-all}',   # ...this to force siunitx to actually use your fonts
+       r'\usepackage{helvet}',    # set the normal font here
+       r'\usepackage{sansmath}',  # load up the sansmath so that math -> helvet
+       r'\sansmath'               # <- tricky! -- gotta actually tell tex to use!
+]
+#
+#
+font = {#'family' : 'sans-serif',
         #'weight' : 'bold',
-        'size'   :8.5}
+        'size'   :9}
+rc('font', **font)
+# # data loading ...
 
-mpl.rc('font', **font)
 
 # constants ...
 # ALPHABET=20
@@ -177,6 +194,10 @@ for wcf,df_w in data_sorted_D.groupby('W_coeff'):
     if len(corrs_w)!= 100:
         print "something went wrong: number of shuffles isn't 100!"
         sys.exit(1)
+    # get p value ...
+    false_cases_num = sum(1 for cw in corrs_w[1:] if cw>corrs_w[0])
+    pvalue = false_cases_num*1.0/len(corrs_w)
+    #
     ################
     # do plotting ...
     ################
@@ -185,15 +206,16 @@ for wcf,df_w in data_sorted_D.groupby('W_coeff'):
         ax_right.hist(corrs_w, bins=bins,ec='none',normed=False, label='shuffled')
         width = (rmax-rmin)/(num-1)
         wt_bin_num = int((corrs_w[0]-rmin)/width)
-        ax_right.bar([wt_bin_num*width+rmin,],[1.0,],width=width,color='red',edgecolor='None',label='wild type')
-        # ax_right.bar([corrs_w[0]-0.5*width,],[1.0,],width=width,color='red',edgecolor='None',label='wild type')
+        ax_right.bar([wt_bin_num*width+rmin,],[1.0,],width=width,color='red',edgecolor='None',label='predicted')
+        # ax_right.bar([corrs_w[0]-0.5*width,],[1.0,],width=width,color='red',edgecolor='None',label='predicted')
         ax_right.set_xlim((rmin,rmax))
         ax_right.yaxis.set_ticks_position('left')
         ax_right.xaxis.set_ticks_position('bottom')
-        ax_right.set_xlabel("$R_{D}$, slopes correlation")
-        leg_right = ax_right.legend(loc='best',frameon=False)
+        ax_right.set_xlabel(r"$R_D$, slopes correlation")
+        f_title = lambda pval: (r"p=%.3f"%pval) if (pval>=0.001) else r"p\textless0.001"
+        leg_right = ax_right.legend(loc='upper right',frameon=False, title=f_title(pvalue))
         # ax_right.set_title('$w$=%.2f'%wcf)
-        ax_right.text(0.13,0.87,'($w$=%.2f)'%wcf,transform=ax_right.transAxes)
+        # ax_right.text(0.1,0.87,r'$w=%.2f$'%wcf,transform=ax_right.transAxes)
         #
         for legend_item in leg_right.get_patches():
             legend_item.set_edgecolor('none')
@@ -211,6 +233,10 @@ for wcf,df in data_sorted_A.groupby('W_coeff'):
     # data_shuff_T_AA = data_shuff_T[:20]
     cors = data_shuff_T.convert_objects(convert_numeric=True).corrwith(exp_A)
     ##################
+    # get p value ...
+    false_cases_num = sum(1 for cw in cors.values[1:] if cw>cors.values[0])
+    pvalue = false_cases_num*1.0/len(cors.values)
+    #
     ##################
     # print wcf
     if (cors.shape[0]>1)and(wcf==0.06):
@@ -222,10 +248,11 @@ for wcf,df in data_sorted_A.groupby('W_coeff'):
         #
         width = (rmax-rmin)/(num-1)
         wt_bin_num = int((cors.values[0]-rmin)/width)
-        ax_left.bar([wt_bin_num*width+rmin,],[1.0,],width=width,color='red',edgecolor='None',label='wild type')
-        leg_left = ax_left.legend(loc='best',frameon=False)
-        ax_left.set_xlabel("$R_{A}$, composition correlation")
-        ax_left.text(0.13,0.87,'($w$=%.2f)'%wcf,transform=ax_left.transAxes)
+        ax_left.bar([wt_bin_num*width+rmin,],[1.0,],width=width,color='red',edgecolor='None',label='predicted')
+        f_title = lambda pval: (r"p=%.3f"%pval) if (pval>=0.001) else r"p\textless0.001"
+        leg_left = ax_left.legend(loc='upper right',frameon=False,title=f_title(pvalue))
+        ax_left.set_xlabel(r"$R_A$, composition correlation")
+        # ax_left.text(0.1,0.87,r'$w=%.2f$'%wcf,transform=ax_left.transAxes)
         #
         # set the same y limits ...
         counts_max_right = ax_right.get_ylim()[1]
@@ -246,8 +273,8 @@ for wcf,df in data_sorted_A.groupby('W_coeff'):
         #
         #
         #
-        ax_left.text(0.05,0.87,'A',fontweight='bold',fontsize=18,transform=ax_left.transAxes)
-        ax_right.text(0.05,0.87,'B',fontweight='bold',fontsize=18,transform=ax_right.transAxes)
+        # ax_left.text(0.05,0.87,'A',fontweight='bold',fontsize=18,transform=ax_left.transAxes)
+        # ax_right.text(0.05,0.87,'B',fontweight='bold',fontsize=18,transform=ax_right.transAxes)
         #
         #
         #
@@ -264,7 +291,7 @@ for wcf,df in data_sorted_A.groupby('W_coeff'):
         pass
 
 
-fig.savefig(os.path.join(results_path,'%s_MainFig6.pdf'%exp_fname))
+fig.savefig(os.path.join(results_path,'%s_MainFig6.png'%exp_fname),dpi=300)
 
 
 ##############################
@@ -319,8 +346,8 @@ for shuff in shuffs:
 #
 ax_left.set_ylim((-1,1))
 ax_left.set_xlim((-0.005,0.125))
-ax_left.set_ylabel('$R_{A}$, correlation coefficient')
-ax_left.set_xlabel('$w$, balance parameter')
+ax_left.set_ylabel(r'$R_A$, correlation coefficient')
+ax_left.set_xlabel(r'$w$, cost adjustment parameter')
 #
 #
 #
@@ -332,7 +359,7 @@ bins = pd.np.arange(0,0.14,0.02)-0.01
 ax_right.hist(ra_wcf_df.apply(lambda x: x.argmax()),bins=bins,edgecolor='deepskyblue',color='dodgerblue')
 ax_right.set_xlim((bins[0],bins[-1]))
 ax_right.set_ylabel('histogram counts')
-ax_right.set_xlabel('$w_{op}$, balance parameter')
+ax_right.set_xlabel(r'$w^*$, optimal parameter')
 
 ax_right.set_ylim((0,43))
 ax_right.yaxis.set_major_locator( MaxNLocator(nbins = 5) )
@@ -343,7 +370,7 @@ cmap = mpl.cm.hot_r
 cbar = mpl.colorbar.ColorbarBase(cax, cmap=mpl.cm.hot_r, norm=col_norm, boundaries = [0,0.02,0.04,0.06,0.08,0.1,0.12,0.14],orientation='horizontal')
 cbar.set_ticks(pd.np.asarray([0.0,0.02,0.04,0.06,0.08,0.1,0.12])+0.01)
 cbar.set_ticklabels(['0.0','0.02','0.04','0.06','0.08','0.1','0.12'])
-cbar.set_label('$w_{op}$, balance parameter',labelpad=1)
+cbar.set_label(r'$w^*$, optimal parameter',labelpad=1)
 # cbar.set_clim(vmin=0.02,vmax=0.12)
 # ax_right.yaxis.set_tick_params(labelleft='off')
 # ax_left.yaxis.set_tick_params(labelright='off')
@@ -357,11 +384,11 @@ ax_right.tick_params(axis='x',which='both',top='off',bottom='on')
 ax_right.tick_params(axis='y',which='both',right='off',left='on')
 
 
-ax_left.text(0.031,0.925,'A',transform=ax_left.transAxes,fontsize=14,fontweight='bold')
-ax_right.text(0.031,0.925,'B',transform=ax_right.transAxes,fontsize=14,fontweight='bold')
+# ax_left.text(0.031,0.925,'A',transform=ax_left.transAxes,fontsize=14,fontweight='bold')
+# ax_right.text(0.031,0.925,'B',transform=ax_right.transAxes,fontsize=14,fontweight='bold')
 
 
-fig.savefig(os.path.join(results_path,'%s_SuppFig3.pdf'%exp_fname))
+fig.savefig(os.path.join(results_path,'%s_SuppFig3.png'%exp_fname),dpi=300)
 
 
 
@@ -433,7 +460,7 @@ fig.savefig(os.path.join(results_path,'%s_SuppFig3.pdf'%exp_fname))
 #         #
 #         width = (rmax-rmin)/(num-1)
 #         wt_bin_num = int((cors.values[0]-rmin)/width)
-#         ax_left.bar([wt_bin_num*width+rmin,],[1.0,],width=width,color='red',edgecolor='None',label='wild type')
+#         ax_left.bar([wt_bin_num*width+rmin,],[1.0,],width=width,color='red',edgecolor='None',label='predicted')
 #         leg_left = ax_left.legend(loc='best',frameon=False)
 #         ax_left.set_xlabel("$R_{A}$, composition correlation")
 #         ax_left.text(0.13,0.87,'($w$=%.2f)'%wcf,transform=ax_left.transAxes)

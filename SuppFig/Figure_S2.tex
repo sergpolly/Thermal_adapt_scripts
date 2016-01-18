@@ -1,32 +1,61 @@
 \documentclass{report}
 
 \usepackage{graphicx}
-\usepackage[top=0.2in, bottom=0.2in, left=0.5in, right=0.2in]{geometry}
+\usepackage[top=0.2in, bottom=0.2in, left=0.3in, right=0.3in]{geometry}
+
+% textcomp package and marvosym package for additional characters
+\usepackage{textcomp,marvosym}
+
+\usepackage[percent]{overpic}
+\newcommand{\ARCHBACTERTOTAL}{683}
+\newcommand{\ARCH}{140}
+\newcommand{\BACT}{543}
+\newcommand{\HALO}{83}
 
 \begin{document}
 
-{\bf Figure S2. Palette of 20 amino acids frequency trends with temperature.} Proteome-wide average frequency of each amino acid is calculated for every organism and plotted against the OGT of corresponding organism {\bf(A)} for archaea, {\bf(B)} for bacteria. Each dot is color-coded by the genome-wide GC content of the genome. Amino acid combinations IVYWREL, DEKR(charged), LVI...(hydrophobic), G...(hydrophilic), and ILVM are presented on the bottom row. Pearson correlation coefficients are calculated for each box.  {\bf(C)} Shows how extreme halophiles stand out from observed archaeal adaptation trends.
+{\bf Figure S2. Temperature trends of all 20 amino acids in \ARCHBACTERTOTAL\ prokaryotic genomes.} Proteome average frequency of each amino acid is calculated for every organism and plotted against the optimal growth temperature (OGT) of corresponding organism. Plots are presented separately for \ARCH\ archaea (without halophiles) ({\bf A}) and \BACT\ bacteria ({\bf B}). Each dot is color--coded according to the genome--wide GC content of an organism. Amino acid combinations \texttt{IVYWREL}, \texttt{DEKR} (charged), \texttt{MPCLVWIF} (hydrophobic), \texttt{AGNQSTHY} (hydrophilic), and \texttt{ILVM} are presented in the bottom row of each plot. Linear regression analysis is performed for every trend, Pearson correlation coefficient $R$ and significance (*** if p\textless0.001, ** if p\textless0.05, and * otherwise) are reported. (C) We excluded \HALO\ halophiles from the analysis because their amino acid frequencies stand out from observed archaeal adaptation trends.
 
 
-\begin{figure}[b!]
-	\centering
-	% \includegraphics[scale=0.99]{../Publication/SuppFig1_arch_trop.pdf}
-	\includegraphics{../Publication/SuppFig2_arch.pdf}
-\end{figure}
+% \begin{figure}[b!]
+% 	\centering
+% 	\includegraphics{../Publication/SuppFig2_arch.pdf}
+% \end{figure}
+\begin{center}
+\begin{overpic}[width=0.9\textwidth]{../Publication/SuppFig2_arch.png}
+\put(-3,95){\huge{(A)}}
+\put(5,24){\huge{Archaea}}
+\end{overpic}
+\end{center}
 
 
-\begin{figure}[b!]
-	\centering
-	% \includegraphics[scale=0.99]{../Publication/SuppFig1_arch_trop.pdf}
-	\includegraphics{../Publication/SuppFig2_bact.pdf}
-\end{figure}
+
+% \begin{figure}[b!]
+% 	\centering
+% 	\includegraphics{../Publication/SuppFig2_bact.png}
+% \end{figure}
+\begin{center}
+\begin{overpic}[width=0.9\textwidth]{../Publication/SuppFig2_bact.png}
+\put(-3,95){\huge{(B)}}
+\put(5,24){\huge{Bacteria}}
+\end{overpic}
+\end{center}
 
 
-\begin{figure}[b!]
-	\centering
-	% \includegraphics[scale=0.99]{../Publication/SuppFig1_arch_trop.pdf}
-	\includegraphics{../Publication/SuppFig2_halo.pdf}
-\end{figure}
+% \begin{figure}[b!]
+% 	\centering
+% 	\includegraphics{../Publication/SuppFig2_halo.png}
+% \end{figure}
+\begin{center}
+\begin{overpic}[width=0.9\textwidth]{../Publication/SuppFig2_halo.png}
+\put(-3,95){\huge{(C)}}
+\end{overpic}
+\end{center}
+
+
+
+
+
 
 
 \end{document}

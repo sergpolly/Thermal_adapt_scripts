@@ -1,18 +1,74 @@
 \documentclass{report}
-
 \usepackage{graphicx}
 \usepackage[top=0.8in, bottom=0.8in, left=0.5in, right=0.8in]{geometry}
+\usepackage[percent]{overpic}
 
 \begin{document}
 
-{\bf Figure S5. Simulated frequencies of amino acids compared with the naturally evolved ones for archaea.} Pearson correlation coefficient is used to compare simulated frequencies with averaged amino acid frequencies for mesophiles, $R_{\mathbf{M}}$, and thermophiles, $R_{\mathbf{T}}$. Multiple temperature profiles for the mesophilic correlation $R_{\mathbf{M}}$ (a) and thermophilic correlation $R_{\mathbf{T}}$ (c), are plotted for a set of trade--off paramteres $w$ using proteome--wide archaea data. Correlation profiles yielding overall highest $R_{\mathbf{M}}$ ($w=0.05$) and $R_{\mathbf{T}}$ ($w=0.06$) are depicted with blue and red correspondingly, along with the dashed guiding--lines for the optimal temperatures correspondingly $T^*_{\mathbf{M}}=1.0$ p.u.  and $T^*_{\mathbf{T}}=1.4$ p.u. Simulations are also compared with the average amino acid composition (b), $R_{\mathbf{A}}$, and with the slopes of amino acid temperature trends (d), $R_{\mathbf{D}}$. Correlation profiles corresponding to the overall optimal trade--off parameter $w^*=0.05$ are plotted in blue, and the unified optimal temperature range $1.0=T^**_{\mathbf{M}}<T<T^**_{\mathbf{T}}=1.5$ is highlighted in yellow. Optimal temperature range cover highest $R_{\mathbf{A}}$ and $R_{\mathbf{D}}$ values.
+% {\bf Figure S5. Simulated frequencies of amino acids compared with the naturally evolved ones for archaea.} Pearson correlation coefficient is used to compare simulated frequencies with averaged amino acid frequencies for mesophiles, $R_{\mathbf{M}}$, and thermophiles, $R_{\mathbf{T}}$. Multiple temperature profiles for the mesophilic correlation $R_{\mathbf{M}}$ (a) and thermophilic correlation $R_{\mathbf{T}}$ (c), are plotted for a set of trade--off paramteres $w$ using proteome--wide archaea data. Correlation profiles yielding overall highest $R_{\mathbf{M}}$ ($w=0.05$) and $R_{\mathbf{T}}$ ($w=0.06$) are depicted with blue and red correspondingly, along with the dashed guiding--lines for the optimal temperatures correspondingly $T^*_{\mathbf{M}}=1.0$ p.u.  and $T^*_{\mathbf{T}}=1.4$ p.u. Simulations are also compared with the average amino acid composition (b), $R_{\mathbf{A}}$, and with the slopes of amino acid temperature trends (d), $R_{\mathbf{D}}$. Correlation profiles corresponding to the overall optimal trade--off parameter $w^*=0.05$ are plotted in blue, and the unified optimal temperature range $1.0=T^{**}_{\mathbf{M}}<T<T^{**}_{\mathbf{T}}=1.5$ is highlighted in yellow. Optimal temperature range cover highest $R_{\mathbf{A}}$ and $R_{\mathbf{D}}$ values.
 
 
-\begin{figure}[h!]
-	\centering
-	\includegraphics{../Publication/exp_MTAD_cai_trop_arch_summary_Figure_4.pdf}
-\end{figure}
+{\bf Figure S5. Simulated frequencies of amino acids compared with the naturally evolved ones.} 
+Pearson correlation coefficient between simulated and observed frequencies in mesophiles $R_M(w,T)$ and thermophiles $R_T(w,T)$ plotted as a function of simulated temperature $T$ and chaperone--adjusted synthesis cost $w$.
 
+({\bf I}) Observed proteome--wide frequencies of archaea were used for comparison: ({\bf A}) correlations for thermophilic archaea $R_T(w,T)$ and ({\bf C}) for mesophilic archaea $R_M(w,T)$ plotted in a temperature range $0.4\leq T\leq1.7$ for a set of $w=0.0,\dots,0.15$. Best correlation between simulated and observed data is achieved at $w_T=0.06$, $T_T=1.4$ (red) and $w_M=0.05$, $T_M=1$ (blue) correspondingly. ({\bf B}) Simulated frequencies are also compared with the data for combination of mesophilic and thermophilic species $R_A = R_{M\cup T}$. ({\bf D}) Correlation $R_D(w,T)$ between observed trends of thermal adaptation and local slopes $df_{model}/dT$ derived from simulations plotted as a function of $w$ and $T$. Overall optimal chaperone-adjusted synthesis cost is $w^*=0.05$ (blue), and optimal temperature range is $1.0=T^*_M\leq T\leq T^*_T=1.5$ (shaded yellow). Optimal $T$--range substantially covers highest values of $R_A(w^*,T)$ and $R_D(w^*,T)$.
+
+({\bf II}) Observed frequencies derived from predicted highly expressed proteins (withit top 10\% of CAI) from archaea with codon usage selection (CUS) and used for comparison: best correlation is achieved at $w_T=0.06$, $T_T=1.4$ (red) and $w_M=0.05$, $T_T=1$ (blue) for thermophiles ({\bf A}) and mesophiles ({\bf C}) correspondingly. Overall optimal adjustment parameter is $w^*=0.05$ (blue), and optimal temperature range is $0.9=T^*_M\leq T\leq T^*_T=1.4$ (shaded yellow).
+
+({\bf III}) Observed frequencies derived from predicted highly expressed proteins (withit top 10\% of CAI) from bacteria with codon usage selection (CUS) and used for comparison: best correlation is achieved at $w_T=0.06$, $T_T=1.1$ (red) and $w_M=0.05$, $T_M=0.9$ (blue) for thermophiles ({\bf A}) and mesophiles ({\bf C}) correspondingly. Overall optimal adjustment parameter is $w^*=0.05$ (blue), and optimal temperature range is $0.9=T^*_M\leq T\leq T^*_T=1.4$ (shaded yellow).
+
+
+% \begin{figure}[h!]
+% 	\centering
+% 	\includegraphics{../Publication/exp_MTAD_cai_trop_arch_summary_Figure_4.pdf}
+% \end{figure}
+
+
+\begin{center}
+\begin{overpic}[width=\textwidth]{../Publication/exp_MTAD_all_all_arch_summary_Figure_4.png}
+\put(0,83){\huge{\bf(I) Archaea}}
+%
+\put(10,78.5){\LARGE{\bf A}}
+\put(59,78.5){\LARGE{\bf B}}
+\put(10,40){\LARGE{\bf C}}
+\put(59,40){\LARGE{\bf D}}
+\end{overpic}
+\end{center}
+
+
+
+
+\begin{center}
+\begin{overpic}[width=\textwidth]{../Publication/exp_MTAD_cai_trop_arch_summary_Figure_4.png}
+\put(-2,84){\huge{\bf(II) CUS Archaea}}
+%
+\put(10,78.5){\LARGE{\bf A}}
+\put(59,78.5){\LARGE{\bf B}}
+\put(10,40){\LARGE{\bf C}}
+\put(59,40){\LARGE{\bf D}}
+\end{overpic}
+\end{center}
+
+
+
+\begin{center}
+\begin{overpic}[width=\textwidth]{../Publication/exp_MTAD_cai_trop_bact_summary_Figure_4.png}
+\put(-2,84){\huge{\bf(III) CUS Bacteria}}
+%
+\put(10,78.5){\LARGE{\bf A}}
+\put(59,78.5){\LARGE{\bf B}}
+\put(10,40){\LARGE{\bf C}}
+\put(59,40){\LARGE{\bf D}}
+\end{overpic}
+\end{center}
+
+
+
+
+% exp_MTAD_all_all_arch_summary_Figure_4.png
+% exp_MTAD_all_all_bact_summary_Figure_4.png
+% exp_MTAD_cai_trop_arch_summary_Figure_4.png
+% exp_MTAD_cai_trop_bact_summary_Figure_4.png
 
 
 \end{document}

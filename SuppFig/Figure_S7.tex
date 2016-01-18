@@ -1,17 +1,45 @@
 \documentclass{report}
 
 \usepackage{graphicx}
-\usepackage[top=0.8in, bottom=0.8in, left=0.5in, right=0.8in]{geometry}
+\usepackage[top=0.3in, bottom=0.7in, left=0.2in, right=0.2in]{geometry}
+\usepackage[percent]{overpic}
 
 \begin{document}
 
-{\bf Figure S7. Simulated temperasture trends of the amino acid synthesis and maintenance costs fitted for archaea.}
-Simulated average cost of amino acid (AA) synthesis and AA maintenance are presented for archaea in a wide range of trade off parameter $w$ {\bf (e,f)}, including the overall optimal one $w_{op}=0.05$ (trends with light brown square markers). Yellow-shaded area highlights optimal temperature span that is best correlated with the observed data. Observed archaeal trends are not reproduced by the simulatioed--optimal trends within the entire highlighted $T$-range. Highlited $T$-range overlaps with the area of meaningless $T$--values ($T$\textgreater1.3).
+{\bf Figure S7. Simulated temperature trends of amino acid synthesis and maintenance costs.}
+Amino acid synthesis and maintenance costs plotted in a wide range of cost adjustment parameter $w$ and temperature $T$ ({\bf A-F}).
+Overall optimal $w^*$ and temperature range were calculated for
+({\bf A,B}) proteome--wide archaeal data: $w^*=0.05$ (light brown markers), $1\leq T\leq1.5$ (shaded yellow),
+({\bf C,D}) predicted highly expressed proteins (PHX) in archaea with codon usage selection (CUS): $w^*=0.05$ (light brown markers), $0.9\leq T\leq1.4$ (shaded yellow),
+({\bf E,F}) and PHX in bacteria with CUS:  $w^*=0.06$ (grey markers), $0.9\leq T\leq1.1$ (shaded yellow).
+Predicted optimal cost--trends reproduce observations for bacteria, unlike archaea, due to wider optimal $T$-range predicted for archaeal data.
 
-\begin{figure}[h!]
-	\centering
-	\includegraphics{../Publication/exp_MTAD_all_all_arch_summary_Fig7_costs.pdf}
-\end{figure}
+% \begin{figure}[h!]
+% 	\centering
+% 	\includegraphics{../Publication/exp_MTAD_all_all_arch_summary_Fig7_costs.pdf}
+% \end{figure}
+% \usepackage[percent]{overpic}
+
+
+\begin{center}
+% \begin{overpic}[grid,tics=20,width=\textwidth]{../Publication/Supp9_quintiles.png}
+\begin{overpic}[width=0.9\textwidth]{../Publication/SuppFigure7.png}
+% \put(32,74){\includegraphics[scale=.3] {busstop.mps}}
+\put(8,96){\LARGE{\bf A} (Archaea)}
+\put(44,96){\LARGE{\bf B} (Archaea)}
+%
+\put(8,63){\LARGE{\bf C} (CUS Archaea)}
+\put(44,63){\LARGE{\bf D} (CUS Archaea)}
+%
+\put(8,29.5){\LARGE{\bf E} (CUS Bacteria)}
+\put(44,29.5){\LARGE{\bf F} (CUS Bacteria)}
+\end{overpic}
+\end{center}
+
+
+
+
+% SuppFigure7.png
 
 
 

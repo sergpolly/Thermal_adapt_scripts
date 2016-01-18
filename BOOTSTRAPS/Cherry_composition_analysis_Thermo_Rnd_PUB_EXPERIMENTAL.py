@@ -436,6 +436,7 @@ fname,title = get_fname_title('R20','bact','original','trop')
 quantile_plotter(original_cai_stats_quant_TrOp,R20_key,fname,ax=ax_R20,savefig=True,title=title,color='red',lims=R20_lims,x_offset=0.05)
 
 
+###########################################
 from scipy.stats import norm
 
 # original_cai_stats_quant_TrOp
@@ -445,25 +446,44 @@ xmin = original_cai_stats_quant_TrOp[ccc].min().min()
 xmax = original_cai_stats_quant_TrOp[ccc].max().max()
 bins = np.linspace(xmin,xmax,50)
 plt.clf()
-fig,ax = plt.subplots(nrows=5,ncols=2,sharex=True,figsize=(7,7))
+fig,ax = plt.subplots(nrows=5,ncols=2,sharex=True,sharey=True,figsize=(6,6))
+temp_threshold = 500
 for i,c in enumerate(ccc):
     # Fit a normal distribution to the data:
-    dat = cai_stats_quant_TrOp[cai_stats_quant_TrOp['OptimumTemperature']<50][c]
-    mu, std = norm.fit(dat)
-    p = norm.pdf(bins, mu, std)
-    ax[len(ccc)-i-1,0].hist(dat.as_matrix(),bins=bins,color='blue',alpha=0.5,linewidth=0,log=False)
-    ax[len(ccc)-i-1,0].plot(bins, p, color='blue', linewidth=2)
+    dat = cai_stats_quant_TrOp[cai_stats_quant_TrOp['OptimumTemperature']<temp_threshold][c]
+    # mu, std = norm.fit(dat)
+    # p = norm.pdf(bins, mu, std)
+    ax[len(ccc)-i-1,0].hist(dat.as_matrix(),bins=bins,color='blue',alpha=0.4,linewidth=0,log=False)
+    # ax[len(ccc)-i-1,0].plot(bins, p, color='blue', linewidth=2)
+    ax[len(ccc)-i-1,0].axvline(dat.mean(), color='blue', linewidth=3, label='mean')
+    #
+    ax[len(ccc)-i-1,0].set_ylabel(r"quintile %d"%(i+1))
+    if i==0:
+        ax[len(ccc)-i-1,0].set_xlabel(r"$R_T$")
+        ax[len(ccc)-i-1,0].legend(loc='upper left',frameon=False)
+    if i==(len(ccc)-1):
+        ax[len(ccc)-i-1,0].set_title("shuffled codons")
+    ax[len(ccc)-i-1,0].yaxis.set_ticks_position('left')
+    ax[len(ccc)-i-1,0].xaxis.set_ticks_position('bottom')
     #
     #
-    #
-    #
-    dat = original_cai_stats_quant_TrOp[original_cai_stats_quant_TrOp['OptimumTemperature']<50][c]
-    mu, std = norm.fit(dat)
-    p = norm.pdf(bins, mu, std)
-    ax[len(ccc)-i-1,1].hist(dat.as_matrix(),bins=bins,color='red',alpha=0.5,linewidth=0,log=False)
+    dat = original_cai_stats_quant_TrOp[original_cai_stats_quant_TrOp['OptimumTemperature']<temp_threshold][c]
+    # mu, std = norm.fit(dat)
+    # p = norm.pdf(bins, mu, std)
+    ax[len(ccc)-i-1,1].hist(dat.as_matrix(),bins=bins,color='red',alpha=0.4,linewidth=0,log=False)
     # ax[len(ccc)-i-1].hist(cai_stats_quant_TrOp[c],bins=bins,color='blue',alpha=0.7)
-    ax[len(ccc)-i-1,1].plot(bins, p, color='red', linewidth=2)
-plt.show()
+    # ax[len(ccc)-i-1,1].plot(bins, p, color='red', linewidth=2)
+    ax[len(ccc)-i-1,1].axvline(dat.mean(), color='red', linewidth=3, label='mean')
+    if i==0:
+        ax[len(ccc)-i-1,1].set_xlabel(r"$R_T$")
+        ax[len(ccc)-i-1,1].legend(loc='upper left',frameon=False)
+    if i==(len(ccc)-1):
+        ax[len(ccc)-i-1,1].set_title("original data")
+    ax[len(ccc)-i-1,1].yaxis.set_ticks_position('left')
+    ax[len(ccc)-i-1,1].xaxis.set_ticks_position('bottom')
+# plt.show()
+plt.tight_layout()
+plt.savefig("RT_underhood_distro.png",dpi=300)
 
 
 

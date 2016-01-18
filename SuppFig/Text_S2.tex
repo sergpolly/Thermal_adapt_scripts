@@ -2,83 +2,71 @@
 
 \usepackage{graphicx}
 \usepackage[lofdepth,lotdepth]{subfig}
-\usepackage[top=0.5in, bottom=0.5in, left=0.5in, right=0.8in]{geometry}
+\usepackage[top=0.3in, bottom=0.5in, left=0.5in, right=0.5in]{geometry}
+
+\usepackage{amsopn}
+
+% textcomp package and marvosym package for additional characters
+\usepackage{textcomp,marvosym}
+\usepackage[percent]{overpic}
 
 \usepackage{color,soul}
 \sethlcolor{yellow}
 
+\DeclareMathOperator*{\argmax}{arg\,max}
 
 \begin{document}
 
-% {\bf Validation of the simulated data using amino acid maintenance rate vector reshuffling.} Amino acid maintenance rate vector $C_{a}$ was reshuffled 100 times and used in the protein design procedure at $\mathit{w}_{op}$ and $T=0.9$. Resulted amino acid frequencies were compared with the evolved average amino acid frequencies, vector $\mathbf{A}$, using Pearson correlation coefficient $R_{\mathbf{A}}$. Histogram of thus simulated $R_{\mathbf{A}}$ values displayed on the figure, $R_{\mathbf{A}}$ value obtained original vector $C_{a}$ depicted as red dot.
-% }
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  MOVE TO SUPPLEMENTARY TEXT ...
+{\bf Text S2. Statistical validation of the simulations.}
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-{\bf Text S2. Statistical validation of the simulations}
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Values of the amino acid maintenance rate $C_{a}$ are crucial for explanation of amino acid frequencies and their temperature-trends in the naturally evolved species. We performed $100$ reshufflings of the maintenance rate vector $C_{a}$, and used these modified vectors to design proteomes according to the procedure used in the above analysis and described in {\bf Model} section. Design procedure was performed for a range of balance parameters $0.0\leq\mathit{w}\leq0.12$ and an artificial temperature $T=0.9$ corresponding to the optimal temperature, $T_{\mathbf{A}}$, explaining average amino acid frequencies over the entire dataset of evolved species. Simulated frequencies of amino acids are compared with the average amino acid compositions both in archaeal and bacterial species, using Pearson correlation coefficient $R_{\mathbf{A}}$. 
-
-\begin{figure}[h!]
-	\centering
-	\subfloat[Subfigure 1 list of figures text][Archaeal data]{
-		\includegraphics[width=0.9\textwidth]{../Publication/exp_MTAD_all_all_arch_summary_SuppFig3.pdf}
-		\label{fig2s1}
-	}
-	\qquad
-	\subfloat[Subfigure 2 list of figures text][Bacterial data]{
-		\includegraphics[width=0.9\textwidth]{../Publication/exp_MTAD_all_all_bact_summary_SuppFig3.pdf}
-		\label{fig2s2}
-	}
-	\caption{
-	{\bf Validation of the simulated data using amino acid maintenance rate vector reshuffling.}(A) Validation using simulations at $T=0.9$ and the balance parameter $w$ ranging from 0.00 to 0.12. Reshuffling at $w=0.0$ does not alter the correlation (as expected), while increasing $w$ makes orginial results stand out significantly from the shuffled ones. (B) Shuffling the original cost vector disrupts the whole concept of the optimal balance parameter, as each of the 100 “trajectories” has its own optimal $w$, and these optimal $w$ distributed almost homogeneously over the entire $w$ range.
-}
-\end{figure}
-
-As expected, metabolic rate $C_{a}$ vector reshuffling does not alter the outcome of the simulations solely based on the foldability requirement at $\mathit{w}=0.0$, where the maintenance rates do not impose any restrictions on the usage of amino acids, see Fig.~\ref{fig2s1}(archaea) and~\ref{fig2s2}(bacteria). At the same time, $R_{\mathbf{A}}$ designed with the original $C_{a}$ stands out significantly as $\mathit{w}$ growths, see Fig.~\ref{fig2s1} and~\ref{fig2s2}. We also extracted the balance parameter $\mathit{w}_{op}$ corresponding to the highest $R_{\mathbf{A}}$ for each one of the hundred reshuffles, and it is noteworthy, that the distribution of these $\mathit{w}_{op}$ is relatively uniform, see Fig.~\ref{fig2s1} and~\ref{fig2s2}, so that reshuffling obscures both the unified balance parameter $\mathit{w}_{op}\sim0.06$ specific for the original $C_{a}$ and the correlation with the naturally observed proteome level data.
-
-Distribution of the resulted $R_{\mathbf{A}}$ values at the balance parameter value $\mathit{w}=0.06$ is presented on Fig.~\ref{fig1}(A), original (wild type) $R^{*}_{\mathbf{A}}$ is depicted in red and is significantly higher that the reshuffled values, \hl{pvalue}. We also used the reshuffling of the maintenance rate vector $C_{a}$ to confirm that temperature trends of amino acid frequencies rely on the original (wild type) vector $C_{a}$ for meaningfull outcomes of the protein design simulation. One hundred reshuffles of the $C_{a}$ were used to design model proteins within the range of temperatures close to the most plausible one $[T_\mathbf{M},T_\mathbf{T}]$, $1.0\leq T\leq1.4$ with the step $\Delta T=0.2$ and the balance parameter assuming two nearly optimal values $\mathit{w}_{T}=0.06$ and $\mathit{w}_{M}=0.06$. We used Pearson correlarion coefficient, $R_{\mathbf{D}}$, to relate the designed trends with the evolved one, vector $\mathbf{D}$. Distribution of the resulted $R_{\mathbf{D}}$ values at the balance parameter value $\mathit{w}_{M}=0.05$ is presented on Fig.~\ref{fig1}(B), original (wild type) $R^{*}_{\mathbf{D}}$ is depicted in red and is significantly higher that the reshuffled values, \hl{pvalue}. Performed validation implies that the agreement between our model and the observed compositional trends in amino acids is not accidental and the original values of the maintenance rate vector $C_{a}$ are highly non-random.
-
+Values of the amino acid maintenance cost $C_{a}$ are crucial for explanation of amino acid frequencies and their temperature--trends. We performed $100$ reshufflings of the cost vector $C_{a}$, and used these modified vectors to design proteomes according to the procedure described in {\bf Model} section, main text. The design procedure was performed for a range of cost adjustment parameters $0.0\leq w\leq0.12$ and temperature $T=0.9$, which lies with optimal $T$-ranges predicted both for archaea and bacteria. Pearson correlation coefficient is used to compare amino acid frequencies from simulated proteomes with the average composition of amino acids $R_A=R_{M\cup T}$ both in archaeal and bacterial species.
 
 
 \begin{figure}[h!]
-	\centering
-	\subfloat[Subfigure 1 list of figures text][Archaeal data]{
-		\includegraphics[width=0.9\textwidth]{../Publication/exp_MTAD_all_all_arch_summary_MainFig6.pdf}
-		\label{fig2s1}
-	}
-	\qquad
-	\subfloat[Subfigure 2 list of figures text][Bacterial data]{
-		\includegraphics[width=0.9\textwidth]{../Publication/exp_MTAD_all_all_bact_summary_MainFig6.pdf}
-		\label{fig2s2}
-	}
+	\begin{center}
+		\begin{overpic}[width=0.9\textwidth]{../Publication/SuppText2_Fig1.png}
+		\put(11,86){\LARGE{\bf A}}
+		\put(60,86){\LARGE{\bf B} Archaea}
+		\put(11,40.5){\LARGE{\bf C}}
+		\put(60,40.5){\LARGE{\bf D} Bacteria}
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		\put(33,86.5){\large original $R_A(w)$}
+		\put(25,40){\large original $R_A(w)$}
+		\end{overpic}
 	\caption{
-	{\bf Validation of the simulated data using amino acid maintenance rate vector reshuffling.} Amino acid maintenance rate vector $C_{a}$ was reshuffled 100 times and used in the protein design procedure at $\mathit{w}_{op}$ and $T=0.9$. Resulted amino acid frequencies were compared with the evolved average amino acid frequencies, vector $\mathbf{A}$, using Pearson correlation coefficient $R_{\mathbf{A}}$. Histogram of thus simulated $R_{\mathbf{A}}$ values displayed on the figure, $R_{\mathbf{A}}$ value obtained original vector $C_{a}$ depicted as red dot.
-}
+		{\bf Validation of the simulated data using amino acid maintenance rate vector reshuffling.} ({\bf A,C})
+		Correlation coefficient, $R_A(w)$, between observed composition of amino acids and frequencies derived from simulated proteomes is plotted as a function of adjustment parameter $w$. Proteomes are simulated at $T=0.9$ using reshuffled costs $C_{a}$, and compared with ({\bf A}) archaeal data and ({\bf C}) bacterial data. Each $R_A(w)$ is colored--coded according to its optimal $\displaystyle w^*=\argmax_{w} R_A(w)$, see legend. $R_A(w)$ corresponding to the original $C_a$ is labeled as well.
+		({\bf B,D}) $R_A(w)$ corresponding to different shuffle of $C_a$ yields differenct optimal values of adjustment parameter $w^*$, disrupting the ``concept'' of optimal $w^*$. Distribution of such $w^*$ for ({\bf B}) archaea and ({\bf D}) bacteria are plotted.
+	}
+	\label{fig1}
+	\end{center}
+\end{figure}
+
+As expected, reshuffling of the maintenance cost vector $C_a$ does not alter the outcome of the simulations for $w=0$, where the maintenance cost does not impose any restrictions on the usage of amino acids, Fig~\ref{fig1}(A,C). Simulations with the original cost vector $C_a$ yields correlation $R_A(w)$ that stands out significantly as $w>0.02$ increases, Fig.~\ref{fig1}(A,C).
+Cost adjustment parameter $w^*$ determined for 100 cost shuffles is concentrated near $w=0.0$ for archaea, Fig~\ref{fig1}(B), and is relatively homogeneous in the case of bacteria, Fig~\ref{fig1}(D). It implies either that lack of maintenance costs yields better predictions for proteome--average composition or that the concept of the unified balance parameter $w^*\sim0.06$ is disrupted. These observations emphasize specificity of the original maintenance cost vector $C_a$.
+
+
+\begin{figure}[h!]
+	\begin{center}
+		\begin{overpic}[width=0.9\textwidth]{../Publication/SuppText2_Fig2.png}
+		\put(8,85){\LARGE{\bf A} Archaea}
+		\put(53,85){\LARGE{\bf B}}
+		\put(8,40){\LARGE{\bf C} Bacteria}
+		\put(53,40){\LARGE{\bf D}}
+		\end{overpic}
+	\caption{
+		{\bf Validation of the simulated data using amino acid maintenance cost $C_a$ reshuffling.} Amino acid maintenance rate vector $C_{a}$ was reshuffled 100 times and used to simulate proteomes at $w^*=0.06$ and $T=0.9$. Compositions of the simulated proteomes were compared with the observed composition of amino acids using correlation coefficient $R_A$ for ({\bf A}) archaea (blue), and ({\bf C}) bacteria (blue). Values of $R_A$ corresponding to the original vector $C_a$ (red) are significantly higher than the values corresponding to shuffled $C_a$, p\textless0.001 in both cases.
+		Trends of thermal adaptation were simulated using reshuffled cost vector $C_a$ in $T$-range, $1.0\leq T\leq1.4$, and $w^*=0.06$. Simulated trends were compared with the observed trends for ({\bf B}) archaea (blue), and ({\bf D}) bacteria (blue). Values of $R_D$ corresponding to the original vector $C_a$ (red) are significantly higher than the values corresponding to shuffled $C_a$, p\textless0.001 and p=0.06 for archaea and bacteria, correspondingly.
+	}
+	\label{fig2}
+	\end{center}
 \end{figure}
 
 
+Distribution of the resulted $R_A$ values at a balance parameter $w=0.06$ is presented, Fig.~\ref{fig2}(A) for archaea (blue), and Fig.~\ref{fig2}(C) for bacteria (blue). Values of $R_A(w=0.06)$ predicted for original maintenance cost vector $C_a$, are depicted as red bars on both plots, Fig.~\ref{fig2}(A,C), and both are significantly higher than the $R_A$ corresponding to shuffled vector $C_a$, p\textless0.001 in both cases. We also tested how reshuffling of the maintenance cost $C_a$ affects correlation of slopes of thermal adaptation $df/dT$ between observed and simulated data, $R_D$. One hundred reshuffles of the cost vector $C_{a}$ were used for design of model proteomes within the range of temperatures $1.0\leq T\leq1.4$, with the step of $\Delta T=0.2$, and the balance parameter $w^*=0.06$. Assumed parameters are close to their optimal values, especially for archaeal results, see Fig 4, main text and Fig S5. Distribution of the resulted values of Pearson correlarion coefficient $R_D$ is demonstrated, Fig.~\ref{fig2}(B) for archaea, and Fig.~\ref{fig2}(D) for bacteria. Values of $R_D$ corresponding to the original vector $C_a$ are depicted in red, Fig.~\ref{fgi2}(B,D), and both of them are significantly higher than the $R_D$ corresponding to shuffled $C_a$, p\textless0.001 for archaea and p=0.06 for bacteria.
+These validation simualtions strongly indicate that the agreement between our model and the observed compositional trends in amino acids is not accidental and the original values of the maintenance cost vector $C_{a}$ are highly non-random, and must be used in conjunction with the physical interaction energy $\epsilon_{i,j}$ for a given type of amino acid.
 
-
-
-% \begin{figure}[h!]
-% \includegraphics{../Publication/exp_MTAD_all_all_bact_summary_MainFig6.pdf}
-% \caption{
-% {\bf Validation of the simulated data using amino acid maintenance rate vector reshuffling.} Amino acid maintenance rate vector $C_{a}$ was reshuffled 100 times and used in the protein design procedure at $\mathit{w}_{op}$ and $T=0.9$. Resulted amino acid frequencies were compared with the evolved average amino acid frequencies, vector $\mathbf{A}$, using Pearson correlation coefficient $R_{\mathbf{A}}$. Histogram of thus simulated $R_{\mathbf{A}}$ values displayed on the figure, $R_{\mathbf{A}}$ value obtained original vector $C_{a}$ depicted as red dot.
-% }
-% % \label{fig:validation}
-% \label{fig1}
-% \end{figure}
-%
-%
-% \begin{figure}[h!]
-% \includegraphics{../Publication/exp_MTAD_all_all_arch_summary_MainFig6.pdf}
-% \caption{
-% {\bf Validation of the simulated data using amino acid maintenance rate vector reshuffling.} Amino acid maintenance rate vector $C_{a}$ was reshuffled 100 times and used in the protein design procedure at $\mathit{w}_{op}$ and $T=0.9$. Resulted amino acid frequencies were compared with the evolved average amino acid frequencies, vector $\mathbf{A}$, using Pearson correlation coefficient $R_{\mathbf{A}}$. Histogram of thus simulated $R_{\mathbf{A}}$ values displayed on the figure, $R_{\mathbf{A}}$ value obtained original vector $C_{a}$ depicted as red dot.
-% }
-% % \label{fig:validation}
-% \label{fig3}
-% \end{figure}
 
 
 \end{document}

@@ -9,7 +9,8 @@
 # pictures ...
 *.png
 *.pdf
-
+*.tiff
+*.tif
 
 # Compiled source #
 ###################

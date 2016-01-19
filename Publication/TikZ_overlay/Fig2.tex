@@ -1,0 +1,33 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usetikzlibrary{calc,matrix, positioning}
+\usepackage[pdftex,active,tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+%\usepackage{verbatim}
+\usepackage{mathdots}
+
+
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+
+\begin{document}
+\begin{tikzpicture}[
+  % node distance=.3cm and 1cm,
+  % my_box/.style={rectangle,fill=gray!10,font=\huge,text depth=0,minimum size=1cm,draw=gray,very thick,inner sep=-0.1cm,outer sep=0},
+  node style ge/.style={text depth=0,rectangle,minimum size=1.5cm,font=\huge,inner sep=-0.1cm,outer sep=-0.1cm},
+  node style seq/.style={text depth=0,rectangle,minimum size=1.5cm,text justified,text width=1.5cm,font=\huge,inner sep=-0.1cm,outer sep=-0.1cm,text badly centered},
+  % node style seq/.style={fill=gray!10,text depth=0,rectangle,minimum size=1.5cm,text justified,text width=1.5cm,font=\huge,inner sep=-0.1cm,outer sep=-0.1cm,text badly centered},
+  % node style vectorized/.style={draw=black,very thick,fill=gray!10,text depth=0,rectangle,minimum size=1.2cm,font=\huge,inner sep=0}
+  node style vectorized/.style={text depth=0,rectangle,minimum size=1mm,font=\Large,inner sep=0,scale=1}
+  % simple/.style={rectangle,minimum size=1cm,inner sep=-0.1cm,outer sep=0,font=\huge,text depth=0}
+  ]
+\coordinate (CENTR) at (0,0);
+\node(image) at (CENTR) {\includegraphics[width=170mm] {../figure2.png}};
+\node[node style vectorized,left=of image.north,xshift=-54mm,yshift=-7mm](aaa) {\bf A};
+\node[node style vectorized,left=of image.north,xshift=+31mm,yshift=-7mm](bbb) {\bf B};
+\node[node style vectorized,left=of image.south,xshift=-54mm,yshift=+68mm](ccc) {\bf C};
+\node[node style vectorized,left=of image.south,xshift=+31mm,yshift=+68mm](ddd) {\bf D};
+\end{tikzpicture}
+\end{document} 

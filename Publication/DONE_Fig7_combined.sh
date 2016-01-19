@@ -3,10 +3,9 @@ python DONE_MainFig7_costs.py arch
 
 convert \
 -append \
--density 150 \
-Fig7.arch.pdf \
-Fig7.bact.pdf \
-exp_MTAD_all_all.bact.summary_Fig7_costs.pdf \
+Fig7.arch.png \
+Fig7.bact.png \
+exp_MTAD_all_all.bact.summary_Fig7_costs.png \
 Figure7.png
 
 

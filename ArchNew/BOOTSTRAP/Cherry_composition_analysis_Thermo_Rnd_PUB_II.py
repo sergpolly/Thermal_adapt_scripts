@@ -285,7 +285,7 @@ def quantile_plotter(dat,kx,fname,ax=None,savefig=False,title='',color='blue',li
     if savefig:
         ax.legend(loc='lower left',ncol=1,frameon=False,markerscale=1,fontsize=8,handlelength=3, numpoints=1, handletextpad=0.01)
         plt.tight_layout(pad=0.4, h_pad=None, w_pad=None)
-        plt.savefig(fname,dpi=300)
+        plt.savefig(fname,dpi=600)
     else:
         return ax
 ######################################

@@ -262,7 +262,7 @@ def plot_broom(MFFTW_case, data):
     # fig.tight_layout()
     #
     plt.title(" case %d %.4f FFT=%s" % (M,W,FFT))
-    plt.savefig(os.path.join(results_path,"der_case_%d_%.4f_FFT%s.ghpcc.png"%(M,W,FFT)),dpi=300)
+    plt.savefig(os.path.join(results_path,"der_case_%d_%.4f_FFT%s.ghpcc.png"%(M,W,FFT)),dpi=600)
 ###############################
 ##########################
 ##########################
@@ -310,7 +310,7 @@ def plot_broom_groups(MFFTW_case, data):
     # fig.tight_layout()
     #
     plt.title(" case %d %.4f FFT=%s"%(M,W,FFT))
-    plt.savefig(os.path.join(results_path,"groups_case_%d_%.4f_FFT%s.ghpcc.png"%(M,W,FFT)),dpi=300)
+    plt.savefig(os.path.join(results_path,"groups_case_%d_%.4f_FFT%s.ghpcc.png"%(M,W,FFT)),dpi=600)
 ##########################
 ##########################
 ##########################
@@ -608,7 +608,7 @@ ax_down.yaxis.set_major_locator( MaxNLocator(nbins = 7) )
 ax_up.axvspan(Top_M, Top_T, facecolor='yellow', alpha=0.5)
 ax_down.axvspan(Top_M, Top_T, facecolor='yellow', alpha=0.5)
 #
-plt.savefig(os.path.join(results_path,'%s_Figure_4.png'%exp_fname.replace('.','_')),dpi=300)
+plt.savefig(os.path.join(results_path,'%s_Figure_4.png'%exp_fname.replace('.','_')),dpi=600)
 
 
 
@@ -679,7 +679,7 @@ ax.text(wopMT-0.002,RMT_max.RM_max.max()+0.02,'$w^{*}$',fontsize=11,verticalalig
 # ax_bottom.text(T_M,ax_bottom.get_ylim()[0],'$T_M$',fontsize=11,verticalalignment='bottom',horizontalalignment='right',color="#046ABE")
 # ax_bottom.text(T_T,ax_bottom.get_ylim()[0],'$T_T$',fontsize=11,verticalalignment='bottom',horizontalalignment='right',color="#F71231")
 
-plt.savefig(os.path.join(results_path,'%s_SuppFigure4.png'%exp_fname),dpi=300)
+plt.savefig(os.path.join(results_path,'%s_SuppFigure4.png'%exp_fname),dpi=600)
 
 
 
@@ -836,7 +836,7 @@ leg = inset_right.legend(loc='upper left',numpoints=1, bbox_to_anchor=(0.99, 1.0
 # # ax2.text(-0.15, 1.15, 'B', transform=ax2.transAxes, fontsize=10, weight='bold', va='top', color='black')
 ###########################################
 ###########################################
-fig.savefig(os.path.join(results_path,"Figure_3.png"),dpi=300)
+fig.savefig(os.path.join(results_path,"Figure_3.png"),dpi=600)
 ###########################################
 ###########################################
 
@@ -921,7 +921,7 @@ ax.set_ylim((ymin-0.1*y_span,ymax+0.3*y_span))
 # ax.plot([-0.1*(xmax-xmin),0],[0,0],color='blue',linewidth=1.0,linestyle='-',zorder=104)
 # #
 # plt.legend(loc='best')
-fig.savefig(os.path.join(results_path,"%s_Slopes_sim_vs_exp_protbact.png"%exp_fname),dpi=300)
+fig.savefig(os.path.join(results_path,"%s_Slopes_sim_vs_exp_protbact.png"%exp_fname),dpi=600)
 
 
 
@@ -1021,7 +1021,7 @@ ax_right.set_xlim((0.4,1.7))
 ax_right.set_ylim((25,230))
 # plt.tight_layout()
 # ax_right.set_title("Akashi_proteome_cost_mod%d_fft%s.ghpcc.png"%(mod,fft))
-fig.savefig(os.path.join(results_path,"%s_Fig7_costs.png"%exp_fname),dpi=300)
+fig.savefig(os.path.join(results_path,"%s_Fig7_costs.png"%exp_fname),dpi=600)
 
 
 

@@ -185,7 +185,7 @@ for cid,criteria_combination in enumerate(combinations):
     arch,bact = get_arch_bact_slopes(criteria_combination)
     alab,blab = get_axis_labels(criteria_combination)
     plot_comparison(ax,arch['exp_D'],bact['exp_D'],xlab=alab,ylab=blab,xlims=xlims[cid],ylims=ylims[cid])
-    plt.savefig("figure2_%s.png"%'abcd'[cid],dpi=300)
+    plt.savefig("figure2_%s.png"%'abcd'[cid],dpi=600)
 
 cmd = "montage "+\
 "figure2_a.png "+\

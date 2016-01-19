@@ -209,8 +209,8 @@ cbar.set_ticks(ticks)
 cbar.set_ticklabels(ticklabels)
 cbar.set_label('GC content, \%')
 #
-# fig.savefig(os.path.join(results_path,"%s.png"%fname),dpi=300)
-fig.savefig("Fig7.%s.pdf"%kingdom)
+# fig.savefig(os.path.join(results_path,"%s.png"%fname),dpi=600)
+fig.savefig("Fig7.%s.png"%kingdom,dpi=600)
 
 
 

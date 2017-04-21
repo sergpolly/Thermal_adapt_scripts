@@ -37,7 +37,7 @@ Next important file is `phylog_temps.txt`, we should try matching orgnisms from 
 
 TODO:
 1) relaunch GPU protein design on COSMOS, like a copy of 'correct_galeprot_design_data/Argentina_MJ99'
-
+2) (BEWARE) Revieweing the design.cpp: our `pnat = pnat - weight\*cost` we do not pre-filter actual pnat>0.7 alone ...
 
 
 

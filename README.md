@@ -24,3 +24,23 @@ most likely, we'd need to download Archaeal genbanks again (folders) ftp.ncbi.ni
 Next important file is `phylog_temps.txt`, we should try matching orgnisms from that file with the ones available at NCBI GenBank - that would be our to go point. Check how it was done before ?
 
 
+###############################################################
+# POST MBE REVISION NOTES
+###############################################################
+
+1) MBE major revision request to explicitly consider protein abundance in the model: some modeling required again.
+2) All modeling-related soft is on COSMOS 'correct_galeprot_design_data/Argentina_MJ99/design'
+3) Simulated frequencies are stored in files 'L64_ffMJ99_w0.060_T0.70_RND787202457-allfreq.dat'
+4) 'data_processing_corrected_MJ99_Argentina.py' relies on the raw simulated data 
+5) 'NEW_data_extraction_corrected_MJ99_Argentina.py' also relies on raw simulated data, it also generated 'simulation.dat'
+6) 'simulation.dat' is used by many plotting scripts and various analyses downstream
+
+TODO:
+1) relaunch GPU protein design on COSMOS, like a copy of 'correct_galeprot_design_data/Argentina_MJ99'
+
+
+
+
+
+
+
